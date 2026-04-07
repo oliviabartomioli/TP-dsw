@@ -5,7 +5,7 @@ Trabajo práctico de Desarrollo de Software - UTN FRRO
 ## Grupo
 ### Integrantes
 * 54223 - Bartomioli, Olivia
-
+* 54657 - Dulcich, Juan Ignacio
 ### Repositorios
 * [frontend app](http://hyperlinkToGihubOrGitlab)
 * [backend app](http://hyperlinkToGihubOrGitlab)
