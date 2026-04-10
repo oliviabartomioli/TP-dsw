@@ -35,7 +35,7 @@ Regularidad:
 |CRUD simple|1. CRUD Usuario<br>2. CRUD Servicio<br>3. CRUD Categoría|
 |CRUD dependiente|1. CRUD Reseña {depende de Usuario y Solicitud} <br>2. CRUD Solicitud {depende de Usuario y Servicio} |
 |Listado<br>+<br>detalle| 1. Listado de servicios filtrado por categoria, muestra servicio, precio y prestador => detalle CRUD Servicio<br> 2. Listado de solicitudes filtrado por estado, muestra servicio, cliente, fecha y estado => detalle CRUD Solicitud|
-|CUU/Epic|1. Contratar un servicio doméstico<br>2. Gestionar una solicitud (aceptar/rechazar y completar)<br>3.Calificar un servicio realizado|
+|CUU/Epic|1. Contratar un servicio doméstico<br>2. Gestionar una solicitud (aceptar/rechazar y completar)<br>3. Calificar un servicio realizado|
 
 
 Adicionales para Aprobación
