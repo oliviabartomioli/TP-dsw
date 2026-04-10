@@ -12,9 +12,12 @@ Trabajo práctico de Desarrollo de Software - UTN FRRO
 * [backend app](http://hyperlinkToGihubOrGitlab)
 *Nota*: si utiliza un monorepo indicar un solo link con fullstack app.
 
-## Tema
+## App para contratar servicios domésticos
 ### Descripción
-*2 a 6 líneas describiendo el negocio (menos es más)*
+La aplicación permite a usuarios registrarse como clientes o prestadores de servicios.
+Los clientes pueden buscar servicios según categoría, ubicación o disponibilidad, y realizar solicitudes de contratación.
+Los prestadores pueden publicar sus servicios, gestionar solicitudes y actualizar su información.
+La plataforma facilita la conexión entre oferta y demanda de servicios, mejorando la experiencia de contratación.
 
 ### Modelo
 ![imagen del modelo]()
