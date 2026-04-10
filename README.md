@@ -20,9 +20,10 @@ Los prestadores pueden publicar sus servicios y gestionar las solicitudes.
 La plataforma facilita la conexión entre oferta y demanda de servicios, mejorando la experiencia de contratación.
 
 ### Modelo
-![imagen del modelo]()
+![ModeloTpContrataciones](https://github.com/user-attachments/assets/c7ce2857-d952-4110-addd-0d0113832879)
 
-*Nota*: incluir un link con la imagen de un modelo, puede ser modelo de dominio, diagrama de clases, DER. Si lo prefieren pueden utilizar diagramas con [Mermaid](https://mermaid.js.org) en lugar de imágenes.
+
+https://drive.google.com/file/d/1e64FdKF6mJaFL2ZmbHjIrkDlq72qxt0d/view?usp=sharing
 
 ## Alcance Funcional 
 
