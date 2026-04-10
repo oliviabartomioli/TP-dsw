@@ -16,7 +16,7 @@ Trabajo práctico de Desarrollo de Software - UTN FRRO
 ### Descripción
 La aplicación permite a usuarios registrarse como clientes o prestadores de servicios.
 Los clientes pueden buscar servicios según categoría, ubicación o disponibilidad, y realizar solicitudes de contratación.
-Los prestadores pueden publicar sus servicios, gestionar solicitudes y actualizar su información.
+Los prestadores pueden publicar sus servicios y gestionar las solicitudes.
 La plataforma facilita la conexión entre oferta y demanda de servicios, mejorando la experiencia de contratación.
 
 ### Modelo
