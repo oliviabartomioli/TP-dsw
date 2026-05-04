@@ -42,7 +42,7 @@ Regularidad:
 Adicionales para Aprobación
 |Req|Detalle|
 |:-|:-|
-|CRUD |1. CRUD Usuario<br>2. CRUD Servicio<br>3. CRUD Categoria<br>4. CRUD Ciudad<br>5. CRUD Provincia<br>6. CRUD Disponibilidad<br>7. CRUD Favorito|
+|CRUD |1. CRUD Usuario<br>2. CRUD Servicio<br>3. CRUD Categoría<br>4. CRUD Ciudad<br>5. CRUD Provincia<br>6. CRUD Disponibilidad<br>7. CRUD Favorito|
 |CUU/Epic|1. Registro e inicio de sesión de usuarios con roles<br>2. Contratar un servicio<br>3. Gestionar una solicitud (aceptar, rechazar y completar)<br>4. Visualizar historial de servicios realizados|
 
 
