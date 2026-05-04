@@ -33,16 +33,16 @@ https://drive.google.com/file/d/1e64FdKF6mJaFL2ZmbHjIrkDlq72qxt0d/view?usp=shari
 Regularidad:
 |Req|Detalle|
 |:-|:-|
-|CRUD simple|1. CRUD Usuario<br>2. CRUD Servicio<br>3. CRUD Categoría|
-|CRUD dependiente|1. CRUD Reseña {depende de Usuario y Solicitud} <br>2. CRUD Solicitud {depende de Usuario y Servicio} |
-|Listado<br>+<br>detalle| 1. Listado de servicios filtrado por categoria, muestra servicio, precio y prestador => detalle CRUD Servicio<br> 2. Listado de solicitudes filtrado por estado, muestra servicio, cliente, fecha y estado => detalle CRUD Solicitud|
+|CRUD simple|1. CRUD Usuario<br>2. CRUD Categoría<br>3. CRUD Provincia|
+|CRUD dependiente|1. CRUD Servicio {depende de categoría} <br>2. CRUD Ciudad {depende de Provincia} |
+|Listado<br>+<br>detalle| 1. Listado de servicios filtrado por categoria, muestra servicio, precio y prestador => detalle CRUD Servicio<br> 2. Listado de servicios filtrado por ciudad, muestra servicio, prestador y precio => detalle CRUD Solicitud|
 |CUU/Epic|1. Contratar un servicio doméstico<br>2. Gestionar una solicitud (aceptar/rechazar y completar)<br>3. Calificar un servicio realizado|
 
 
 Adicionales para Aprobación
 |Req|Detalle|
 |:-|:-|
-|CRUD |1. CRUD Usuario<br>2. CRUD Servicio<br>3. CRUD Categoria<br>4. CRUD Solicitud<br>5. CRUD Reseña<br>6. CRUD Disponibilidad<br>7. CRUD Favorito|
+|CRUD |1. CRUD Usuario<br>2. CRUD Servicio<br>3. CRUD Categoria<br>4. CRUD Ciudad<br>5. CRUD Provincia<br>6. CRUD Disponibilidad<br>7. CRUD Favorito|
 |CUU/Epic|1. Registro e inicio de sesión de usuarios con roles<br>2. Contratar un servicio<br>3. Gestionar una solicitud (aceptar, rechazar y completar)<br>4. Visualizar historial de servicios realizados|
 
 
