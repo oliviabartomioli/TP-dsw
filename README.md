@@ -20,8 +20,7 @@ Los prestadores pueden publicar sus servicios y gestionar las solicitudes.
 La plataforma facilita la conexión entre oferta y demanda de servicios, mejorando la experiencia de contratación.
 
 ### Modelo
-![ModeloTpContrataciones](https://github.com/user-attachments/assets/c7ce2857-d952-4110-addd-0d0113832879)
-
+![ModeloTpContrataciones](https://github.com/user-attachments/assets/476734b5-356a-4d61-b460-8e6038a44227)
 
 https://drive.google.com/file/d/1e64FdKF6mJaFL2ZmbHjIrkDlq72qxt0d/view?usp=sharing
 
