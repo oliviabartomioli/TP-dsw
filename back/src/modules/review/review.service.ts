@@ -14,7 +14,7 @@ export class ReviewService {
   async createReview(review: reviewDto) {
     const ReviewExists = await this.findReview(review.idReview);
     if (ReviewExists) {
-      throw new ConflictException('reseña ya registrada');
+      throw new ConflictException('reseña ya registrada.');
     } else {
       return await this.reviewRepository.save(review);
     }
