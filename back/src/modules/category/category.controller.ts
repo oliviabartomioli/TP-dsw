@@ -19,12 +19,12 @@ export class CategoryController {
     return this.categoryService.createCategory(category);
   }
   @Get()
-  getUsers() {
+  getCategory() {
     return this.categoryService.findAll();
   }
   @Get('delete/deleted')
   getCategoryDeleted() {
-    return this.categoryService.findAllDeleted();
+    return this.categoryService.findAllDelete();
   }
   @Delete('/:idCategory')
   deleteCategory(@Param('idCategory') idCategory: number) {

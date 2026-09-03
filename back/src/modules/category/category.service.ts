@@ -3,13 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { categoryDto } from './dto/category-dto';
 import { category } from './entity/category.entity';
-import { UpdateResult } from 'typeorm/browser';
+import { UpdateResult } from 'typeorm';
 
 @Injectable()
 export class CategoryService {
-  findAllDeleted() {
-    throw new Error('Method not implemented.');
-  }
   constructor(
     @InjectRepository(category)
     private categoryRepository: Repository<category>,
@@ -58,7 +55,7 @@ export class CategoryService {
         'La categoria con idCategory ' + idCategory + ' no existe',
       );
     }
-    if (!CategoryExists) {
+    if (!CategoryExists.deleteC) {
       throw new ConflictException('la categoria no esta eliminada');
     }
 
