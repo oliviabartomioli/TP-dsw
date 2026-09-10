@@ -7,17 +7,17 @@ import {
   IsString,
 } from 'class-validator';
 
-export class cityDto {
+export class provinceDto {
   @IsNumber()
   @IsPositive()
   @IsNotEmpty()
-  idCity!: number;
+  idProvince!: number;
 
   @IsString()
   @IsNotEmpty()
-  nameCity!: string;
+  nameProvince!: string;
 
   @IsBoolean()
   @IsOptional()
-  deleteCity?: boolean;
+  deleteProvince?: boolean;
 }

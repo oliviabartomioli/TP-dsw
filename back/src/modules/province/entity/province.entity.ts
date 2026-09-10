@@ -1,13 +1,13 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('city')
-export class city {
+@Entity('province')
+export class province {
   @PrimaryGeneratedColumn()
-  idCity!: number;
+  idProvince!: number;
 
   @Column({ type: String, nullable: false, length: 15 })
-  nameCity!: string;
+  nameProvince!: string;
 
   @Column({ type: Boolean, nullable: false, default: false })
-  deleteCity?: boolean;
+  deleteProvince?: boolean;
 }
