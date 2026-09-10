@@ -6,6 +6,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProfessionalModule } from './modules/professional/professional.module';
 import { ServicesModule } from './modules/services/services.module';
 import { CategoryModule } from './modules/category/category.module';
+import { CityModule } from './modules/city/city.module';
+import { ProvinceModule } from './modules/province/province.module';
+import { RequestModule } from './modules/request/request.module';
 
 @Module({
   imports: [
@@ -15,6 +18,9 @@ import { CategoryModule } from './modules/category/category.module';
     ProfessionalModule,
     ServicesModule,
     CategoryModule,
+    CityModule,
+    ProvinceModule,
+    RequestModule,
   ],
   controllers: [],
   providers: [],
