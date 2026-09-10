@@ -1,4 +1,4 @@
-import { Type } from 'class-transformer';
+import { Type } from "class-transformer";
 import {
   IsBoolean,
   IsDate,
@@ -7,7 +7,7 @@ import {
   IsOptional,
   IsPositive,
   IsString,
-} from 'class-validator';
+} from "class-validator";
 
 export class requestDto {
   @IsNumber()

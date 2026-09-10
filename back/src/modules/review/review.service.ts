@@ -1,9 +1,9 @@
-import { ConflictException, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { reviewDto } from './dto/review-dto';
-import { review } from './entity/review.entity';
-import { UpdateResult } from 'typeorm';
+import { ConflictException, Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { reviewDto } from "./dto/review-dto";
+import { review } from "./entity/review.entity";
+import { UpdateResult } from "typeorm";
 
 @Injectable()
 export class ReviewService {
@@ -14,7 +14,7 @@ export class ReviewService {
   async createReview(review: reviewDto) {
     const ReviewExists = await this.findReview(review.idReview);
     if (ReviewExists) {
-      throw new ConflictException('reseña ya registrada.');
+      throw new ConflictException("reseña ya registrada.");
     } else {
       return await this.reviewRepository.save(review);
     }
@@ -31,11 +31,11 @@ export class ReviewService {
   async deleteReview(idReview: number) {
     const ReviewExists = await this.findReview(idReview);
     if (!ReviewExists) {
-      throw new ConflictException('La reseña con id:' + idReview + 'no existe');
+      throw new ConflictException("La reseña con id:" + idReview + "no existe");
     }
     if (ReviewExists.deleteR) {
       throw new ConflictException(
-        'La reseña con id' + idReview + 'esta eliminada',
+        "La reseña con id" + idReview + "esta eliminada",
       );
     }
     const rows: UpdateResult = await this.reviewRepository.update(
@@ -49,11 +49,11 @@ export class ReviewService {
 
     if (!ReviewExists) {
       throw new ConflictException(
-        'La reseña con idReview ' + idReview + ' no existe',
+        "La reseña con idReview " + idReview + " no existe",
       );
     }
     if (!ReviewExists.deleteR) {
-      throw new ConflictException('la reseña no esta eliminada');
+      throw new ConflictException("la reseña no esta eliminada");
     }
 
     const rows: UpdateResult = await this.reviewRepository.update(

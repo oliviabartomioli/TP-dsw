@@ -7,26 +7,26 @@ import {
   Patch,
   Post,
   Put,
-} from '@nestjs/common';
-import { ServicesService } from './services.service';
-import { ServicesDto } from './dto/services-dto';
+} from "@nestjs/common";
+import { ServicesService } from "./services.service";
+import { ServicesDto } from "./dto/services-dto";
 
-@Controller('api/v1/services')
+@Controller("api/v1/services")
 export class ServicesController {
   constructor(private ServicesService: ServicesService) {}
-  @Post('createServices')
+  @Post("createServices")
   createServices(@Body() services: ServicesDto) {
     return this.ServicesService.createServices(services);
   }
-  @Get('/:idServicio')
-  getServicesById(@Param('idServicio') idServicio: number) {
+  @Get("/:idServicio")
+  getServicesById(@Param("idServicio") idServicio: number) {
     return this.ServicesService.findServices(idServicio);
   }
   @Get()
   getServices() {
     return this.ServicesService.findAll();
   }
-  @Get('delete/deleted')
+  @Get("delete/deleted")
   getServicesDelete() {
     return this.ServicesService.findAllDelete();
   }
@@ -34,12 +34,12 @@ export class ServicesController {
   upDateServices(@Body() services: ServicesDto) {
     return this.ServicesService.upDateServices(services);
   }
-  @Delete('/:idServicio')
-  deleteServices(@Param('idServicio') idServicio: number) {
+  @Delete("/:idServicio")
+  deleteServices(@Param("idServicio") idServicio: number) {
     return this.ServicesService.deleteServices(idServicio);
   }
-  @Patch('/restore/:idServicio')
-  restoreServices(@Param('idServicio') idServicio: number) {
+  @Patch("/restore/:idServicio")
+  restoreServices(@Param("idServicio") idServicio: number) {
     return this.ServicesService.restoreServices(idServicio);
   }
 }

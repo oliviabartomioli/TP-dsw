@@ -1,9 +1,9 @@
-import { ConflictException, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { categoryDto } from './dto/category-dto';
-import { category } from './entity/category.entity';
-import { UpdateResult } from 'typeorm';
+import { ConflictException, Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { categoryDto } from "./dto/category-dto";
+import { category } from "./entity/category.entity";
+import { UpdateResult } from "typeorm";
 
 @Injectable()
 export class CategoryService {
@@ -15,7 +15,7 @@ export class CategoryService {
   async createCategory(category: categoryDto) {
     const CategoryExists = await this.findCategory(category.idCategory);
     if (CategoryExists) {
-      throw new ConflictException('categoría ya registrada');
+      throw new ConflictException("categoría ya registrada");
     } else {
       return await this.categoryRepository.save(category);
     }
@@ -33,12 +33,12 @@ export class CategoryService {
     const CategoryExists = await this.findCategory(idCategory);
     if (!CategoryExists) {
       throw new ConflictException(
-        'La categoria con id:' + idCategory + 'no existe',
+        "La categoria con id:" + idCategory + "no existe",
       );
     }
     if (CategoryExists.deleteC) {
       throw new ConflictException(
-        'La categoria con id' + idCategory + 'esta eliminada',
+        "La categoria con id" + idCategory + "esta eliminada",
       );
     }
     const rows: UpdateResult = await this.categoryRepository.update(
@@ -52,11 +52,11 @@ export class CategoryService {
 
     if (!CategoryExists) {
       throw new ConflictException(
-        'La categoria con idCategory ' + idCategory + ' no existe',
+        "La categoria con idCategory " + idCategory + " no existe",
       );
     }
     if (!CategoryExists.deleteC) {
-      throw new ConflictException('la categoria no esta eliminada');
+      throw new ConflictException("la categoria no esta eliminada");
     }
 
     const rows: UpdateResult = await this.categoryRepository.update(

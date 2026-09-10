@@ -1,8 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { city } from './entity/city.entity';
-import { cityDto } from './dto/city-dto';
+import { ConflictException, Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { city } from "./entity/city.entity";
+import { cityDto } from "./dto/city-dto";
 
 @Injectable()
 export class CityService {
@@ -12,7 +12,7 @@ export class CityService {
   async createCity(city: cityDto) {
     const cityExists = await this.findCity(city.nameCity);
     if (cityExists) {
-      throw new ConflictException('Ciudad ya registrada.');
+      throw new ConflictException("Ciudad ya registrada.");
     } else {
       return await this.cityRepository.save(city);
     }
@@ -28,19 +28,19 @@ export class CityService {
   async deleteCity(nameCity: string) {
     const cityExists = await this.findCity(nameCity);
     if (!cityExists) {
-      throw new ConflictException('La ciudad:' + nameCity + 'no existe');
+      throw new ConflictException("La ciudad:" + nameCity + "no existe");
     }
     if (cityExists.deleteCity) {
-      throw new ConflictException('La ciudad:' + nameCity + 'esta eliminada');
+      throw new ConflictException("La ciudad:" + nameCity + "esta eliminada");
     }
   }
   async restoreCity(nameCity: string) {
     const cityExists = await this.findCity(nameCity);
     if (!cityExists) {
-      throw new ConflictException('La ciudad:' + nameCity + 'no existe.');
+      throw new ConflictException("La ciudad:" + nameCity + "no existe.");
     }
     if (!cityExists.deleteCity) {
-      throw new ConflictException('La ciudad no esta eliminada.');
+      throw new ConflictException("La ciudad no esta eliminada.");
     }
   }
 }

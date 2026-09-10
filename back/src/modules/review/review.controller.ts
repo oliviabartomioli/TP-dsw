@@ -6,15 +6,15 @@ import {
   Param,
   Patch,
   Post,
-} from '@nestjs/common';
-import { ReviewService } from './review.service';
-import { reviewDto } from './dto/review-dto';
+} from "@nestjs/common";
+import { ReviewService } from "./review.service";
+import { reviewDto } from "./dto/review-dto";
 
-@Controller('review')
+@Controller("review")
 export class ReviewController {
   constructor(private reviewService: ReviewService) {}
 
-  @Post('createReview')
+  @Post("createReview")
   createReview(@Body() review: reviewDto) {
     return this.reviewService.createReview(review);
   }
@@ -22,16 +22,16 @@ export class ReviewController {
   getReview() {
     return this.reviewService.findAll();
   }
-  @Get('delete/deleted')
+  @Get("delete/deleted")
   getReviewDeleted() {
     return this.reviewService.findAllDelete();
   }
-  @Delete('/:idReview')
-  deleteReview(@Param('idReview') idReview: number) {
+  @Delete("/:idReview")
+  deleteReview(@Param("idReview") idReview: number) {
     return this.reviewService.deleteReview(idReview);
   }
-  @Patch('/restore/:idReview')
-  restoreReview(@Param('idReview') idReview: number) {
+  @Patch("/restore/:idReview")
+  restoreReview(@Param("idReview") idReview: number) {
     return this.reviewService.restoreReview(idReview);
   }
 }
