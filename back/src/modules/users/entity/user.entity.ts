@@ -1,6 +1,6 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 
-@Entity("users")
+@Entity('users')
 export class User {
   @PrimaryColumn()
   dniUs!: number;

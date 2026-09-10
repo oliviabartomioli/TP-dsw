@@ -1,8 +1,8 @@
-import { ConflictException, Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { province } from "./entity/province.entity";
-import { provinceDto } from "./dto/province-dto";
+import { ConflictException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { province } from './entity/province.entity';
+import { provinceDto } from './dto/province-dto';
 
 @Injectable()
 export class ProvinceService {
@@ -13,7 +13,7 @@ export class ProvinceService {
   async createProvince(province: provinceDto) {
     const provinceExists = await this.findProvince(province.nameProvince);
     if (provinceExists) {
-      throw new ConflictException("Provincia ya registrada.");
+      throw new ConflictException('Provincia ya registrada.');
     } else {
       return await this.provinceRepository.save(province);
     }
@@ -30,23 +30,23 @@ export class ProvinceService {
     const provinceExists = await this.findProvince(nameProvince);
     if (!provinceExists) {
       throw new ConflictException(
-        "La provincia:" + nameProvince + "no existe.",
+        'La provincia:' + nameProvince + 'no existe.',
       );
     }
     if (!provinceExists.deleteProvince) {
-      throw new ConflictException("La provincia no esta eliminada.");
+      throw new ConflictException('La provincia no esta eliminada.');
     }
   }
   async deleteProvince(nameProvince: string) {
     const provinceExists = await this.findProvince(nameProvince);
     if (!provinceExists) {
       throw new ConflictException(
-        "La provincia:" + nameProvince + "no existe.",
+        'La provincia:' + nameProvince + 'no existe.',
       );
     }
     if (provinceExists.deleteProvince) {
       throw new ConflictException(
-        "La provincia:" + nameProvince + "esta eliminada.",
+        'La provincia:' + nameProvince + 'esta eliminada.',
       );
     }
   }

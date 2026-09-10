@@ -1,9 +1,9 @@
-import { ConflictException, Injectable } from "@nestjs/common";
-import { Professional } from "./entity/professional.entity";
-import { Repository } from "typeorm";
-import { InjectRepository } from "@nestjs/typeorm";
-import { professionalDto } from "./dto/professional-dto";
-import { UpdateResult } from "typeorm/browser";
+import { ConflictException, Injectable } from '@nestjs/common';
+import { Professional } from './entity/professional.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { professionalDto } from './dto/professional-dto';
+import { UpdateResult } from 'typeorm/browser';
 
 @Injectable()
 export class ProfessionalService {
@@ -14,7 +14,7 @@ export class ProfessionalService {
   async createProfessional(professional: professionalDto) {
     const professionalExists = await this.findProfessional(professional.dniP);
     if (professionalExists) {
-      throw new ConflictException("profesional ya registrado");
+      throw new ConflictException('profesional ya registrado');
     } else {
       return await this.professionalRepository.save(professional);
     }
@@ -43,10 +43,10 @@ export class ProfessionalService {
   async deleteProfessional(dniP: number) {
     const professionalExists = await this.findProfessional(dniP);
     if (!professionalExists) {
-      throw new ConflictException("profesional no existe");
+      throw new ConflictException('profesional no existe');
     }
     if (professionalExists.deleteP) {
-      throw new ConflictException("profesional esta eliminado");
+      throw new ConflictException('profesional esta eliminado');
     }
     const rows: UpdateResult = await this.professionalRepository.update(
       {
@@ -60,10 +60,10 @@ export class ProfessionalService {
   async restoreProfessional(dniP: number) {
     const professionalExists = await this.findProfessional(dniP);
     if (!professionalExists) {
-      throw new ConflictException("profesional no existe");
+      throw new ConflictException('profesional no existe');
     }
     if (!professionalExists.deleteP) {
-      throw new ConflictException("profesional no esta eliminado");
+      throw new ConflictException('profesional no esta eliminado');
     }
     const rows: UpdateResult = await this.professionalRepository.update(
       {

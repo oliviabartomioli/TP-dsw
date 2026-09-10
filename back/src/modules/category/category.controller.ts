@@ -6,15 +6,15 @@ import {
   Param,
   Patch,
   Post,
-} from "@nestjs/common";
-import { CategoryService } from "./category.service";
-import { categoryDto } from "./dto/category-dto";
+} from '@nestjs/common';
+import { CategoryService } from './category.service';
+import { categoryDto } from './dto/category-dto';
 
-@Controller("category")
+@Controller('category')
 export class CategoryController {
   constructor(private categoryService: CategoryService) {}
 
-  @Post("createCategory")
+  @Post('createCategory')
   createCategory(@Body() category: categoryDto) {
     return this.categoryService.createCategory(category);
   }
@@ -22,16 +22,16 @@ export class CategoryController {
   getCategory() {
     return this.categoryService.findAll();
   }
-  @Get("delete/deleted")
+  @Get('delete/deleted')
   getCategoryDeleted() {
     return this.categoryService.findAllDelete();
   }
-  @Delete("/:idCategory")
-  deleteCategory(@Param("idCategory") idCategory: number) {
+  @Delete('/:idCategory')
+  deleteCategory(@Param('idCategory') idCategory: number) {
     return this.categoryService.deleteCategory(idCategory);
   }
-  @Patch("/restore/:idCategory")
-  restoreCategory(@Param("idCategory") idCategory: number) {
+  @Patch('/restore/:idCategory')
+  restoreCategory(@Param('idCategory') idCategory: number) {
     return this.categoryService.restoreCategory(idCategory);
   }
 }

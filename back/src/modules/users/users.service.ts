@@ -1,9 +1,9 @@
-import { ConflictException, Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { User } from "./entity/user.entity";
-import { Repository } from "typeorm";
-import { UsersDto } from "./dto/users-dto";
-import { UpdateResult } from "typeorm/browser";
+import { ConflictException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from './entity/user.entity';
+import { Repository } from 'typeorm';
+import { UsersDto } from './dto/users-dto';
+import { UpdateResult } from 'typeorm/browser';
 
 @Injectable()
 export class UsersService {
@@ -14,7 +14,7 @@ export class UsersService {
   async createUser(user: UsersDto) {
     const UserExists = await this.findUser(user.dniUs);
     if (UserExists) {
-      throw new ConflictException("Usuario ya registrado");
+      throw new ConflictException('Usuario ya registrado');
     } else {
       return await this.userRepository.save(user);
     }
@@ -40,11 +40,11 @@ export class UsersService {
     const UserExists = await this.findUser(dniUs);
     if (!UserExists) {
       throw new ConflictException(
-        "El usuario con dniUs: " + dniUs + "no existe",
+        'El usuario con dniUs: ' + dniUs + 'no existe',
       );
     }
     if (UserExists.deleteU) {
-      throw new ConflictException("El usuario ya esta eliminado");
+      throw new ConflictException('El usuario ya esta eliminado');
     }
     const rows: UpdateResult = await this.userRepository.update(
       { dniUs },
@@ -58,11 +58,11 @@ export class UsersService {
 
     if (!UserExists) {
       throw new ConflictException(
-        "El usuario con dniUs " + dniUs + " no existe",
+        'El usuario con dniUs ' + dniUs + ' no existe',
       );
     }
     if (!UserExists) {
-      throw new ConflictException("el usuario no esta eliminado");
+      throw new ConflictException('el usuario no esta eliminado');
     }
 
     const rows: UpdateResult = await this.userRepository.update(

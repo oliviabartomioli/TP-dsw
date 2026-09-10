@@ -1,6 +1,6 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 
-@Entity("professional")
+@Entity('professional')
 export class Professional {
   @PrimaryColumn()
   dniP!: number;
