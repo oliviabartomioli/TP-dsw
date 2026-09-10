@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {
   Body,
   Controller,
@@ -10,6 +11,11 @@ import {
 } from "@nestjs/common";
 import { RequestService } from "./request.service";
 import { requestDto } from "./dto/request-dto";
+=======
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { RequestService } from './request.service';
+import { requestDto } from './dto/request-dto';
+>>>>>>> parent of 141d88c (modulo request finalizado)
 
 @Controller("request")
 export class RequestController {
@@ -22,6 +28,7 @@ export class RequestController {
   getRequestByIdRequest(@Param("idRequest") idRequest: number) {
     return this.requestService.findRequest(idRequest);
   }
+<<<<<<< HEAD
   @Get()
   getRequests() {
     return this.requestService.findAll();
@@ -38,4 +45,7 @@ export class RequestController {
   restoreRequests(@Param("idRequest") idRequest: number) {
     return this.requestService.restoreRequest(idRequest);
   }
+=======
+
+>>>>>>> parent of 141d88c (modulo request finalizado)
 }
