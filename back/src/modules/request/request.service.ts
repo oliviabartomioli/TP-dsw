@@ -1,24 +1,8 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-import { ConflictException, Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository, UpdateResult } from "typeorm";
-import { requestDto } from "./dto/request-dto";
-import { request } from "./entity/request.entity";
-=======
-import { ConflictException, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { requestDto } from './dto/request-dto';
-import { request } from './entity/request.entity';
->>>>>>> parent of 141d88c (modulo request finalizado)
-=======
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
 import { requestDto } from './dto/request-dto';
 import { request } from './entity/request.entity';
->>>>>>> parent of ab56bb6 (modificación comillas)
 
 @Injectable()
 export class RequestService {
@@ -29,12 +13,7 @@ export class RequestService {
   async createRequests(requests: requestDto) {
     const requestExists = await this.findRequest(requests.idRequest);
     if (requestExists) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-      throw new ConflictException("La solicitud ya existe");
-=======
       throw new ConflictException('La solicitud ya existe');
->>>>>>> parent of ab56bb6 (modificación comillas)
     } else {
       return await this.requestRepository.save(requests);
     }
@@ -84,10 +63,6 @@ export class RequestService {
     return rows.affected == 1;
   }
   async updateRequests(requests: requestDto) {
-=======
-      throw new ConflictException('La solicitud ya existe');
-    }
->>>>>>> parent of 141d88c (modulo request finalizado)
     return await this.requestRepository.save(requests);
   }
 }

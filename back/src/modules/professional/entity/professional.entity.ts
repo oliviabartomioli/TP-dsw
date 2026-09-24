@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Availability } from 'src/modules/availability/entity/availability.entity';
+import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 
 @Entity('professional')
 export class Professional {
@@ -19,4 +20,7 @@ export class Professional {
 
   @Column({ type: Boolean, nullable: false, default: false })
   deleteP?: boolean;
+
+  @OneToMany(() => Availability, (availability) => availability.professional)
+  availabilities!: Availability[];
 }

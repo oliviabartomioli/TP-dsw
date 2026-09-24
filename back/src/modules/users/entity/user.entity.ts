@@ -17,7 +17,7 @@ export class User {
   @Column({ type: String, nullable: false, length: 30 })
   emailU!: string;
 
-  @Column({ type: String, nullable: false, length: 15 })
+  @Column({ type: String, nullable: false, length: 100 })
   passwordU!: string;
 
   @Column({ type: Boolean, nullable: false, default: false })

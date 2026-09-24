@@ -1,9 +1,13 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entity/user.entity';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { UsersDto } from './dto/users-dto';
-import { UpdateResult } from 'typeorm/browser';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -12,10 +16,12 @@ export class UsersService {
   ) {}
 
   async createUser(user: UsersDto) {
-    const UserExists = await this.findUser(user.dniUs);
-    if (UserExists) {
+    const userExists = await this.findUser(user.dniUs);
+    if (userExists) {
       throw new ConflictException('Usuario ya registrado');
     } else {
+      const salt = await bcrypt.genSalt(10);
+      user.passwordU = await bcrypt.hash(user.passwordU, salt);
       return await this.userRepository.save(user);
     }
   }
@@ -33,24 +39,40 @@ export class UsersService {
   }
 
   async updateUsers(user: UsersDto) {
+    const userExists = await this.findUser(user.dniUs);
+    if (!userExists) {
+      throw new NotFoundException(
+        'El usuario con dniUs: ' + user.dniUs + ' no existe',
+      );
+    }
+    if (userExists.deleteU) {
+      throw new ConflictException(
+        'El usuario con dniUs: ' + user.dniUs + ' esta eliminado',
+      );
+    }
+    if (user.passwordU) {
+      user.passwordU = await bcrypt.hash(user.passwordU, 10);
+    }
     return await this.userRepository.save(user);
   }
 
   async deleteUsers(dniUs: number) {
-    const UserExists = await this.findUser(dniUs);
-    if (!UserExists) {
-      throw new ConflictException(
-        'El usuario con dniUs: ' + dniUs + 'no existe',
+    const userExists = await this.findUser(dniUs);
+    if (!userExists) {
+      throw new NotFoundException(
+        'El usuario con dniUs: ' + dniUs + ' no existe',
       );
     }
-    if (UserExists.deleteU) {
-      throw new ConflictException('El usuario ya esta eliminado');
+    if (userExists.deleteU) {
+      throw new ConflictException(
+        'El usuario con dniUs: ' + dniUs + ' ya esta eliminado',
+      );
     }
     const rows: UpdateResult = await this.userRepository.update(
       { dniUs },
       { deleteU: true },
     );
-    return rows.affected == 1;
+    return rows.affected === 1;
   }
 
   async restoreUsers(dniUs: number) {
@@ -61,14 +83,22 @@ export class UsersService {
         'El usuario con dniUs ' + dniUs + ' no existe',
       );
     }
-    if (!UserExists) {
-      throw new ConflictException('el usuario no esta eliminado');
+    if (!UserExists.deleteU) {
+      throw new ConflictException(
+        'El usuario con dniUs: ' + dniUs + ' no esta eliminado',
+      );
     }
 
     const rows: UpdateResult = await this.userRepository.update(
       { dniUs },
       { deleteU: false },
     );
-    return rows.affected == 1;
+    return rows.affected === 1;
+  }
+  async validatePassword(
+    password: string,
+    storedHash: string,
+  ): Promise<boolean> {
+    return bcrypt.compare(password, storedHash);
   }
 }
