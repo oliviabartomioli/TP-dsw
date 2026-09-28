@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+
+import { city } from '../../city/entity/city.entity';
 
 @Entity('province')
 export class province {
@@ -10,4 +12,7 @@ export class province {
 
   @Column({ type: Boolean, nullable: false, default: false })
   deleteProvince?: boolean;
+
+  @OneToMany(() => city, (city) => city.province)
+  cities!: city[];
 }

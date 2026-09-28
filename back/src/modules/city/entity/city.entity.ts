@@ -1,4 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+
+import { province } from '../../province/entity/province.entity';
 
 @Entity('city')
 export class city {
@@ -10,4 +18,10 @@ export class city {
 
   @Column({ type: Boolean, nullable: false, default: false })
   deleteCity?: boolean;
+
+  @ManyToOne(() => province, (province) => province.cities, {
+    nullable: false,
+  })
+  @JoinColumn({ name: 'idProvince' })
+  province!: province;
 }
