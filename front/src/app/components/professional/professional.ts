@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Professional, professionalDto } from '../../models/professional.model';
+import { ProfessionalService } from '../../services/professional';
 
 @Component({
   imports: [CommonModule, ReactiveFormsModule],
@@ -80,7 +81,7 @@ export class ProfessionalComponents implements OnInit {
 
         next: () => {
           this.resetForm();
-          this.loadDeletedProfessionals();
+          this.loadDeletedProfessional();
         }
       })
     }
