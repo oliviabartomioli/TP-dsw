@@ -7,7 +7,7 @@ import { request } from './entity/request.entity';
 @Injectable()
 export class RequestService {
   constructor(
-    @InjectRepository(Request)
+    @InjectRepository(request)
     private requestRepository: Repository<request>,
   ) {}
   async createRequests(requests: requestDto) {

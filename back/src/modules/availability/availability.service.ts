@@ -27,14 +27,12 @@ export class AvailabilityService {
     return await this.availabilityRepository.save(availability);
   }
 
-  // incluye las dadas de baja (lo usa el delete)
   async findAvailability(idAvailability: number) {
     return await this.availabilityRepository.findOne({
       where: { idAvailability },
     });
   }
 
-  // solo activas, para el GET por id
   async findOneAvailability(idAvailability: number) {
     const availability = await this.availabilityRepository.findOne({
       where: { idAvailability, deleteAv: false },
@@ -60,7 +58,7 @@ export class AvailabilityService {
     availability: AvailabilityDto,
   ) {
     this.validateTimes(availability);
-    await this.findOneAvailability(idAvailability); // tira 404 si no existe o está dada de baja
+    await this.findOneAvailability(idAvailability);
     return await this.availabilityRepository.save({
       ...availability,
       idAvailability,

@@ -1,7 +1,9 @@
 import {
+  IsBoolean,
   IsEmail,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsPositive,
   IsString,
 } from 'class-validator';
@@ -31,4 +33,8 @@ export class UsersDto {
   @IsString()
   @IsNotEmpty()
   passwordU!: string;
+
+  @IsBoolean()
+  @IsOptional()
+  deleteU?: boolean;
 }
