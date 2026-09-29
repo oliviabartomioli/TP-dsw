@@ -82,8 +82,67 @@ export class ProfessionalComponents implements OnInit {
         next: () => {
           this.resetForm();
           this.loadDeletedProfessional();
-        }
-      })
+        },
+        error: (err) => {
+          this.errorMessage = 'error al actualizar profesional'}, 
+      });
+    } else {
+      this.professionalService.createProfessional(dto).subscribe({
+        next: () => {
+          this.resetForm();
+          this.loadProfessionals();
+        },
+        error: (err)=> {
+          this.errorMessage = 'error al crear profesional'
+        },
+      });
     }
+  }
+  onEdit(professional:Professional):void{
+    this.isEditMode = true;
+    this.professionalForm.patchValue({
+      dniP: professional.dniP,
+      nameP: professional.nameP,
+      surnameP: professional.surnameP,
+      typeP: professional.typeP,
+      assessmentP: professional.assesmentP,
+      deleteP: professional.deleteP ?? false,
+    });
+    this.professionalForm.get('dniP')?.disable();
+  }
+  onDelete(dniP:number): void{
+    if (confirm(`Seguro que desea eliminar al profesional con dni: ${dniP}?`)){
+      this.professionalService.deleteProfessionals(dniP).subscribe({
+        next:()=>{
+          this.loadProfessionals();
+          if (this.showDeleted) this.loadDeletedProfessional();
+        },
+        error:(err)=> {
+          this.errorMessage='error al eliminar profesional'
+        },
+      });
+    }
+  }
+  onRestore(dniP:number):void{
+    this.professionalService.restoreProfessional(dniP).subscribe({
+      next:()=>{
+        this.loadProfessionals();
+        this.loadDeletedProfessional();
+      },
+      error: (err)=> {
+        this.errorMessage = 'error al restaurar profesional'
+      },
+    });
+  }
+  toggleDeletedView(): void{
+    this.showDeleted = !this.showDeleted;
+    if(this.showDeleted){
+      this.loadDeletedProfessional();
+    }
+  }
+  resetForm():void{
+    this.isEditMode = false;
+    this.professionalForm.reset({delete: false});
+    this.professionalForm.get('dniP')?.enable();
   }
 }
