@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Put,
 } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { categoryDto } from './dto/category-dto';
@@ -25,6 +26,10 @@ export class CategoryController {
   @Get('delete/deleted')
   getCategoryDeleted() {
     return this.categoryService.findAllDelete();
+  }
+  @Put()
+  updateCategory(@Body() category: categoryDto) {
+    return this.categoryService.updateCategory(category);
   }
   @Delete('/:idCategory')
   deleteCategory(@Param('idCategory') idCategory: number) {

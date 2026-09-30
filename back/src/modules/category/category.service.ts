@@ -29,6 +29,23 @@ export class CategoryService {
   async findAllDelete() {
     return await this.categoryRepository.find({ where: { deleteC: true } });
   }
+  async updateCategory(category: categoryDto) {
+    const CategoryExists = await this.findCategory(category.idCategory);
+
+    if (!CategoryExists) {
+      throw new ConflictException(
+        'La categoria con id ' + category.idCategory + ' no existe',
+      );
+    }
+
+    if (CategoryExists.deleteC) {
+      throw new ConflictException(
+        'La categoria con id ' + category.idCategory + ' esta eliminada',
+      );
+    }
+
+    return await this.categoryRepository.save(category);
+  }
   async deleteCategory(idCategory: number) {
     const CategoryExists = await this.findCategory(idCategory);
     if (!CategoryExists) {

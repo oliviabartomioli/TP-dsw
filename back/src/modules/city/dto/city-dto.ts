@@ -16,6 +16,10 @@ export class cityDto {
   @IsString()
   @IsNotEmpty()
   nameCity!: string;
+
+  @IsNumber()
+  @IsPositive()
+  @IsNotEmpty()
   idProvince!: number;
 
   @IsBoolean()

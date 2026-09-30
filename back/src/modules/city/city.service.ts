@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { city } from './entity/city.entity';
 import { cityDto } from './dto/city-dto';
 import { province } from '../province/entity/province.entity';
@@ -12,7 +12,8 @@ import { province } from '../province/entity/province.entity';
 @Injectable()
 export class CityService {
   constructor(
-    @InjectRepository(city) private cityRepository: Repository<city>,
+    @InjectRepository(city)
+    private cityRepository: Repository<city>,
 
     @InjectRepository(province)
     private readonly provinceRepository: Repository<province>,
@@ -40,33 +41,107 @@ export class CityService {
       province: provinceExists,
     });
 
+    return await this.cityRepository.save(newCity);
+  }
 
-  return await this.cityRepository.save(newCity);
-}
   async findCity(nameCity: string) {
     return await this.cityRepository.findOne({
       where: { nameCity },
     });
   }
-  async findAll() {
-    return await this.cityRepository.find({ where: { deleteCity: false } });
+
+  async findCityById(idCity: number) {
+    return await this.cityRepository.findOne({
+      where: { idCity },
+    });
   }
+
+  async findAll() {
+    const cities = await this.cityRepository
+      .createQueryBuilder('city')
+      .leftJoinAndSelect('city.province', 'province')
+      .where('city.deleteCity = :deleted', { deleted: false })
+      .getMany();
+
+    return cities;
+  }
+
+  async findAllDeleted() {
+    return await this.cityRepository
+      .createQueryBuilder('city')
+      .leftJoinAndSelect('city.province', 'province')
+      .where('city.deleteCity = :deleted', { deleted: true })
+      .getMany();
+  }
+
+  async updateCity(cityData: cityDto) {
+    const cityExists = await this.findCityById(cityData.idCity);
+
+    if (!cityExists) {
+      throw new ConflictException(
+        'La ciudad con ID ' + cityData.idCity + ' no existe.',
+      );
+    }
+
+    if (cityExists.deleteCity) {
+      throw new ConflictException(
+        'La ciudad con ID ' + cityData.idCity + ' está eliminada.',
+      );
+    }
+
+    const provinceExists = await this.provinceRepository.findOne({
+      where: {
+        idProvince: cityData.idProvince,
+      },
+    });
+
+    if (!provinceExists) {
+      throw new NotFoundException('Provincia no encontrada.');
+    }
+
+    cityExists.nameCity = cityData.nameCity;
+    cityExists.province = provinceExists;
+
+    return await this.cityRepository.save(cityExists);
+  }
+
   async deleteCity(nameCity: string) {
     const cityExists = await this.findCity(nameCity);
+
     if (!cityExists) {
-      throw new ConflictException('La ciudad:' + nameCity + 'no existe');
+      throw new ConflictException('La ciudad: ' + nameCity + ' no existe.');
     }
+
     if (cityExists.deleteCity) {
-      throw new ConflictException('La ciudad:' + nameCity + 'esta eliminada');
+      throw new ConflictException(
+        'La ciudad: ' + nameCity + ' está eliminada.',
+      );
     }
+
+    const rows: UpdateResult = await this.cityRepository.update(
+      { nameCity },
+      { deleteCity: true },
+    );
+
+    return rows.affected == 1;
   }
+
   async restoreCity(nameCity: string) {
     const cityExists = await this.findCity(nameCity);
+
     if (!cityExists) {
-      throw new ConflictException('La ciudad:' + nameCity + 'no existe.');
+      throw new ConflictException('La ciudad: ' + nameCity + ' no existe.');
     }
+
     if (!cityExists.deleteCity) {
-      throw new ConflictException('La ciudad no esta eliminada.');
+      throw new ConflictException('La ciudad no está eliminada.');
     }
+
+    const rows: UpdateResult = await this.cityRepository.update(
+      { nameCity },
+      { deleteCity: false },
+    );
+
+    return rows.affected == 1;
   }
 }
