@@ -1,1 +1,264 @@
-<p>professional works!</p>
+<div class="professional-container">
+
+  <h1>Gestión de Profesionales</h1>
+
+  <!-- MENSAJE DE ERROR -->
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <!-- FORMULARIO -->
+  <form [formGroup]="professionalForm" (ngSubmit)="onSubmit()">
+
+    <h2>
+      {{ isEditMode ? 'Editar Profesional' : 'Nuevo Profesional' }}
+    </h2>
+
+    <!-- DNI -->
+    <div class="form-group">
+      <label for="dniP">DNI</label>
+
+      <input
+        id="dniP"
+        type="number"
+        formControlName="dniP"
+      />
+
+      <small
+        *ngIf="
+          professionalForm.get('dniP')?.invalid &&
+          professionalForm.get('dniP')?.touched
+        "
+      >
+        El DNI es obligatorio.
+      </small>
+    </div>
+
+    <!-- NOMBRE -->
+    <div class="form-group">
+      <label for="nameP">Nombre</label>
+
+      <input
+        id="nameP"
+        type="text"
+        formControlName="nameP"
+      />
+
+      <small
+        *ngIf="
+          professionalForm.get('nameP')?.invalid &&
+          professionalForm.get('nameP')?.touched
+        "
+      >
+        El nombre es obligatorio.
+      </small>
+    </div>
+
+    <!-- APELLIDO -->
+    <div class="form-group">
+      <label for="surnameP">Apellido</label>
+
+      <input
+        id="surnameP"
+        type="text"
+        formControlName="surnameP"
+      />
+
+      <small
+        *ngIf="
+          professionalForm.get('surnameP')?.invalid &&
+          professionalForm.get('surnameP')?.touched
+        "
+      >
+        El apellido es obligatorio.
+      </small>
+    </div>
+
+    <!-- TIPO DE PROFESIONAL -->
+    <div class="form-group">
+      <label for="typeP">Tipo de profesional</label>
+
+      <input
+        id="typeP"
+        type="text"
+        formControlName="typeP"
+      />
+
+      <small
+        *ngIf="
+          professionalForm.get('typeP')?.invalid &&
+          professionalForm.get('typeP')?.touched
+        "
+      >
+        El tipo de profesional es obligatorio.
+      </small>
+    </div>
+
+    <!-- VALORACIÓN -->
+    <div class="form-group">
+      <label for="assessmentP">Valoración</label>
+
+      <input
+        id="assessmentP"
+        type="text"
+        formControlName="assessmentP"
+      />
+
+      <small
+        *ngIf="
+          professionalForm.get('assessmentP')?.invalid &&
+          professionalForm.get('assessmentP')?.touched
+        "
+      >
+        La valoración es obligatoria.
+      </small>
+    </div>
+
+    <!-- BOTONES -->
+    <div class="form-actions">
+
+      <button type="submit">
+        {{ isEditMode ? 'Actualizar' : 'Crear Profesional' }}
+      </button>
+
+      <button
+        *ngIf="isEditMode"
+        type="button"
+        (click)="resetForm()"
+      >
+        Cancelar
+      </button>
+
+    </div>
+
+  </form>
+
+  <!-- BOTÓN ACTIVOS / ELIMINADOS -->
+  <div class="view-actions">
+
+    <button
+      type="button"
+      (click)="toggleDeletedView()"
+    >
+      {{
+        showDeleted
+          ? 'Ver Profesionales Activos'
+          : 'Ver Profesionales Eliminados'
+      }}
+    </button>
+
+  </div>
+
+  <!-- CARGANDO -->
+  <p *ngIf="loading">
+    Cargando profesionales...
+  </p>
+
+  <!-- PROFESIONALES ACTIVOS -->
+  <div *ngIf="!showDeleted">
+
+    <h2>Profesionales Activos</h2>
+
+    <p *ngIf="professionals.length === 0 && !loading">
+      No hay profesionales registrados.
+    </p>
+
+    <table *ngIf="professionals.length > 0">
+
+      <thead>
+        <tr>
+          <th>DNI</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Tipo</th>
+          <th>Valoración</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr *ngFor="let professional of professionals">
+
+          <td>{{ professional.dniP }}</td>
+          <td>{{ professional.nameP }}</td>
+          <td>{{ professional.surnameP }}</td>
+          <td>{{ professional.typeP }}</td>
+          <td>{{ professional.assessmentP }}</td>
+
+          <td>
+
+            <button
+              type="button"
+              (click)="onEdit(professional)"
+            >
+              Editar
+            </button>
+
+            <button
+              type="button"
+              (click)="onDelete(professional.dniP)"
+            >
+              Eliminar
+            </button>
+
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+  <!-- PROFESIONALES ELIMINADOS -->
+  <div *ngIf="showDeleted">
+
+    <h2>Profesionales Eliminados</h2>
+
+    <p *ngIf="deletedProfessionals.length === 0">
+      No hay profesionales eliminados.
+    </p>
+
+    <table *ngIf="deletedProfessionals.length > 0">
+
+      <thead>
+        <tr>
+          <th>DNI</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Tipo</th>
+          <th>Valoración</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr *ngFor="let professional of deletedProfessionals">
+
+          <td>{{ professional.dniP }}</td>
+          <td>{{ professional.nameP }}</td>
+          <td>{{ professional.surnameP }}</td>
+          <td>{{ professional.typeP }}</td>
+          <td>{{ professional.assessmentP }}</td>
+
+          <td>
+            <button
+              type="button"
+              (click)="onRestore(professional.dniP)"
+            >
+              Restaurar
+            </button>
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>

@@ -4,7 +4,7 @@ export interface Professional{
   nameP: string;
   surnameP: string;
   typeP: string;
-  assesmentP: string;
+  assessmentP: string;
   deleteP?: boolean;
 }
 
@@ -14,7 +14,7 @@ export interface professionalDto{
   nameP: string;
   surnameP: string;
   typeP: string;
-  assesmentP: string;
+  assessmentP: string;
   deleteP?: boolean;
 
 }

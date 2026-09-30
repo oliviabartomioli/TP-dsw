@@ -1,7 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { Category, categoryDto } from '../../models/category.model';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { Category, categoryDto } from '../../models/category.model';
 import { CategoryService } from '../../services/category';
 
 @Component({
@@ -23,62 +28,146 @@ export class CategoryComponents implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private categoryService: CategoryService
-  ){}
+    private categoryService: CategoryService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.initForm();
     this.loadCategorys();
   }
-  initForm(): void {
-  this.categoryForm = this.fb.group({
-    idCategory: ['', [Validators.required, Validators.min(1)]],
-    nameC: ['', [Validators.required, Validators.maxLength(15)]],
-    descriptionC: ['', [Validators.required, Validators.maxLength(100)]],
-    deleteC: [false]
-  });
-}
 
-loadCategorys(): void {
+  initForm(): void {
+    this.categoryForm = this.fb.group({
+      idCategory: ['', [Validators.required, Validators.min(1)]],
+      nameC: ['', [Validators.required, Validators.maxLength(15)]],
+      descriptionC: ['', [Validators.required, Validators.maxLength(100)]],
+      deleteC: [false],
+    });
+  }
+
+  loadCategorys(): void {
   this.loading = true;
+
   this.categoryService.getCategory().subscribe({
-      next: (data) => {
-        this.Categorys= data;
-        this.loading = false;
-      },
-      error: (err) => {
-        this.errorMessage = 'error al cargar categorias';
-        this.loading = false;
-    }
+    next: (data) => {
+      this.Categorys = data;
+      this.loading = false;
+      this.cdr.detectChanges();
+    },
+    error: (err) => {
+      this.errorMessage = 'error al cargar categorias';
+      this.loading = false;
+      this.cdr.detectChanges();
+    },
   });
 }
 
   loadDeletedCategory(): void {
-    this.categoryService.getCategoryDelete().subscribe({
-      next: (data) => {
-        this.deletedCategorys = data;
-      },
-      error: (err) => {
-        this.errorMessage = 'error al cargar categorias eliminadas';
-      }
-    })
-  }
+  this.categoryService.getCategoryDelete().subscribe({
+    next: (data) => {
+      this.deletedCategorys = data;
+      this.cdr.detectChanges();
+    },
+    error: (err) => {
+      this.errorMessage = 'error al cargar categorias eliminadas';
+      this.cdr.detectChanges();
+    },
+  });
+}
 
   onSubmit(): void {
-    if(this.categoryForm.invalid){
+    if (this.categoryForm.invalid) {
       this.categoryForm.markAllAsTouched();
       return;
     }
-    const dto: categoryDto = this.categoryForm.value;
 
-    if(this.isEditMode){
+    const dto: categoryDto = this.categoryForm.getRawValue();
+
+    if (this.isEditMode) {
       this.categoryService.upDateCategory(dto).subscribe({
-
         next: () => {
           this.resetForm();
-          this.loadDeletedCategory();
-        }
-      })
+          this.loadCategorys();
+        },
+        error: (err) => {
+          this.errorMessage = 'error al actualizar categoria';
+        },
+      });
+    } else {
+      this.categoryService.createCategory(dto).subscribe({
+        next: () => {
+          this.resetForm();
+          this.loadCategorys();
+        },
+        error: (err) => {
+          this.errorMessage = 'error al crear categoria';
+        },
+      });
     }
+  }
+
+  onEdit(category: Category): void {
+    this.isEditMode = true;
+
+    this.categoryForm.patchValue({
+      idCategory: category.idCategory,
+      nameC: category.nameC,
+      descriptionC: category.descriptionC,
+      deleteC: category.deleteC ?? false,
+    });
+
+    this.categoryForm.get('idCategory')?.disable();
+  }
+
+  onDelete(idCategory: number): void {
+    if (
+      confirm(
+        `Seguro que desea eliminar la categoria con ID: ${idCategory}?`
+      )
+    ) {
+      this.categoryService.deleteCategory(idCategory).subscribe({
+        next: () => {
+          this.loadCategorys();
+
+          if (this.showDeleted) {
+            this.loadDeletedCategory();
+          }
+        },
+        error: (err) => {
+          this.errorMessage = 'error al eliminar categoria';
+        },
+      });
+    }
+  }
+
+  onRestore(idCategory: number): void {
+    this.categoryService.restoreCategory(idCategory).subscribe({
+      next: () => {
+        this.loadCategorys();
+        this.loadDeletedCategory();
+      },
+      error: (err) => {
+        this.errorMessage = 'error al restaurar categoria';
+      },
+    });
+  }
+
+  toggleDeletedView(): void {
+    this.showDeleted = !this.showDeleted;
+
+    if (this.showDeleted) {
+      this.loadDeletedCategory();
+    }
+  }
+
+  resetForm(): void {
+    this.isEditMode = false;
+
+    this.categoryForm.reset({
+      deleteC: false,
+    });
+
+    this.categoryForm.get('idCategory')?.enable();
   }
 }

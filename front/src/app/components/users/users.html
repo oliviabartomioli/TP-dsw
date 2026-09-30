@@ -1,1 +1,286 @@
-<p>users works!</p>
+<div class="users-container">
+
+  <h1>Gestión de Usuarios</h1>
+
+  <!-- MENSAJE DE ERROR -->
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <!-- FORMULARIO -->
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+
+    <h2>
+      {{ isEditMode ? 'Editar Usuario' : 'Nuevo Usuario' }}
+    </h2>
+
+    <!-- DNI -->
+    <div class="form-group">
+      <label for="dniUs">DNI</label>
+
+      <input
+        id="dniUs"
+        type="number"
+        formControlName="dniUs"
+      />
+
+      <small
+        *ngIf="
+          userForm.get('dniUs')?.invalid &&
+          userForm.get('dniUs')?.touched
+        "
+      >
+        El DNI es obligatorio.
+      </small>
+    </div>
+
+    <!-- NOMBRE -->
+    <div class="form-group">
+      <label for="nameU">Nombre</label>
+
+      <input
+        id="nameU"
+        type="text"
+        formControlName="nameU"
+      />
+
+      <small
+        *ngIf="
+          userForm.get('nameU')?.invalid &&
+          userForm.get('nameU')?.touched
+        "
+      >
+        El nombre es obligatorio.
+      </small>
+    </div>
+
+    <!-- APELLIDO -->
+    <div class="form-group">
+      <label for="surnameU">Apellido</label>
+
+      <input
+        id="surnameU"
+        type="text"
+        formControlName="surnameU"
+      />
+
+      <small
+        *ngIf="
+          userForm.get('surnameU')?.invalid &&
+          userForm.get('surnameU')?.touched
+        "
+      >
+        El apellido es obligatorio.
+      </small>
+    </div>
+
+    <!-- TELÉFONO -->
+    <div class="form-group">
+      <label for="phoneU">Teléfono</label>
+
+      <input
+        id="phoneU"
+        type="text"
+        formControlName="phoneU"
+      />
+
+      <small
+        *ngIf="
+          userForm.get('phoneU')?.invalid &&
+          userForm.get('phoneU')?.touched
+        "
+      >
+        El teléfono es obligatorio.
+      </small>
+    </div>
+
+    <!-- EMAIL -->
+    <div class="form-group">
+      <label for="emailU">Email</label>
+
+      <input
+        id="emailU"
+        type="email"
+        formControlName="emailU"
+      />
+
+      <small
+        *ngIf="
+          userForm.get('emailU')?.invalid &&
+          userForm.get('emailU')?.touched
+        "
+      >
+        Ingrese un email válido.
+      </small>
+    </div>
+
+    <!-- CONTRASEÑA -->
+    <div class="form-group">
+      <label for="passwordU">Contraseña</label>
+
+      <input
+        id="passwordU"
+        type="password"
+        formControlName="passwordU"
+      />
+
+      <small
+        *ngIf="
+          userForm.get('passwordU')?.invalid &&
+          userForm.get('passwordU')?.touched
+        "
+      >
+        La contraseña es obligatoria.
+      </small>
+    </div>
+
+    <!-- BOTONES DEL FORMULARIO -->
+    <div class="form-actions">
+
+      <button type="submit">
+        {{ isEditMode ? 'Actualizar' : 'Crear Usuario' }}
+      </button>
+
+      <button
+        *ngIf="isEditMode"
+        type="button"
+        (click)="resetForm()"
+      >
+        Cancelar
+      </button>
+
+    </div>
+
+  </form>
+
+
+  <!-- CAMBIAR ENTRE ACTIVOS Y ELIMINADOS -->
+  <div class="view-actions">
+
+    <button
+      type="button"
+      (click)="toggleDeletedView()"
+    >
+      {{ showDeleted ? 'Ver Usuarios Activos' : 'Ver Usuarios Eliminados' }}
+    </button>
+
+  </div>
+
+
+  <!-- CARGANDO -->
+  <p *ngIf="loading">
+    Cargando usuarios...
+  </p>
+
+
+  <!-- USUARIOS ACTIVOS -->
+  <div *ngIf="!showDeleted">
+
+    <h2>Usuarios Activos</h2>
+
+    <p *ngIf="users.length === 0 && !loading">
+      No hay usuarios registrados.
+    </p>
+
+    <table *ngIf="users.length > 0">
+
+      <thead>
+        <tr>
+          <th>DNI</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Teléfono</th>
+          <th>Email</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr *ngFor="let user of users">
+
+          <td>{{ user.dniUs }}</td>
+          <td>{{ user.nameU }}</td>
+          <td>{{ user.surnameU }}</td>
+          <td>{{ user.phoneU }}</td>
+          <td>{{ user.emailU }}</td>
+
+          <td>
+
+            <button
+              type="button"
+              (click)="onEdit(user)"
+            >
+              Editar
+            </button>
+
+            <button
+              type="button"
+              (click)="onDelete(user.dniUs)"
+            >
+              Eliminar
+            </button>
+
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+
+  <!-- USUARIOS ELIMINADOS -->
+  <div *ngIf="showDeleted">
+
+    <h2>Usuarios Eliminados</h2>
+
+    <p *ngIf="deletedUsers.length === 0">
+      No hay usuarios eliminados.
+    </p>
+
+    <table *ngIf="deletedUsers.length > 0">
+
+      <thead>
+        <tr>
+          <th>DNI</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Teléfono</th>
+          <th>Email</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr *ngFor="let user of deletedUsers">
+
+          <td>{{ user.dniUs }}</td>
+          <td>{{ user.nameU }}</td>
+          <td>{{ user.surnameU }}</td>
+          <td>{{ user.phoneU }}</td>
+          <td>{{ user.emailU }}</td>
+
+          <td>
+
+            <button
+              type="button"
+              (click)="onRestore(user.dniUs)"
+            >
+              Restaurar
+            </button>
+
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>

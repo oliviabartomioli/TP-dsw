@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Professional, professionalDto } from '../../models/professional.model';
 import { ProfessionalService } from '../../services/professional';
@@ -23,7 +23,8 @@ export class ProfessionalComponents implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private professionalService: ProfessionalService
+    private professionalService: ProfessionalService,
+    private cdr: ChangeDetectorRef
   ){}
 
   ngOnInit(): void {
@@ -43,30 +44,33 @@ export class ProfessionalComponents implements OnInit {
   }
 
   loadProfessionals(): void {
-
     this.loading = true;
+
     this.professionalService.getProfessional().subscribe({
       next: (data) => {
-        this.professionals= data;
+        this.professionals = data;
         this.loading = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.errorMessage = 'error al cargar Profesionales';
         this.loading = false;
-      }
+        this.cdr.detectChanges();
+      },
     });
   }
 
-  loadDeletedProfessional(): void { 
-
+  loadDeletedProfessional(): void {
     this.professionalService.getProfessionalDelete().subscribe({
       next: (data) => {
         this.deletedProfessionals = data;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         this.errorMessage = 'error al cargar Profesionales eliminados';
-      }
-    })
+        this.cdr.detectChanges();
+      },
+    });
   }
 
   onSubmit(): void {
@@ -105,7 +109,7 @@ export class ProfessionalComponents implements OnInit {
       nameP: professional.nameP,
       surnameP: professional.surnameP,
       typeP: professional.typeP,
-      assessmentP: professional.assesmentP,
+      assessmentP: professional.assessmentP,
       deleteP: professional.deleteP ?? false,
     });
     this.professionalForm.get('dniP')?.disable();

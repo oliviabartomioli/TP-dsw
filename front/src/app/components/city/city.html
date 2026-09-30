@@ -1,0 +1,173 @@
+<h2>Gestión de Ciudades</h2>
+
+<p *ngIf="loading">Cargando ciudades...</p>
+<p *ngIf="errorMessage">{{ errorMessage }}</p>
+
+<form [formGroup]="cityForm" (ngSubmit)="onSubmit()">
+
+  <div>
+    <label for="idCity">ID Ciudad:</label>
+    <input
+      id="idCity"
+      type="number"
+      formControlName="idCity"
+    />
+
+    <span
+      *ngIf="
+        cityForm.get('idCity')?.invalid &&
+        cityForm.get('idCity')?.touched
+      "
+    >
+      El ID es obligatorio.
+    </span>
+  </div>
+
+  <div>
+    <label for="nameCity">Nombre:</label>
+    <input
+      id="nameCity"
+      type="text"
+      formControlName="nameCity"
+    />
+
+    <span
+      *ngIf="
+        cityForm.get('nameCity')?.invalid &&
+        cityForm.get('nameCity')?.touched
+      "
+    >
+      El nombre es obligatorio.
+    </span>
+  </div>
+
+  <div>
+    <label for="idProvince">Provincia:</label>
+
+    <select
+      id="idProvince"
+      formControlName="idProvince"
+    >
+      <option value="">Seleccione una provincia</option>
+
+      <option
+        *ngFor="let province of provinces"
+        [value]="province.idProvince"
+      >
+        {{ province.nameProvince }}
+      </option>
+    </select>
+
+    <span
+      *ngIf="
+        cityForm.get('idProvince')?.invalid &&
+        cityForm.get('idProvince')?.touched
+      "
+    >
+      Debe seleccionar una provincia.
+    </span>
+  </div>
+
+  <button type="submit">
+    {{ isEditMode ? 'Actualizar' : 'Crear' }}
+  </button>
+
+  <button
+    *ngIf="isEditMode"
+    type="button"
+    (click)="resetForm()"
+  >
+    Cancelar
+  </button>
+
+</form>
+
+<hr>
+
+<h3>Ciudades</h3>
+
+<table *ngIf="cities.length > 0">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Ciudad</th>
+      <th>Provincia</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let city of cities">
+      <td>{{ city.idCity }}</td>
+      <td>{{ city.nameCity }}</td>
+      <td>{{ city.province?.nameProvince }}</td>
+
+      <td>
+        <button
+          type="button"
+          (click)="onEdit(city)"
+        >
+          Editar
+        </button>
+
+        <button
+          type="button"
+          (click)="onDelete(city.nameCity)"
+        >
+          Eliminar
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p *ngIf="!loading && cities.length === 0">
+  No hay ciudades registradas.
+</p>
+
+<hr>
+
+<button
+  type="button"
+  (click)="toggleDeletedView()"
+>
+  {{ showDeleted ? 'Ocultar eliminadas' : 'Ver eliminadas' }}
+</button>
+
+<div *ngIf="showDeleted">
+
+  <h3>Ciudades eliminadas</h3>
+
+  <table *ngIf="deletedCities.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Ciudad</th>
+        <th>Provincia</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let city of deletedCities">
+        <td>{{ city.idCity }}</td>
+        <td>{{ city.nameCity }}</td>
+        <td>{{ city.province?.nameProvince }}</td>
+
+        <td>
+          <button
+            type="button"
+            (click)="onRestore(city.nameCity)"
+          >
+            Restaurar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="deletedCities.length === 0">
+    No hay ciudades eliminadas.
+  </p>
+
+</div>
