@@ -34,15 +34,15 @@ Regularidad:
 |:-|:-|
 |CRUD simple|1. CRUD Usuario<br>2. CRUD Categoría<br>3. CRUD Provincia|
 |CRUD dependiente|1. CRUD Servicio {depende de categoría} <br>2. CRUD Ciudad {depende de Provincia} |
-|Listado<br>+<br>detalle| 1. Listado de servicios filtrado por categoria, muestra servicio, precio y prestador => detalle CRUD Servicio<br> 2. Listado de servicios filtrado por ciudad, muestra servicio, prestador y precio => detalle CRUD Solicitud|
-|CUU/Epic|1. Contratar un servicio doméstico<br>2. Gestionar una solicitud (aceptar/rechazar y completar)<br>3. Calificar un servicio realizado|
+|Listado<br>+<br>detalle| 1. Listado de servicios filtrado por categoria, muestra servicio, precio y profesional => detalle CRUD Servicio<br> 2. Listado de servicios filtrado por ciudad, muestra servicio, profesional y precio => detalle CRUD Solicitud|
+|CUU/Epic|1. Contratar un servicio doméstico<br>2. Gestionar una solicitud (aceptar/rechazar y completar)
 
 
 Adicionales para Aprobación
 |Req|Detalle|
 |:-|:-|
 |CRUD |1. CRUD Usuario<br>2. CRUD Servicio<br>3. CRUD Categoría<br>4. CRUD Ciudad<br>5. CRUD Provincia<br>6. CRUD Disponibilidad<br>7. CRUD Favorito|
-|CUU/Epic|1. Registro e inicio de sesión de usuarios con roles<br>2. Contratar un servicio<br>3. Gestionar una solicitud (aceptar, rechazar y completar)<br>4. Visualizar historial de servicios realizados|
+|CUU/Epic|1. Contratar un servicio doméstico<br>2. Gestionar una solicitud (aceptar/rechazar y completar)<br>3. Calificar un servicio realizado|
 
 
 ### Alcance Adicional Voluntario
