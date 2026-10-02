@@ -42,7 +42,7 @@ Adicionales para Aprobación
 |Req|Detalle|
 |:-|:-|
 |CRUD |1. CRUD Usuario<br>2. CRUD Servicio<br>3. CRUD Categoría<br>4. CRUD Ciudad<br>5. CRUD Provincia<br>6. CRUD Disponibilidad<br>7. CRUD Favorito|
-|CUU/Epic|1. Contratar un servicio doméstico<br>2. Gestionar una solicitud (aceptar/rechazar y completar)<br>3. Calificar un servicio realizado|
+|CUU/Epic|1. Registro e inicio de sesión de usuarios con roles (cliente/profesional)<br>2.Contratar un servicio doméstico<br>3. Gestionar una solicitud (aceptar/rechazar y completar)<br>4. Calificar un servicio realizado|
 
 
 ### Alcance Adicional Voluntario
