@@ -34,7 +34,7 @@ Regularidad:
 |:-|:-|
 |CRUD simple|1. CRUD Usuario<br>2. CRUD Categoría<br>3. CRUD Provincia|
 |CRUD dependiente|1. CRUD Servicio {depende de categoría} <br>2. CRUD Ciudad {depende de Provincia} |
-|Listado<br>+<br>detalle| 1. Listado de servicios filtrado por categoria, muestra servicio, precio y profesional => detalle CRUD Servicio<br> 2. Listado de servicios filtrado por ciudad, muestra servicio, profesional y precio => detalle CRUD Solicitud|
+|Listado<br>+<br>detalle| 1. Listado de servicios filtrado por categoria, muestra servicio, precio y profesional => detalle CRUD Servicio<br> 2. Listado de servicios filtrado por ciudad, muestra servicio, profesional y precio => detalle CRUD Servicio|
 |CUU/Epic|1. Contratar un servicio doméstico<br>2. Gestionar una solicitud (aceptar/rechazar y completar)
 
 
