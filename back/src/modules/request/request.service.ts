@@ -26,6 +26,12 @@ export class RequestService {
       where: { deleteRequest: false },
     });
   }
+  async findAllDelete() {
+    return await this.requestRepository
+      .createQueryBuilder('request')
+      .where('request.deleteRequest = :deleted', { deleted: true })
+      .getMany();
+  }
   async deleteRequests(idRequest: number) {
     const requestsExists = await this.findRequest(idRequest);
     if (!requestsExists) {

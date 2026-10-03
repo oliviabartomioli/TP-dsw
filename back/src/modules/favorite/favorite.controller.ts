@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+
 import { FavoriteService } from './favorite.service';
 import { FavoriteDto } from './dto/favorite-dto';
 
@@ -18,22 +19,27 @@ export class FavoriteController {
   createFavorite(@Body() favorite: FavoriteDto) {
     return this.favoriteService.createFavorite(favorite);
   }
-  @Get('/:idfav')
-  getFavoriteByIdfav(@Param('idfav') idfav: number) {
-    return this.favoriteService.findFavorite(idfav);
-  }
+
   @Get()
   getFavorite() {
     return this.favoriteService.findAll();
   }
+
   @Get('delete/deleted')
   getFavoriteDelete() {
     return this.favoriteService.findAllDelete();
   }
+
+  @Get('/:idfav')
+  getFavoriteByIdfav(@Param('idfav') idfav: number) {
+    return this.favoriteService.findFavorite(idfav);
+  }
+
   @Delete('/:idfav')
   deleteFavorite(@Param('idfav') idfav: number) {
     return this.favoriteService.deleteFavorite(idfav);
   }
+
   @Patch('/restore/:idfav')
   restoreFavorite(@Param('idfav') idfav: number) {
     return this.favoriteService.restoreFavorite(idfav);

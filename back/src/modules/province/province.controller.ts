@@ -12,7 +12,7 @@ import {
 import { ProvinceService } from './province.service';
 import { provinceDto } from './dto/province-dto';
 
-@Controller('province')
+@Controller('api/v1/province')
 export class ProvinceController {
   constructor(private provinceService: ProvinceService) {}
 

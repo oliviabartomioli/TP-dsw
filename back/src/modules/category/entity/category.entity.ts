@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Services } from 'src/modules/services/entity/services.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('category')
 export class category {
@@ -13,4 +14,7 @@ export class category {
 
   @Column({ type: Boolean, nullable: false, default: false })
   deleteC?: boolean;
+
+  @OneToMany(() => Services, (service) => service.category)
+  services!: Services[];
 }

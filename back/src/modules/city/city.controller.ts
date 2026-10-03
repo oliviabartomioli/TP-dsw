@@ -12,7 +12,7 @@ import {
 import { CityService } from './city.service';
 import { cityDto } from './dto/city-dto';
 
-@Controller('city')
+@Controller('api/v1/city')
 export class CityController {
   constructor(private cityService: CityService) {}
 

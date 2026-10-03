@@ -5,8 +5,8 @@ import {
   IsNumber,
   IsOptional,
   IsPositive,
-  IsString,
 } from 'class-validator';
+
 import { Type } from 'class-transformer';
 
 export class FavoriteDto {
@@ -18,11 +18,12 @@ export class FavoriteDto {
   @IsNumber()
   @IsPositive()
   @IsNotEmpty()
-  fiveStarAmount!: number;
+  dniUs!: number;
 
-  @IsString()
+  @IsNumber()
+  @IsPositive()
   @IsNotEmpty()
-  comment!: string;
+  dniP!: number;
 
   @IsOptional()
   @IsBoolean()

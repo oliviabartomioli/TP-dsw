@@ -1,10 +1,13 @@
 import {
   IsBoolean,
+  IsInt,
   IsNotEmpty,
   IsNumber,
   IsOptional,
   IsPositive,
   IsString,
+  Max,
+  Min,
 } from 'class-validator';
 
 export class reviewDto {
@@ -17,9 +20,9 @@ export class reviewDto {
   @IsNotEmpty()
   commentR!: string;
 
-  @IsNumber()
-  @IsPositive()
-  @IsNotEmpty()
+  @IsInt()
+  @Min(1)
+  @Max(5)
   rating!: number;
 
   @IsBoolean()

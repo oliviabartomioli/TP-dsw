@@ -11,7 +11,7 @@ import {
 import { CategoryService } from './category.service';
 import { categoryDto } from './dto/category-dto';
 
-@Controller('category')
+@Controller('api/v1/category')
 export class CategoryController {
   constructor(private categoryService: CategoryService) {}
 

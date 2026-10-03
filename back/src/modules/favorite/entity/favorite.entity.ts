@@ -1,4 +1,13 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+
+import { User } from '../../users/entity/user.entity';
+import { Professional } from '../../professional/entity/professional.entity';
 
 @Entity('favorite')
 export class Favorite {
@@ -8,12 +17,14 @@ export class Favorite {
   @Column({ type: Date, nullable: false })
   date!: Date;
 
-  @Column({ type: Number, nullable: false })
-  fiveStarAmount!: number;
-
-  @Column({ type: String, nullable: false, length: 150 })
-  comment!: string;
-
   @Column({ type: Boolean, nullable: false, default: false })
   deleteFav?: boolean;
+
+  @ManyToOne(() => User, (user) => user.favorites)
+  @JoinColumn({ name: 'dniUs' })
+  user!: User;
+
+  @ManyToOne(() => Professional, (professional) => professional.favorites)
+  @JoinColumn({ name: 'dniP' })
+  professional!: Professional;
 }

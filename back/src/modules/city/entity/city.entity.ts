@@ -3,10 +3,12 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
 import { province } from '../../province/entity/province.entity';
+import { Professional } from '../../professional/entity/professional.entity';
 
 @Entity('city')
 export class city {
@@ -24,4 +26,7 @@ export class city {
   })
   @JoinColumn({ name: 'idProvince' })
   province!: province;
+
+  @OneToMany(() => Professional, (professional) => professional.city)
+  professionals!: Professional[];
 }

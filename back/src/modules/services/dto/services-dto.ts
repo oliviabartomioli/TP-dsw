@@ -24,4 +24,14 @@ export class ServicesDto {
   @IsBoolean()
   @IsOptional()
   deleteS?: boolean;
+
+  @IsNumber()
+  @IsPositive()
+  @IsNotEmpty()
+  idCategory!: number;
+
+  @IsNumber()
+  @IsPositive()
+  @IsNotEmpty()
+  dniP!: number;
 }

@@ -28,6 +28,26 @@ export class ReviewService {
   async findAllDelete() {
     return await this.reviewRepository.find({ where: { deleteR: true } });
   }
+  async updateReview(reviewData: reviewDto) {
+    const reviewExists = await this.findReview(reviewData.idReview);
+
+    if (!reviewExists) {
+      throw new ConflictException(
+        'La reseña con id ' + reviewData.idReview + ' no existe',
+      );
+    }
+
+    if (reviewExists.deleteR) {
+      throw new ConflictException(
+        'La reseña con id ' + reviewData.idReview + ' está eliminada',
+      );
+    }
+
+    reviewExists.commentR = reviewData.commentR;
+    reviewExists.rating = reviewData.rating;
+
+    return await this.reviewRepository.save(reviewExists);
+  }
   async deleteReview(idReview: number) {
     const ReviewExists = await this.findReview(idReview);
     if (!ReviewExists) {

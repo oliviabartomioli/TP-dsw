@@ -1,1 +1,170 @@
-<p>services works!</p>
+<h2>Servicios</h2>
+
+<!-- MENSAJE DE ERROR -->
+<p *ngIf="errorMessage">
+  {{ errorMessage }}
+</p>
+
+<!-- FORMULARIO -->
+<form [formGroup]="servicesForm" (ngSubmit)="onSubmit()">
+
+  <div>
+    <label for="idService">ID Servicio:</label>
+    <input
+      id="idService"
+      type="number"
+      formControlName="idService"
+    />
+  </div>
+
+  <div>
+    <label for="nameS">Nombre:</label>
+    <input
+      id="nameS"
+      type="text"
+      formControlName="nameS"
+    />
+  </div>
+
+  <div>
+    <label for="descriptionS">Descripción:</label>
+    <input
+      id="descriptionS"
+      type="text"
+      formControlName="descriptionS"
+    />
+  </div>
+
+  <!-- RELACIÓN SERVICE -> CATEGORY -->
+  <div>
+    <label for="idCategory">Categoría:</label>
+
+    <select
+      id="idCategory"
+      formControlName="idCategory"
+    >
+      <option value="">Seleccione una categoría</option>
+
+      <option
+        *ngFor="let category of categories"
+        [value]="category.idCategory"
+      >
+        {{ category.nameC }}
+      </option>
+    </select>
+  </div>
+
+  <button type="submit">
+    {{ isEditMode ? 'Actualizar' : 'Crear' }}
+  </button>
+
+  <button
+    type="button"
+    *ngIf="isEditMode"
+    (click)="resetForm()"
+  >
+    Cancelar
+  </button>
+
+</form>
+
+<hr />
+
+<!-- CARGANDO -->
+<p *ngIf="loading">
+  Cargando servicios...
+</p>
+
+<!-- SERVICIOS ACTIVOS -->
+<h3>Servicios activos</h3>
+
+<table *ngIf="!loading && services.length > 0">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Descripción</th>
+      <th>Categoría</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let service of services">
+      <td>{{ service.idService }}</td>
+      <td>{{ service.nameS }}</td>
+      <td>{{ service.descriptionS }}</td>
+      <td>{{ service.category?.nameC }}</td>
+
+      <td>
+        <button
+          type="button"
+          (click)="onEdit(service)"
+        >
+          Editar
+        </button>
+
+        <button
+          type="button"
+          (click)="onDelete(service.idService)"
+        >
+          Eliminar
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p *ngIf="!loading && services.length === 0">
+  No hay servicios activos.
+</p>
+
+<hr />
+
+<!-- SERVICIOS ELIMINADOS -->
+<button
+  type="button"
+  (click)="toggleDeletedView()"
+>
+  {{ showDeleted ? 'Ocultar eliminados' : 'Ver eliminados' }}
+</button>
+
+<div *ngIf="showDeleted">
+
+  <h3>Servicios eliminados</h3>
+
+  <table *ngIf="deleteService.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Categoría</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let service of deleteService">
+        <td>{{ service.idService }}</td>
+        <td>{{ service.nameS }}</td>
+        <td>{{ service.descriptionS }}</td>
+        <td>{{ service.category?.nameC }}</td>
+
+        <td>
+          <button
+            type="button"
+            (click)="onRestore(service.idService)"
+          >
+            Restaurar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="deleteService.length === 0">
+    No hay servicios eliminados.
+  </p>
+
+</div>
