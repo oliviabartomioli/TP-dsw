@@ -8,6 +8,9 @@ export class review {
   @Column({ type: String, nullable: false, length: 60 })
   commentR!: string;
 
+  @Column({ type: Number, nullable: false })
+  rating!: number;
+
   @Column({ type: Boolean, nullable: false, default: false })
   deleteR?: boolean;
 }

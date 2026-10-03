@@ -12,6 +12,7 @@ import { RequestModule } from './modules/request/request.module';
 import { AuthModule } from './auth/auth.module';
 import { FavoriteModule } from './modules/favorite/favorite.module';
 import { AvailabilityModule } from './modules/availability/availability.module';
+import { ReviewModule } from './modules/review/review.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { AvailabilityModule } from './modules/availability/availability.module';
     AuthModule,
     FavoriteModule,
     AvailabilityModule,
+    ReviewModule,
   ],
   controllers: [],
   providers: [],

@@ -1,5 +1,15 @@
 import { Availability } from 'src/modules/availability/entity/availability.entity';
-import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { city } from 'src/modules/city/entity/city.entity';
+import { Favorite } from 'src/modules/favorite/entity/favorite.entity';
+import { Services } from 'src/modules/services/entity/services.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryColumn,
+} from 'typeorm';
 
 @Entity('professional')
 export class Professional {
@@ -23,4 +33,16 @@ export class Professional {
 
   @OneToMany(() => Availability, (availability) => availability.professional)
   availabilities!: Availability[];
+
+  @OneToMany(() => Services, (service) => service.professional)
+  services!: Services[];
+
+  @OneToMany(() => Favorite, (favorite) => favorite.professional)
+  favorites!: Favorite[];
+
+  @ManyToOne(() => city, (city) => city.professionals, {
+    nullable: false,
+  })
+  @JoinColumn({ name: 'idCity' })
+  city!: city;
 }

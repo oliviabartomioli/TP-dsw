@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Favorite } from 'src/modules/favorite/entity/favorite.entity';
+import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 
 @Entity('users')
 export class User {
@@ -22,4 +23,7 @@ export class User {
 
   @Column({ type: Boolean, nullable: false, default: false })
   deleteU?: boolean;
+
+  @OneToMany(() => Favorite, (favorite) => favorite.user)
+  favorites!: Favorite[];
 }

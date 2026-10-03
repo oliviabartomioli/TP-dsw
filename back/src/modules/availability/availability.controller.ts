@@ -11,7 +11,7 @@ import {
 import { AvailabilityService } from './availability.service';
 import { AvailabilityDto } from './dto/availability-dto';
 
-@Controller('availability')
+@Controller('api/v1/availability')
 export class AvailabilityController {
   constructor(private availabilityService: AvailabilityService) {}
 

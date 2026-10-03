@@ -15,11 +15,11 @@ export class professionalDto {
 
   @IsString()
   @IsNotEmpty()
-  name!: string;
+  nameP!: string;
 
   @IsString()
   @IsNotEmpty()
-  surname!: string;
+  surnameP!: string;
 
   @IsString()
   @IsNotEmpty()
@@ -27,9 +27,14 @@ export class professionalDto {
 
   @IsString()
   @IsNotEmpty()
-  assessment!: string;
+  assessmentP!: string;
 
   @IsBoolean()
   @IsOptional()
-  delete?: boolean;
+  deleteP?: boolean;
+
+  @IsNumber()
+  @IsPositive()
+  @IsNotEmpty()
+  idCity!: number;
 }
