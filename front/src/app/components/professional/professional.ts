@@ -52,7 +52,7 @@ export class ProfessionalComponents implements OnInit {
         this.loading = false;
         this.cdr.detectChanges();
       },
-      error: (err) => {
+      error: () => {
         this.errorMessage = 'error al cargar Profesionales';
         this.loading = false;
         this.cdr.detectChanges();
@@ -66,7 +66,7 @@ export class ProfessionalComponents implements OnInit {
         this.deletedProfessionals = data;
         this.cdr.detectChanges();
       },
-      error: (err) => {
+      error: () => {
         this.errorMessage = 'error al cargar Profesionales eliminados';
         this.cdr.detectChanges();
       },
@@ -87,7 +87,7 @@ export class ProfessionalComponents implements OnInit {
           this.resetForm();
           this.loadDeletedProfessional();
         },
-        error: (err) => {
+        error: () => {
           this.errorMessage = 'error al actualizar profesional'}, 
       });
     } else {
@@ -96,7 +96,7 @@ export class ProfessionalComponents implements OnInit {
           this.resetForm();
           this.loadProfessionals();
         },
-        error: (err)=> {
+        error: ()=> {
           this.errorMessage = 'error al crear profesional'
         },
       });

@@ -28,4 +28,11 @@ export class ProfessionalService{
     upDateProfessional(professional:professionalDto):Observable<Professional>{
         return this.http.put<Professional>(this.apiUrl, professional)
     }
+    deleteProfessionals(dniP: number): Observable<void> {
+  return this.http.delete<void>(`${this.apiUrl}/${dniP}`);
+}
+
+restoreProfessional(dniP: number): Observable<void> {
+  return this.http.patch<void>(`${this.apiUrl}/restore/${dniP}`, {});
+}
 }
