@@ -8,12 +8,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Availability } from './entity/availability.entity';
 import { Repository, UpdateResult } from 'typeorm';
 import { AvailabilityDto } from './dto/availability-dto';
+import { Professional } from '../professional/entity/professional.entity';
 
 @Injectable()
 export class AvailabilityService {
   constructor(
     @InjectRepository(Availability)
     private availabilityRepository: Repository<Availability>,
+    @InjectRepository(Professional)
+    private professionalRepository: Repository<Professional>,
   ) {}
 
   private validateTimes(availability: AvailabilityDto) {
@@ -24,7 +27,25 @@ export class AvailabilityService {
 
   async createAvailability(availability: AvailabilityDto) {
     this.validateTimes(availability);
-    return await this.availabilityRepository.save(availability);
+
+    const professionalExists = await this.professionalRepository.findOne({
+      where: {
+        dniP: availability.dniProfessional,
+      },
+    });
+
+    if (!professionalExists) {
+      throw new NotFoundException('Profesional no encontrado');
+    }
+
+    const newAvailability = this.availabilityRepository.create({
+      dayOfWeek: availability.dayOfWeek,
+      startTime: availability.startTime,
+      endTime: availability.endTime,
+      professional: professionalExists,
+    });
+
+    return await this.availabilityRepository.save(newAvailability);
   }
 
   async findAvailability(idAvailability: number) {
@@ -58,11 +79,28 @@ export class AvailabilityService {
     availability: AvailabilityDto,
   ) {
     this.validateTimes(availability);
+
     await this.findOneAvailability(idAvailability);
-    return await this.availabilityRepository.save({
-      ...availability,
-      idAvailability,
+
+    const professionalExists = await this.professionalRepository.findOne({
+      where: {
+        dniP: availability.dniProfessional,
+      },
     });
+
+    if (!professionalExists) {
+      throw new NotFoundException('Profesional no encontrado');
+    }
+
+    const availabilityUpdated = this.availabilityRepository.create({
+      idAvailability,
+      dayOfWeek: availability.dayOfWeek,
+      startTime: availability.startTime,
+      endTime: availability.endTime,
+      professional: professionalExists,
+    });
+
+    return await this.availabilityRepository.save(availabilityUpdated);
   }
 
   async deleteAvailability(idAvailability: number) {
