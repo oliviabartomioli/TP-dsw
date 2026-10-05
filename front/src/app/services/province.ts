@@ -8,7 +8,7 @@ import { Province, provinceDto } from '../models/province.model';
 })
 export class ProvinceService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:3000/province';
+  private apiUrl = 'http://localhost:3000/api/v1/province';
 
   createProvince(province: provinceDto): Observable<Province> {
     return this.http.post<Province>(

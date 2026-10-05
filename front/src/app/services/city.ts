@@ -8,7 +8,7 @@ import { City, cityDto } from '../models/city.model';
 })
 export class CityService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:3000/city';
+  private apiUrl = 'http://localhost:3000/api/v1/city';
 
   createCity(city: cityDto): Observable<City> {
     return this.http.post<City>(
