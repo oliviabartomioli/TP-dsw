@@ -11,6 +11,7 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { UsersDto } from './dto/users-dto';
+import { UpdateUsersDto } from './dto/update-users-dto';
 
 @Controller('api/v1/users')
 @ApiTags('Usuarios')
@@ -38,7 +39,7 @@ export class UsersController {
   }
 
   @Put()
-  updateUsers(@Body() user: UsersDto) {
+  updateUsers(@Body() user: UpdateUsersDto) {
     return this.usersService.updateUsers(user);
   }
 

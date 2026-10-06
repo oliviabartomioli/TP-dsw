@@ -9,7 +9,6 @@
 
 <!-- Formulario -->
 <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
-
   <div>
     <label for="idCategory">ID Categoría:</label>
     <input
@@ -75,15 +74,14 @@
   >
     Cancelar
   </button>
-
 </form>
 
-<hr>
+<hr />
 
 <!-- Categorías activas -->
 <h3>Categorías</h3>
 
-<table *ngIf="Categorys.length > 0">
+<table *ngIf="Categories.length > 0">
   <thead>
     <tr>
       <th>ID</th>
@@ -94,7 +92,7 @@
   </thead>
 
   <tbody>
-    <tr *ngFor="let category of Categorys">
+    <tr *ngFor="let category of Categories">
       <td>{{ category.idCategory }}</td>
       <td>{{ category.nameC }}</td>
       <td>{{ category.descriptionC }}</td>
@@ -118,11 +116,11 @@
   </tbody>
 </table>
 
-<p *ngIf="!loading && Categorys.length === 0">
+<p *ngIf="!loading && Categories.length === 0">
   No hay categorías registradas.
 </p>
 
-<hr>
+<hr />
 
 <!-- Categorías eliminadas -->
 <button
@@ -133,7 +131,6 @@
 </button>
 
 <div *ngIf="showDeleted">
-
   <h3>Categorías eliminadas</h3>
 
   <table *ngIf="deletedCategorys.length > 0">
@@ -167,5 +164,4 @@
   <p *ngIf="deletedCategorys.length === 0">
     No hay categorías eliminadas.
   </p>
-
 </div>

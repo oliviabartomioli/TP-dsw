@@ -8,6 +8,7 @@ import { User } from './entity/user.entity';
 import { Repository, UpdateResult } from 'typeorm';
 import { UsersDto } from './dto/users-dto';
 import * as bcrypt from 'bcrypt';
+import { UpdateUsersDto } from './dto/update-users-dto';
 
 @Injectable()
 export class UsersService {
@@ -38,7 +39,7 @@ export class UsersService {
     return await this.userRepository.find({ where: { deleteU: true } });
   }
 
-  async updateUsers(user: UsersDto) {
+  async updateUsers(user: UpdateUsersDto) {
     const userExists = await this.findUser(user.dniUs);
     if (!userExists) {
       throw new NotFoundException(
