@@ -24,6 +24,11 @@ export class requestDto {
   @IsString()
   state!: string;
 
+  @IsNumber()
+  @IsPositive()
+  @IsNotEmpty()
+  dniUs!: number;
+
   @IsBoolean()
   @IsOptional()
   deleteRequest?: boolean;

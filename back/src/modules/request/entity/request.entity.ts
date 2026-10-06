@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { User } from '../../users/entity/user.entity';
 
 @Entity('request')
 export class request {
@@ -13,4 +20,10 @@ export class request {
 
   @Column({ type: Boolean, nullable: false, default: false })
   deleteRequest?: boolean;
+
+  @ManyToOne(() => User, (user) => user.requests, {
+    nullable: false,
+  })
+  @JoinColumn({ name: 'dniUs' })
+  user!: User;
 }
