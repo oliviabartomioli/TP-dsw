@@ -22,7 +22,10 @@ export class FavoriteService {
 
   async createFavorite(favorite: FavoriteDto) {
     const userExists = await this.userRepository.findOne({
-      where: { dniUs: favorite.dniUs },
+      where: {
+        dniUs: favorite.dniUs,
+        deleteU: false,
+      },
     });
 
     if (!userExists) {
@@ -30,7 +33,10 @@ export class FavoriteService {
     }
 
     const professionalExists = await this.professionalRepository.findOne({
-      where: { dniP: favorite.dniP },
+      where: {
+        dniP: favorite.dniP,
+        deleteP: false,
+      },
     });
 
     if (!professionalExists) {

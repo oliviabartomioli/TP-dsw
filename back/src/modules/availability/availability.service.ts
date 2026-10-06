@@ -31,6 +31,7 @@ export class AvailabilityService {
     const professionalExists = await this.professionalRepository.findOne({
       where: {
         dniP: availability.dniProfessional,
+        deleteP: false,
       },
     });
 
@@ -85,6 +86,7 @@ export class AvailabilityService {
     const professionalExists = await this.professionalRepository.findOne({
       where: {
         dniP: availability.dniProfessional,
+        deleteP: false,
       },
     });
 

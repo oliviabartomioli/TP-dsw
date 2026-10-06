@@ -17,7 +17,10 @@ export class RequestService {
 
   async createRequests(requests: requestDto) {
     const user = await this.userRepository.findOne({
-      where: { dniUs: requests.dniUs },
+      where: {
+        dniUs: requests.dniUs,
+        deleteU: false,
+      },
     });
 
     if (!user) {
@@ -29,7 +32,6 @@ export class RequestService {
     const newRequest = this.requestRepository.create({
       date: requests.date,
       state: requests.state,
-      deleteRequest: requests.deleteRequest,
       user: user,
     });
 
@@ -104,6 +106,37 @@ export class RequestService {
   }
 
   async updateRequests(requests: requestDto) {
-    return await this.requestRepository.save(requests);
+    const requestExists = await this.findRequest(requests.idRequest);
+
+    if (!requestExists) {
+      throw new ConflictException(
+        'La solicitud con id: ' + requests.idRequest + ' no existe',
+      );
+    }
+
+    if (requestExists.deleteRequest) {
+      throw new ConflictException(
+        'La solicitud con id ' + requests.idRequest + ' esta eliminada',
+      );
+    }
+
+    const userExists = await this.userRepository.findOne({
+      where: {
+        dniUs: requests.dniUs,
+        deleteU: false,
+      },
+    });
+
+    if (!userExists) {
+      throw new ConflictException(
+        'El usuario con DNI ' + requests.dniUs + ' no existe',
+      );
+    }
+
+    requestExists.date = requests.date;
+    requestExists.state = requests.state;
+    requestExists.user = userExists;
+
+    return await this.requestRepository.save(requestExists);
   }
 }
