@@ -1,11 +1,15 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { UsersService } from '../../modules/users/users.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(configService: ConfigService) {
+  constructor(
+    configService: ConfigService,
+    private readonly usersService: UsersService,
+  ) {
     const secret = configService.getOrThrow<string>('JWT_SECRET');
 
     super({
@@ -15,7 +19,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  validate(payload: any) {
-    return { dniUs: payload.dniUs };
+  async validate(payload: any) {
+    const user = await this.usersService.findUser(payload.dniUs);
+
+    if (!user || user.deleteU) {
+      throw new UnauthorizedException('Usuario no autorizado');
+    }
+
+    return { dniUs: user.dniUs };
   }
 }

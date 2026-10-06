@@ -11,13 +11,16 @@ export class AuthService {
 
   async validateUser(dniUs: number, pass: string): Promise<any> {
     const user = await this.usersService.findUser(dniUs);
+
     if (
       user &&
+      !user.deleteU &&
       (await this.usersService.validatePassword(pass, user.passwordU))
     ) {
       const { passwordU: _passwordU, ...result } = user;
       return result;
     }
+
     return null;
   }
 
