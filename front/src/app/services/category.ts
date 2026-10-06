@@ -9,7 +9,7 @@ import { Category, categoryDto } from '../models/category.model';
 export class CategoryService {
 
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:3000/category';
+  private apiUrl = 'http://localhost:3000/api/v1/category';
 
   createCategory(category: categoryDto): Observable<Category> {
     return this.http.post<Category>(

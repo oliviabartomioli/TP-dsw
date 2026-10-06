@@ -1,3 +1,4 @@
+import { Favorite } from 'src/modules/favorite/entity/favorite.entity';
 import { request } from '../../request/entity/request.entity';
 import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 
@@ -26,4 +27,7 @@ export class User {
 
   @OneToMany(() => request, (request) => request.user)
   requests!: request[];
+
+  @OneToMany(() => Favorite, (favorite) => favorite.user)
+  favorites!: Favorite[];
 }

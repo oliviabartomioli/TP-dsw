@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { Category, categoryDto } from '../../models/category.model';
 import { CategoryService } from '../../services/category';
+import { Professional } from '../../models/professional.model';
 
 @Component({
   imports: [CommonModule, ReactiveFormsModule],
@@ -18,7 +19,7 @@ import { CategoryService } from '../../services/category';
 })
 export class CategoryComponents implements OnInit {
 
-  Categorys: Category[] = [];
+  Categories: Category[] = [];
   deletedCategorys: Category[] = [];
   categoryForm!: FormGroup;
   isEditMode = false;
@@ -51,7 +52,7 @@ export class CategoryComponents implements OnInit {
 
   this.categoryService.getCategory().subscribe({
     next: (data) => {
-      this.Categorys = data;
+      this.Categories = data;
       this.loading = false;
       this.cdr.detectChanges();
     },

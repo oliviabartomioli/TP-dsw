@@ -16,6 +16,8 @@ import { Category } from '../../models/category.model';
 
 import { ServiceService } from '../../services/services';
 import { CategoryService } from '../../services/category';
+import { Professional } from '../../models/professional.model';
+import { ProfessionalService } from '../../services/professional';
 
 @Component({
   imports: [CommonModule, ReactiveFormsModule],
@@ -28,6 +30,7 @@ export class ServicesComponents implements OnInit {
   services: Services[] = [];
   deleteService: Services[] = [];
   categories: Category[] = [];
+  professionals: Professional[] = [];
 
   servicesForm!: FormGroup;
 
@@ -37,27 +40,30 @@ export class ServicesComponents implements OnInit {
   errorMessage = '';
 
   constructor(
-    private fb: FormBuilder,
-    private servicesService: ServiceService,
-    private categoryService: CategoryService,
-    private cdr: ChangeDetectorRef
-  ) {}
+  private fb: FormBuilder,
+  private servicesService: ServiceService,
+  private categoryService: CategoryService,
+  private professionalService: ProfessionalService,
+  private cdr: ChangeDetectorRef
+) {}
 
   ngOnInit(): void {
-    this.initForm();
-    this.loadServices();
-    this.loadCategories();
-  }
+  this.initForm();
+  this.loadServices();
+  this.loadCategories();
+  this.loadProfessionals();
+}
 
   initForm(): void {
-    this.servicesForm = this.fb.group({
-      idService: ['', [Validators.required, Validators.min(1)]],
-      nameS: ['', [Validators.required, Validators.maxLength(30)]],
-      descriptionS: ['', [Validators.required, Validators.maxLength(150)]],
-      idCategory: ['', [Validators.required]],
-      deleteS: [false],
-    });
-  }
+  this.servicesForm = this.fb.group({
+    idService: ['', [Validators.required, Validators.min(1)]],
+    nameS: ['', [Validators.required, Validators.maxLength(30)]],
+    descriptionS: ['', [Validators.required, Validators.maxLength(150)]],
+    idCategory: ['', [Validators.required]],
+    dniP: [null, [Validators.required, Validators.min(1)]],
+    deleteS: [false],
+  });
+}
 
   loadServices(): void {
     this.loading = true;
@@ -88,6 +94,19 @@ export class ServicesComponents implements OnInit {
       },
     });
   }
+
+  loadProfessionals(): void {
+  this.professionalService.getProfessional().subscribe({
+    next: (data) => {
+      this.professionals = data;
+      this.cdr.detectChanges();
+    },
+    error: () => {
+      this.errorMessage = 'Error al cargar profesionales';
+      this.cdr.detectChanges();
+    },
+  });
+}
 
   loadDeletedService(): void {
     this.servicesService.getServicesDelete().subscribe({
@@ -139,12 +158,13 @@ export class ServicesComponents implements OnInit {
     this.isEditMode = true;
 
     this.servicesForm.patchValue({
-      idService: service.idService,
-      nameS: service.nameS,
-      descriptionS: service.descriptionS,
-      idCategory: service.category?.idCategory,
-      deleteS: service.deleteS ?? false,
-    });
+    idService: service.idService,
+    nameS: service.nameS,
+    descriptionS: service.descriptionS,
+    idCategory: service.category?.idCategory,
+    dniP: service.professional?.dniP ?? null,
+    deleteS: service.deleteS ?? false,
+  });
 
     this.servicesForm.get('idService')?.disable();
   }

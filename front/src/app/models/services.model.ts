@@ -1,4 +1,5 @@
 import { Category } from './category.model';
+import { Professional } from './professional.model';
 
 export interface Services {
   idService: number;
@@ -6,6 +7,7 @@ export interface Services {
   descriptionS: string;
   deleteS?: boolean;
   category?: Category;
+  professional?: Professional;
 }
 
 export interface servicesDto {
@@ -13,5 +15,6 @@ export interface servicesDto {
   nameS: string;
   descriptionS: string;
   idCategory: number;
+  dniP: number;
   deleteS?: boolean;
 }

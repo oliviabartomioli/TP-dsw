@@ -54,6 +54,22 @@
     </select>
   </div>
 
+    <div>
+    <label for="dniP">Profesional:</label>
+
+    <select id="dniP" formControlName="dniP">
+      <option [ngValue]="null">Seleccione un profesional</option>
+
+      <option
+        *ngFor="let professional of professionals"
+        [ngValue]="professional.dniP"
+      >
+        {{ professional.nameP }} {{ professional.surnameP }}
+        — DNI: {{ professional.dniP }}
+      </option>
+    </select>
+  </div>
+
   <button type="submit">
     {{ isEditMode ? 'Actualizar' : 'Crear' }}
   </button>
