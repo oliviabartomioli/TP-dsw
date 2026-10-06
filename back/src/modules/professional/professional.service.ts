@@ -1,7 +1,6 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
-
 import { Professional } from './entity/professional.entity';
 import { professionalDto } from './dto/professional-dto';
 import { city } from '../city/entity/city.entity';
@@ -26,7 +25,10 @@ export class ProfessionalService {
     }
 
     const cityExists = await this.cityRepository.findOne({
-      where: { idCity: professionalData.idCity },
+      where: {
+        idCity: professionalData.idCity,
+        deleteCity: false,
+      },
     });
 
     if (!cityExists) {
@@ -87,8 +89,15 @@ export class ProfessionalService {
       throw new ConflictException('profesional no existe');
     }
 
+    if (professionalExists.deleteP) {
+      throw new ConflictException('profesional esta eliminado');
+    }
+
     const cityExists = await this.cityRepository.findOne({
-      where: { idCity: professionalData.idCity },
+      where: {
+        idCity: professionalData.idCity,
+        deleteCity: false,
+      },
     });
 
     if (!cityExists) {

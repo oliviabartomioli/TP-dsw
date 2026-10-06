@@ -33,6 +33,7 @@ export class ServicesService {
     const categoryExists = await this.categoryRepository.findOne({
       where: {
         idCategory: servicesData.idCategory,
+        deleteC: false,
       },
     });
 
@@ -43,6 +44,7 @@ export class ServicesService {
     const professionalExists = await this.professionalRepository.findOne({
       where: {
         dniP: servicesData.dniP,
+        deleteP: false,
       },
     });
 
@@ -123,6 +125,7 @@ export class ServicesService {
     const categoryExists = await this.categoryRepository.findOne({
       where: {
         idCategory: servicesData.idCategory,
+        deleteC: false,
       },
     });
 
@@ -133,6 +136,7 @@ export class ServicesService {
     const professionalExists = await this.professionalRepository.findOne({
       where: {
         dniP: servicesData.dniP,
+        deleteP: false,
       },
     });
 

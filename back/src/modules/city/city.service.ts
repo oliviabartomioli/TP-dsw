@@ -29,6 +29,7 @@ export class CityService {
     const provinceExists = await this.provinceRepository.findOne({
       where: {
         idProvince: cityData.idProvince,
+        deleteProvince: false,
       },
     });
 
@@ -92,6 +93,7 @@ export class CityService {
     const provinceExists = await this.provinceRepository.findOne({
       where: {
         idProvince: cityData.idProvince,
+        deleteProvince: false,
       },
     });
 
