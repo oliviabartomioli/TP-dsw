@@ -6,7 +6,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { User, UsersDto } from '../../models/user.model';
+import { User } from '../../models/user.model';
 import { UsersService } from '../../services/users';
 
 @Component({
@@ -88,57 +88,60 @@ loadUsers(): void {
     });
   }
 
-  onSubmit(): void {
-
-    if (this.userForm.invalid) {
-      this.userForm.markAllAsTouched();
-      return;
-    }
-
-    const dto: UsersDto = this.userForm.getRawValue();
-
-    if (this.isEditMode) {
-
-      this.usersService.upDateUser(dto).subscribe({
-        next: () => {
-          this.resetForm();
-          this.loadUsers();
-        },
-        error: (err) => {
-          this.errorMessage = 'error al actualizar Usuario';
-        },
-      });
-
-    } else {
-
-      this.usersService.createUser(dto).subscribe({
-        next: () => {
-          this.resetForm();
-          this.loadUsers();
-        },
-        error: (err) => {
-          this.errorMessage = 'error al crear Usuario';
-        },
-      });
-    }
+ onSubmit(): void {
+  if (this.userForm.invalid) {
+    this.userForm.markAllAsTouched();
+    return;
   }
 
-  onEdit(user: User): void {
+  const dto = this.userForm.getRawValue();
 
-    this.isEditMode = true;
+  if (this.isEditMode && dto.passwordU === '') {
+    delete dto.passwordU;
+  }
 
-    this.userForm.patchValue({
-      dniUs: user.dniUs,
-      nameU: user.nameU,
-      surnameU: user.surnameU,
-      phoneU: user.phoneU,
-      emailU: user.emailU,
-      passwordU: user.passwordU,
-      deleteU: user.deleteU ?? false,
+  if (this.isEditMode) {
+    this.usersService.upDateUser(dto).subscribe({
+      next: () => {
+        this.resetForm();
+        this.loadUsers();
+      },
+      error: () => {
+        this.errorMessage = 'error al actualizar Usuario';
+      },
     });
-
-    this.userForm.get('dniUs')?.disable();
+  } else {
+    this.usersService.createUser(dto).subscribe({
+      next: () => {
+        this.resetForm();
+        this.loadUsers();
+      },
+      error: () => {
+        this.errorMessage = 'error al crear Usuario';
+      },
+    });
   }
+}
+onEdit(user: User): void {
+  this.isEditMode = true;
+
+  this.userForm.patchValue({
+    dniUs: user.dniUs,
+    nameU: user.nameU,
+    surnameU: user.surnameU,
+    phoneU: user.phoneU,
+    emailU: user.emailU,
+    passwordU: '',
+    deleteU: user.deleteU ?? false,
+  });
+
+  this.userForm.get('dniUs')?.disable();
+
+  const passwordControl = this.userForm.get('passwordU');
+
+  passwordControl?.setValidators([Validators.maxLength(100)]);
+  passwordControl?.updateValueAndValidity();
+}
 
   onDelete(dniUs: number): void {
 
@@ -185,14 +188,23 @@ loadUsers(): void {
     }
   }
 
-  resetForm(): void {
+resetForm(): void {
+  this.isEditMode = false;
 
-    this.isEditMode = false;
+  this.userForm.reset({
+    passwordU: '',
+    deleteU: false,
+  });
 
-    this.userForm.reset({
-      deleteU: false,
-    });
+  this.userForm.get('dniUs')?.enable();
 
-    this.userForm.get('dniUs')?.enable();
-  }
+  const passwordControl = this.userForm.get('passwordU');
+
+  passwordControl?.setValidators([
+    Validators.required,
+    Validators.maxLength(100),
+  ]);
+
+  passwordControl?.updateValueAndValidity();
+}
 }

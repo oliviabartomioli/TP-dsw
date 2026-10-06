@@ -1,20 +1,21 @@
-export interface Professional{
+import { City } from './city.model';
 
-  dniP: number
+export interface Professional {
+  dniP: number;
   nameP: string;
   surnameP: string;
   typeP: string;
   assessmentP: string;
   deleteP?: boolean;
+  city?: City;
 }
 
-export interface professionalDto{
-
-  dniP: number
+export interface professionalDto {
+  dniP: number;
   nameP: string;
   surnameP: string;
   typeP: string;
   assessmentP: string;
+  idCity: number;
   deleteP?: boolean;
-
 }

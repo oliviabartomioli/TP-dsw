@@ -3,6 +3,8 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Professional, professionalDto } from '../../models/professional.model';
 import { ProfessionalService } from '../../services/professional';
+import { City } from '../../models/city.model';
+import { CityService } from '../../services/city';
 
 @Component({
   imports: [CommonModule, ReactiveFormsModule],
@@ -14,6 +16,7 @@ import { ProfessionalService } from '../../services/professional';
 export class ProfessionalComponents implements OnInit {
 
   professionals: Professional[] = [];
+  cities: City[] = [];
   deletedProfessionals: Professional[] = [];
   professionalForm!: FormGroup;
   isEditMode = false;
@@ -21,16 +24,18 @@ export class ProfessionalComponents implements OnInit {
   loading = false;
   errorMessage = '';
 
-  constructor(
-    private fb: FormBuilder,
-    private professionalService: ProfessionalService,
-    private cdr: ChangeDetectorRef
-  ){}
+constructor(
+  private fb: FormBuilder,
+  private professionalService: ProfessionalService,
+  private cityService: CityService,
+  private cdr: ChangeDetectorRef
+) {}
 
   ngOnInit(): void {
-    this.initForm();
-    this.loadProfessionals();
-  }
+  this.initForm();
+  this.loadProfessionals();
+  this.loadCities();
+}
 
   initForm(): void {
     this.professionalForm = this.fb.group({
@@ -39,7 +44,8 @@ export class ProfessionalComponents implements OnInit {
       surnameP: ['', [Validators.required, Validators.maxLength(15)]],
       typeP: ['', [Validators.required, Validators.maxLength(15)]],
       assessmentP: ['', [Validators.required, Validators.maxLength(15)]],
-      deleteP: [false]
+      deleteP: [false],
+      idCity: [null, [Validators.required, Validators.min(1)]],
     })
   }
 
@@ -60,6 +66,19 @@ export class ProfessionalComponents implements OnInit {
     });
   }
 
+  loadCities(): void {
+  this.cityService.getCities().subscribe({
+    next: (data) => {
+      this.cities = data;
+      this.cdr.detectChanges();
+    },
+    error: () => {
+      this.errorMessage = 'Error al cargar ciudades';
+      this.cdr.detectChanges();
+    },
+  });
+}
+
   loadDeletedProfessional(): void {
     this.professionalService.getProfessionalDelete().subscribe({
       next: (data) => {
@@ -78,14 +97,14 @@ export class ProfessionalComponents implements OnInit {
       this.professionalForm.markAllAsTouched();
       return;
     }
-    const dto: professionalDto = this.professionalForm.value;
+    const dto: professionalDto = this.professionalForm.getRawValue();
 
     if(this.isEditMode){
       this.professionalService.upDateProfessional(dto).subscribe({
 
         next: () => {
           this.resetForm();
-          this.loadDeletedProfessional();
+          this.loadProfessionals();
         },
         error: () => {
           this.errorMessage = 'error al actualizar profesional'}, 
@@ -111,8 +130,10 @@ export class ProfessionalComponents implements OnInit {
       typeP: professional.typeP,
       assessmentP: professional.assessmentP,
       deleteP: professional.deleteP ?? false,
+      idCity: professional.city?.idCity ?? null,
     });
     this.professionalForm.get('dniP')?.disable();
+    
   }
   onDelete(dniP:number): void{
     if (confirm(`Seguro que desea eliminar al profesional con dni: ${dniP}?`)){
@@ -144,9 +165,14 @@ export class ProfessionalComponents implements OnInit {
       this.loadDeletedProfessional();
     }
   }
-  resetForm():void{
-    this.isEditMode = false;
-    this.professionalForm.reset({delete: false});
-    this.professionalForm.get('dniP')?.enable();
-  }
+  resetForm(): void {
+  this.isEditMode = false;
+
+  this.professionalForm.reset({
+    idCity: null,
+    deleteP: false,
+  });
+
+  this.professionalForm.get('dniP')?.enable();
+}
 }
