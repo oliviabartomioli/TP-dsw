@@ -27,10 +27,9 @@ export class CityComponent implements OnInit {
   cities: City[] = [];
   deletedCities: City[] = [];
   provinces: Province[] = [];
-
   cityForm!: FormGroup;
-
   isEditMode = false;
+  selectedCityId: number | null = null;
   showDeleted = false;
   loading = false;
   errorMessage = '';
@@ -50,7 +49,6 @@ export class CityComponent implements OnInit {
 
   initForm(): void {
     this.cityForm = this.fb.group({
-      idCity: ['', [Validators.required, Validators.min(1)]],
       nameCity: ['', [Validators.required, Validators.maxLength(15)]],
       idProvince: ['', [Validators.required]],
       deleteCity: [false],
@@ -111,7 +109,16 @@ export class CityComponent implements OnInit {
     const dto: cityDto = this.cityForm.getRawValue();
 
     if (this.isEditMode) {
-      this.cityService.updateCity(dto).subscribe({
+      if (this.selectedCityId === null) {
+        return;
+      }
+
+      const updateDto: cityDto = {
+        ...dto,
+        idCity: this.selectedCityId,
+      };
+
+      this.cityService.updateCity(updateDto).subscribe({
         next: () => {
           this.resetForm();
           this.loadCities();
@@ -137,15 +144,13 @@ export class CityComponent implements OnInit {
 
   onEdit(city: City): void {
     this.isEditMode = true;
+    this.selectedCityId = city.idCity;
 
     this.cityForm.patchValue({
-      idCity: city.idCity,
       nameCity: city.nameCity,
       idProvince: city.province?.idProvince,
       deleteCity: city.deleteCity ?? false,
     });
-
-    this.cityForm.get('idCity')?.disable();
   }
 
   onDelete(nameCity: string): void {
@@ -193,11 +198,10 @@ export class CityComponent implements OnInit {
 
   resetForm(): void {
     this.isEditMode = false;
+    this.selectedCityId = null;
 
     this.cityForm.reset({
       deleteCity: false,
     });
-
-    this.cityForm.get('idCity')?.enable();
   }
 }

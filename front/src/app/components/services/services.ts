@@ -13,7 +13,6 @@ import {
 
 import { Services, servicesDto } from '../../models/services.model';
 import { Category } from '../../models/category.model';
-
 import { ServiceService } from '../../services/services';
 import { CategoryService } from '../../services/category';
 import { Professional } from '../../models/professional.model';
@@ -35,6 +34,7 @@ export class ServicesComponents implements OnInit {
   servicesForm!: FormGroup;
 
   isEditMode = false;
+  selectedServiceId: number | null = null;
   showDeleted = false;
   loading = false;
   errorMessage = '';
@@ -56,7 +56,6 @@ export class ServicesComponents implements OnInit {
 
   initForm(): void {
   this.servicesForm = this.fb.group({
-    idService: ['', [Validators.required, Validators.min(1)]],
     nameS: ['', [Validators.required, Validators.maxLength(30)]],
     descriptionS: ['', [Validators.required, Validators.maxLength(150)]],
     idCategory: ['', [Validators.required]],
@@ -130,7 +129,16 @@ export class ServicesComponents implements OnInit {
     const dto: servicesDto = this.servicesForm.getRawValue();
 
     if (this.isEditMode) {
-      this.servicesService.upDateServices(dto).subscribe({
+      if (this.selectedServiceId === null) {
+        return;
+      }
+
+      const updateDto: servicesDto = {
+        ...dto,
+        idService: this.selectedServiceId,
+      };
+
+      this.servicesService.upDateServices(updateDto).subscribe({
         next: () => {
           this.resetForm();
           this.loadServices();
@@ -155,19 +163,17 @@ export class ServicesComponents implements OnInit {
   }
 
   onEdit(service: Services): void {
-    this.isEditMode = true;
+  this.isEditMode = true;
+  this.selectedServiceId = service.idService;
 
-    this.servicesForm.patchValue({
-    idService: service.idService,
+  this.servicesForm.patchValue({
     nameS: service.nameS,
     descriptionS: service.descriptionS,
     idCategory: service.category?.idCategory,
     dniP: service.professional?.dniP ?? null,
     deleteS: service.deleteS ?? false,
   });
-
-    this.servicesForm.get('idService')?.disable();
-  }
+}
 
   onDelete(idService: number): void {
     if (confirm(`¿Deseas eliminar el servicio ID: ${idService}?`)) {
@@ -210,11 +216,10 @@ export class ServicesComponents implements OnInit {
 
   resetForm(): void {
     this.isEditMode = false;
+    this.selectedServiceId = null;
 
     this.servicesForm.reset({
       deleteS: false,
     });
-
-    this.servicesForm.get('idService')?.enable();
   }
 }

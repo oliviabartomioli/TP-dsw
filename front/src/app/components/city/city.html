@@ -6,24 +6,6 @@
 <form [formGroup]="cityForm" (ngSubmit)="onSubmit()">
 
   <div>
-    <label for="idCity">ID Ciudad:</label>
-    <input
-      id="idCity"
-      type="number"
-      formControlName="idCity"
-    />
-
-    <span
-      *ngIf="
-        cityForm.get('idCity')?.invalid &&
-        cityForm.get('idCity')?.touched
-      "
-    >
-      El ID es obligatorio.
-    </span>
-  </div>
-
-  <div>
     <label for="nameCity">Nombre:</label>
     <input
       id="nameCity"
