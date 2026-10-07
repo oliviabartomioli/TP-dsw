@@ -72,21 +72,6 @@
       </small>
     </div>
 
-    <!-- VALORACIÓN -->
-    <div class="form-group">
-      <label for="assessmentP">Valoración</label>
-      <input id="assessmentP" type="text" formControlName="assessmentP" />
-
-      <small
-        *ngIf="
-          professionalForm.get('assessmentP')?.invalid &&
-          professionalForm.get('assessmentP')?.touched
-        "
-      >
-        La valoración es obligatoria y admite hasta 15 caracteres.
-      </small>
-    </div>
-
     <!-- CIUDAD -->
     <div class="form-group">
       <label for="idCity">Ciudad:</label>

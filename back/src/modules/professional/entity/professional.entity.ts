@@ -25,8 +25,8 @@ export class Professional {
   @Column({ type: String, nullable: false, length: 15 })
   typeP!: string;
 
-  @Column({ type: String, nullable: false, length: 15 })
-  assessmentP!: string;
+  @Column({ type: String, nullable: true, length: 15 })
+  assessmentP!: string | null;
 
   @Column({ type: Boolean, nullable: false, default: false })
   deleteP?: boolean;

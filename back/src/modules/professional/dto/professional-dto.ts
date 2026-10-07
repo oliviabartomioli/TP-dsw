@@ -25,9 +25,9 @@ export class professionalDto {
   @IsNotEmpty()
   typeP!: string;
 
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
-  assessmentP!: string;
+  assessmentP?: string;
 
   @IsBoolean()
   @IsOptional()

@@ -43,28 +43,27 @@ constructor(
       nameP: ['', [Validators.required, Validators.maxLength(15)]],
       surnameP: ['', [Validators.required, Validators.maxLength(15)]],
       typeP: ['', [Validators.required, Validators.maxLength(15)]],
-      assessmentP: ['', [Validators.required, Validators.maxLength(15)]],
       deleteP: [false],
       idCity: [null, [Validators.required, Validators.min(1)]],
     })
   }
 
   loadProfessionals(): void {
-    this.loading = true;
+  this.loading = true;
 
-    this.professionalService.getProfessional().subscribe({
-      next: (data) => {
-        this.professionals = data;
-        this.loading = false;
-        this.cdr.detectChanges();
-      },
-      error: () => {
-        this.errorMessage = 'error al cargar Profesionales';
-        this.loading = false;
-        this.cdr.detectChanges();
-      },
-    });
-  }
+  this.professionalService.getProfessional().subscribe({
+    next: (data) => {
+      this.professionals = data;
+      this.loading = false;
+      this.cdr.markForCheck();
+    },
+    error: () => {
+      this.errorMessage = 'Error al cargar profesionales';
+      this.loading = false;
+      this.cdr.markForCheck();
+    },
+  });
+}
 
   loadCities(): void {
   this.cityService.getCities().subscribe({

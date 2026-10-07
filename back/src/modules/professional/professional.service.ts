@@ -40,7 +40,7 @@ export class ProfessionalService {
       nameP: professionalData.nameP,
       surnameP: professionalData.surnameP,
       typeP: professionalData.typeP,
-      assessmentP: professionalData.assessmentP,
+      assessmentP: null,
       city: cityExists,
     });
 
@@ -107,7 +107,6 @@ export class ProfessionalService {
     professionalExists.nameP = professionalData.nameP;
     professionalExists.surnameP = professionalData.surnameP;
     professionalExists.typeP = professionalData.typeP;
-    professionalExists.assessmentP = professionalData.assessmentP;
     professionalExists.city = cityExists;
 
     return await this.professionalRepository.save(professionalExists);

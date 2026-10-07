@@ -52,13 +52,12 @@ export class ServicesComponents implements OnInit {
   this.loadProfessionals();
 }
 
-  initForm(): void {
+ initForm(): void {
   this.servicesForm = this.fb.group({
     nameS: ['', [Validators.required, Validators.maxLength(30)]],
     descriptionS: ['', [Validators.required, Validators.maxLength(150)]],
     idCategory: ['', [Validators.required]],
     dniP: [null, [Validators.required, Validators.min(1)]],
-    deleteS: [false],
   });
 }
 
@@ -169,7 +168,6 @@ export class ServicesComponents implements OnInit {
     descriptionS: service.descriptionS,
     idCategory: service.category?.idCategory,
     dniP: service.professional?.dniP ?? null,
-    deleteS: service.deleteS ?? false,
   });
 }
 
@@ -215,9 +213,6 @@ export class ServicesComponents implements OnInit {
   resetForm(): void {
     this.isEditMode = false;
     this.selectedServiceId = null;
-
-    this.servicesForm.reset({
-      deleteS: false,
-    });
+    this.servicesForm.reset();
   }
 }
