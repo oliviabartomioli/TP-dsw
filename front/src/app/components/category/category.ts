@@ -23,6 +23,7 @@ export class CategoryComponents implements OnInit {
   deletedCategorys: Category[] = [];
   categoryForm!: FormGroup;
   isEditMode = false;
+  selectedCategoryId: number | null = null;
   showDeleted = false;
   loading = false;
   errorMessage = '';
@@ -40,7 +41,6 @@ export class CategoryComponents implements OnInit {
 
   initForm(): void {
     this.categoryForm = this.fb.group({
-      idCategory: ['', [Validators.required, Validators.min(1)]],
       nameC: ['', [Validators.required, Validators.maxLength(15)]],
       descriptionC: ['', [Validators.required, Validators.maxLength(100)]],
       deleteC: [false],

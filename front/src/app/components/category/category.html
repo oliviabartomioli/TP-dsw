@@ -10,13 +10,6 @@
 <!-- Formulario -->
 <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
   <div>
-    <label for="idCategory">ID Categoría:</label>
-    <input
-      id="idCategory"
-      type="number"
-      formControlName="idCategory"
-    />
-
     <span
       *ngIf="
         categoryForm.get('idCategory')?.invalid &&

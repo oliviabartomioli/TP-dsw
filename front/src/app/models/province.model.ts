@@ -5,7 +5,7 @@ export interface Province {
 }
 
 export interface provinceDto {
-  idProvince: number;
+  idProvince?: number;
   nameProvince: string;
   deleteProvince?: boolean;
 }

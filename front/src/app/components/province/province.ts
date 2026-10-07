@@ -24,10 +24,9 @@ import { ProvinceService } from '../../services/province';
 export class ProvinceComponent implements OnInit {
   provinces: Province[] = [];
   deletedProvinces: Province[] = [];
-
   provinceForm!: FormGroup;
-
   isEditMode = false;
+  selectedProvinceId: number | null = null;
   showDeleted = false;
   loading = false;
   errorMessage = '';

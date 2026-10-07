@@ -6,7 +6,7 @@ export interface Category {
 }
 
 export interface categoryDto {
-  idCategory: number;
+  idCategory?: number;
   nameC: string;
   descriptionC: string;
   deleteC?: boolean;
