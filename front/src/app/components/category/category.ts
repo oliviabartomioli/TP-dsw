@@ -86,13 +86,24 @@ export class CategoryComponents implements OnInit {
     const dto: categoryDto = this.categoryForm.getRawValue();
 
     if (this.isEditMode) {
-      this.categoryService.upDateCategory(dto).subscribe({
+      if (this.selectedCategoryId === null) {
+        return;
+      }
+
+      const updateDto: categoryDto = {
+        ...dto,
+        idCategory: this.selectedCategoryId,
+      };
+
+      this.categoryService.upDateCategory(updateDto).subscribe({
         next: () => {
           this.resetForm();
           this.loadCategorys();
         },
         error: (err) => {
+          console.error('ERROR UPDATE CATEGORY:', err);
           this.errorMessage = 'error al actualizar categoria';
+          this.cdr.detectChanges();
         },
       });
     } else {
@@ -102,7 +113,9 @@ export class CategoryComponents implements OnInit {
           this.loadCategorys();
         },
         error: (err) => {
+          console.error('ERROR CREATE CATEGORY:', err);
           this.errorMessage = 'error al crear categoria';
+          this.cdr.detectChanges();
         },
       });
     }
@@ -110,15 +123,13 @@ export class CategoryComponents implements OnInit {
 
   onEdit(category: Category): void {
     this.isEditMode = true;
+    this.selectedCategoryId = category.idCategory;
 
     this.categoryForm.patchValue({
-      idCategory: category.idCategory,
       nameC: category.nameC,
       descriptionC: category.descriptionC,
       deleteC: category.deleteC ?? false,
     });
-
-    this.categoryForm.get('idCategory')?.disable();
   }
 
   onDelete(idCategory: number): void {
@@ -162,13 +173,12 @@ export class CategoryComponents implements OnInit {
     }
   }
 
-  resetForm(): void {
+ resetForm(): void {
     this.isEditMode = false;
+    this.selectedCategoryId = null;
 
     this.categoryForm.reset({
       deleteC: false,
     });
-
-    this.categoryForm.get('idCategory')?.enable();
   }
 }

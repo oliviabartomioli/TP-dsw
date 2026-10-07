@@ -44,8 +44,7 @@ export class ProvinceComponent implements OnInit {
 
   initForm(): void {
     this.provinceForm = this.fb.group({
-      idProvince: ['', [Validators.required, Validators.min(1)]],
-      nameProvince: ['', [Validators.required, Validators.maxLength(15)]],
+      nameProvince: ['', [Validators.required, Validators.maxLength(30)]],
       deleteProvince: [false],
     });
   }
@@ -89,12 +88,22 @@ export class ProvinceComponent implements OnInit {
     const dto: provinceDto = this.provinceForm.getRawValue();
 
     if (this.isEditMode) {
-      this.provinceService.updateProvince(dto).subscribe({
+      if (this.selectedProvinceId === null) {
+        return;
+      }
+
+      const updateDto: provinceDto = {
+        ...dto,
+        idProvince: this.selectedProvinceId,
+      };
+
+      this.provinceService.updateProvince(updateDto).subscribe({
         next: () => {
           this.resetForm();
           this.loadProvinces();
         },
         error: (err) => {
+          console.error('ERROR UPDATE PROVINCE:', err);
           this.errorMessage = 'Error al actualizar provincia';
           this.cdr.detectChanges();
         },
@@ -106,6 +115,7 @@ export class ProvinceComponent implements OnInit {
           this.loadProvinces();
         },
         error: (err) => {
+          console.error('ERROR CREATE PROVINCE:', err);
           this.errorMessage = 'Error al crear provincia';
           this.cdr.detectChanges();
         },
@@ -115,14 +125,12 @@ export class ProvinceComponent implements OnInit {
 
   onEdit(province: Province): void {
     this.isEditMode = true;
+    this.selectedProvinceId = province.idProvince;
 
     this.provinceForm.patchValue({
-      idProvince: province.idProvince,
       nameProvince: province.nameProvince,
       deleteProvince: province.deleteProvince ?? false,
     });
-
-    this.provinceForm.get('idProvince')?.disable();
   }
 
   onDelete(nameProvince: string): void {
@@ -170,11 +178,9 @@ export class ProvinceComponent implements OnInit {
 
   resetForm(): void {
     this.isEditMode = false;
-
+    this.selectedProvinceId = null;
     this.provinceForm.reset({
       deleteProvince: false,
     });
-
-    this.provinceForm.get('idProvince')?.enable();
   }
 }

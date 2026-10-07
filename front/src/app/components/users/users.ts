@@ -77,13 +77,15 @@ loadUsers(): void {
 }
 
   loadDeletedUsers(): void {
-
     this.usersService.getUserDelete().subscribe({
       next: (data) => {
         this.deletedUsers = data;
+        this.cdr.detectChanges();
       },
       error: (err) => {
+        console.error('ERROR GET DELETED USERS:', err);
         this.errorMessage = 'error al cargar Usuarios eliminados';
+        this.cdr.detectChanges();
       },
     });
   }

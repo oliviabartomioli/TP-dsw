@@ -7,7 +7,7 @@ export class province {
   @PrimaryGeneratedColumn()
   idProvince!: number;
 
-  @Column({ type: String, nullable: false, length: 15 })
+  @Column({ type: String, nullable: false, length: 30 })
   nameProvince!: string;
 
   @Column({ type: Boolean, nullable: false, default: false })

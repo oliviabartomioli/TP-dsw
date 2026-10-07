@@ -6,25 +6,8 @@
 <form [formGroup]="provinceForm" (ngSubmit)="onSubmit()">
 
   <div>
-    <label for="idProvince">ID Provincia:</label>
-    <input
-      id="idProvince"
-      type="number"
-      formControlName="idProvince"
-    />
-
-    <span
-      *ngIf="
-        provinceForm.get('idProvince')?.invalid &&
-        provinceForm.get('idProvince')?.touched
-      "
-    >
-      El ID es obligatorio.
-    </span>
-  </div>
-
-  <div>
     <label for="nameProvince">Nombre:</label>
+
     <input
       id="nameProvince"
       type="text"
@@ -33,11 +16,20 @@
 
     <span
       *ngIf="
-        provinceForm.get('nameProvince')?.invalid &&
+        provinceForm.get('nameProvince')?.hasError('required') &&
         provinceForm.get('nameProvince')?.touched
       "
     >
       El nombre es obligatorio.
+    </span>
+
+    <span
+      *ngIf="
+        provinceForm.get('nameProvince')?.hasError('maxlength') &&
+        provinceForm.get('nameProvince')?.touched
+      "
+    >
+      El nombre no puede superar los 15 caracteres.
     </span>
   </div>
 

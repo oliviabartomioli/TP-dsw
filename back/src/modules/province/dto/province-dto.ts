@@ -10,8 +10,8 @@ import {
 export class provinceDto {
   @IsNumber()
   @IsPositive()
-  @IsNotEmpty()
-  idProvince!: number;
+  @IsOptional()
+  idProvince?: number;
 
   @IsString()
   @IsNotEmpty()

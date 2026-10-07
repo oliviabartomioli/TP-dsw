@@ -30,9 +30,7 @@ export class ServicesComponents implements OnInit {
   deleteService: Services[] = [];
   categories: Category[] = [];
   professionals: Professional[] = [];
-
   servicesForm!: FormGroup;
-
   isEditMode = false;
   selectedServiceId: number | null = null;
   showDeleted = false;

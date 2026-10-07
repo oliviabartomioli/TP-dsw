@@ -13,12 +13,7 @@ export class CategoryService {
   ) {}
 
   async createCategory(category: categoryDto) {
-    const CategoryExists = await this.findCategory(category.idCategory);
-    if (CategoryExists) {
-      throw new ConflictException('categoría ya registrada');
-    } else {
-      return await this.categoryRepository.save(category);
-    }
+    return await this.categoryRepository.save(category);
   }
   async findCategory(idCategory: number) {
     return await this.categoryRepository.findOne({ where: { idCategory } });
@@ -30,6 +25,12 @@ export class CategoryService {
     return await this.categoryRepository.find({ where: { deleteC: true } });
   }
   async updateCategory(category: categoryDto) {
+    if (category.idCategory === undefined) {
+      throw new ConflictException(
+        'El idCategory es obligatorio para actualizar una categoría',
+      );
+    }
+
     const CategoryExists = await this.findCategory(category.idCategory);
 
     if (!CategoryExists) {

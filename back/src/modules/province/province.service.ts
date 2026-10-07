@@ -46,6 +46,12 @@ export class ProvinceService {
   }
 
   async updateProvince(province: provinceDto) {
+    if (province.idProvince === undefined) {
+      throw new ConflictException(
+        'El idProvince es obligatorio para actualizar una provincia.',
+      );
+    }
+
     const provinceExists = await this.findProvinceById(province.idProvince);
 
     if (!provinceExists) {

@@ -10,8 +10,8 @@ import {
 export class categoryDto {
   @IsNumber()
   @IsPositive()
-  @IsNotEmpty()
-  idCategory!: number;
+  @IsOptional()
+  idCategory?: number;
 
   @IsString()
   @IsNotEmpty()
