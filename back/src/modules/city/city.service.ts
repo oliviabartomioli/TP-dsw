@@ -8,6 +8,7 @@ import { Repository, UpdateResult } from 'typeorm';
 import { city } from './entity/city.entity';
 import { cityDto } from './dto/city-dto';
 import { province } from '../province/entity/province.entity';
+import { CreateCityDto } from './dto/create-city-dto';
 
 @Injectable()
 export class CityService {
@@ -19,7 +20,7 @@ export class CityService {
     private readonly provinceRepository: Repository<province>,
   ) {}
 
-  async createCity(cityData: cityDto) {
+  async createCity(cityData: CreateCityDto) {
     const cityExists = await this.findCity(cityData.nameCity);
 
     if (cityExists) {

@@ -9,6 +9,7 @@ import { Services } from './entity/services.entity';
 import { ServicesDto } from './dto/services-dto';
 import { category } from '../category/entity/category.entity';
 import { Professional } from '../professional/entity/professional.entity';
+import { CreateServicesDto } from './dto/create-services-dto';
 
 @Injectable()
 export class ServicesService {
@@ -23,13 +24,7 @@ export class ServicesService {
     private professionalRepository: Repository<Professional>,
   ) {}
 
-  async createServices(servicesData: ServicesDto) {
-    const servicesExists = await this.findServices(servicesData.idService);
-
-    if (servicesExists) {
-      throw new ConflictException('El servicio ya existe');
-    }
-
+  async createServices(servicesData: CreateServicesDto) {
     const categoryExists = await this.categoryRepository.findOne({
       where: {
         idCategory: servicesData.idCategory,

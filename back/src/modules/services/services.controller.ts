@@ -11,13 +11,14 @@ import {
 
 import { ServicesService } from './services.service';
 import { ServicesDto } from './dto/services-dto';
+import { CreateServicesDto } from './dto/create-services-dto';
 
 @Controller('api/v1/services')
 export class ServicesController {
   constructor(private ServicesService: ServicesService) {}
 
   @Post('createServices')
-  createServices(@Body() services: ServicesDto) {
+  createServices(@Body() services: CreateServicesDto) {
     return this.ServicesService.createServices(services);
   }
 

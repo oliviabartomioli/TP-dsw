@@ -11,13 +11,14 @@ import {
 
 import { CityService } from './city.service';
 import { cityDto } from './dto/city-dto';
+import { CreateCityDto } from './dto/create-city-dto';
 
 @Controller('api/v1/city')
 export class CityController {
   constructor(private cityService: CityService) {}
 
   @Post('createCity')
-  createCity(@Body() city: cityDto) {
+  createCity(@Body() city: CreateCityDto) {
     return this.cityService.createCity(city);
   }
 
