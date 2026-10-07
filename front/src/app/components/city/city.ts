@@ -51,7 +51,6 @@ export class CityComponent implements OnInit {
     this.cityForm = this.fb.group({
       nameCity: ['', [Validators.required, Validators.maxLength(15)]],
       idProvince: ['', [Validators.required]],
-      deleteCity: [false],
     });
   }
 

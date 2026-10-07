@@ -23,7 +23,7 @@
     </span>
   </div>
 
-  <div>
+    <div>
     <label for="idProvince">Provincia:</label>
 
     <select
@@ -34,7 +34,7 @@
 
       <option
         *ngFor="let province of provinces"
-        [value]="province.idProvince"
+        [ngValue]="province.idProvince"
       >
         {{ province.nameProvince }}
       </option>
@@ -49,7 +49,6 @@
       Debe seleccionar una provincia.
     </span>
   </div>
-
   <button type="submit">
     {{ isEditMode ? 'Actualizar' : 'Crear' }}
   </button>
