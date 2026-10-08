@@ -12,22 +12,27 @@ import {
 export class requestDto {
   @IsNumber()
   @IsPositive()
-  @IsNotEmpty()
-  idRequest!: number;
+  @IsOptional()
+  idRequest?: number;
 
   @Type(() => Date)
   @IsDate()
   @IsNotEmpty()
   date!: Date;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  state!: string;
+  state?: string;
 
   @IsNumber()
   @IsPositive()
   @IsNotEmpty()
   dniUs!: number;
+
+  @IsNumber()
+  @IsPositive()
+  @IsNotEmpty()
+  idService!: number;
 
   @IsBoolean()
   @IsOptional()

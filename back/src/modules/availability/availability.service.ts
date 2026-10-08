@@ -58,7 +58,11 @@ export class AvailabilityService {
   async findOneAvailability(idAvailability: number) {
     const availability = await this.availabilityRepository.findOne({
       where: { idAvailability, deleteAv: false },
+      relations: {
+        professional: true,
+      },
     });
+
     if (!availability) {
       throw new NotFoundException(
         'la disponibilidad con idAvailability: ' +
@@ -66,12 +70,16 @@ export class AvailabilityService {
           ' no existe',
       );
     }
+
     return availability;
   }
 
   async findAll() {
     return await this.availabilityRepository.find({
       where: { deleteAv: false },
+      relations: {
+        professional: true,
+      },
     });
   }
 

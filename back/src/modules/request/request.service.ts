@@ -1,9 +1,14 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
 import { requestDto } from './dto/request-dto';
 import { request } from './entity/request.entity';
 import { User } from '../users/entity/user.entity';
+import { Services } from '../services/entity/services.entity';
 
 @Injectable()
 export class RequestService {
@@ -13,6 +18,9 @@ export class RequestService {
 
     @InjectRepository(User)
     private userRepository: Repository<User>,
+
+    @InjectRepository(Services)
+    private servicesRepository: Repository<Services>,
   ) {}
 
   async createRequests(requests: requestDto) {
@@ -29,10 +37,33 @@ export class RequestService {
       );
     }
 
+    const service = await this.servicesRepository.findOne({
+      where: {
+        idService: requests.idService,
+        deleteS: false,
+      },
+      relations: {
+        professional: true,
+      },
+    });
+
+    if (!service) {
+      throw new ConflictException(
+        'El servicio con ID ' + requests.idService + ' no existe',
+      );
+    }
+
+    if (!service.professional || service.professional.deleteP) {
+      throw new ConflictException(
+        'El profesional asociado al servicio no está disponible',
+      );
+    }
+
     const newRequest = this.requestRepository.create({
       date: requests.date,
-      state: requests.state,
+      state: 'pendiente',
       user: user,
+      service: service,
     });
 
     return await this.requestRepository.save(newRequest);
@@ -49,6 +80,9 @@ export class RequestService {
       where: { deleteRequest: false },
       relations: {
         user: true,
+        service: {
+          professional: true,
+        },
       },
     });
   }
@@ -57,6 +91,8 @@ export class RequestService {
     return await this.requestRepository
       .createQueryBuilder('request')
       .leftJoinAndSelect('request.user', 'user')
+      .leftJoinAndSelect('request.service', 'service')
+      .leftJoinAndSelect('service.professional', 'professional')
       .where('request.deleteRequest = :deleted', { deleted: true })
       .getMany();
   }
@@ -106,6 +142,11 @@ export class RequestService {
   }
 
   async updateRequests(requests: requestDto) {
+    if (requests.idRequest === undefined) {
+      throw new BadRequestException(
+        'El ID de la solicitud es obligatorio para actualizar',
+      );
+    }
     const requestExists = await this.findRequest(requests.idRequest);
 
     if (!requestExists) {
@@ -133,9 +174,31 @@ export class RequestService {
       );
     }
 
+    const serviceExists = await this.servicesRepository.findOne({
+      where: {
+        idService: requests.idService,
+        deleteS: false,
+      },
+      relations: {
+        professional: true,
+      },
+    });
+
+    if (!serviceExists) {
+      throw new ConflictException(
+        'El servicio con ID ' + requests.idService + ' no existe',
+      );
+    }
+
+    if (!serviceExists.professional || serviceExists.professional.deleteP) {
+      throw new ConflictException(
+        'El profesional asociado al servicio no está disponible',
+      );
+    }
+
     requestExists.date = requests.date;
-    requestExists.state = requests.state;
     requestExists.user = userExists;
+    requestExists.service = serviceExists;
 
     return await this.requestRepository.save(requestExists);
   }

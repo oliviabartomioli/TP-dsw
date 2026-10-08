@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '../../users/entity/user.entity';
+import { Services } from 'src/modules/services/entity/services.entity';
 
 @Entity('request')
 export class request {
@@ -26,4 +27,10 @@ export class request {
   })
   @JoinColumn({ name: 'dniUs' })
   user!: User;
+
+  @ManyToOne(() => Services, {
+    nullable: true,
+  })
+  @JoinColumn({ name: 'idService' })
+  service?: Services;
 }
