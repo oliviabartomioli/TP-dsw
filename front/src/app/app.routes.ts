@@ -7,6 +7,7 @@ import { CityComponent } from './components/city/city';
 import { ServicesComponents } from './components/services/services';
 import { AvailabilityComponent } from './components/availability/availability';
 import { RequestComponent } from './components/request/request';
+import { FavoriteComponent } from './components/favorite/favorite';
 
 export const routes: Routes = [
   { path: 'users', component: UsersComponent },
@@ -18,4 +19,5 @@ export const routes: Routes = [
   { path: 'availability', component: AvailabilityComponent},
   { path: 'request', component: RequestComponent},
   { path: '', redirectTo: 'users', pathMatch: 'full' },
+  { path: 'favorite', component: FavoriteComponent },
 ];
