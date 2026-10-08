@@ -5,6 +5,8 @@ import { CategoryComponents } from './components/category/category';
 import { ProvinceComponent } from './components/province/province';
 import { CityComponent } from './components/city/city';
 import { ServicesComponents } from './components/services/services';
+import { AvailabilityComponent } from './components/availability/availability';
+import { RequestComponent } from './components/request/request';
 
 export const routes: Routes = [
   { path: 'users', component: UsersComponent },
@@ -13,5 +15,7 @@ export const routes: Routes = [
   { path: 'province', component: ProvinceComponent },
   { path: 'city', component: CityComponent },
   { path: 'services', component: ServicesComponents },
+  { path: 'availability', component: AvailabilityComponent},
+  { path: 'request', component: RequestComponent},
   { path: '', redirectTo: 'users', pathMatch: 'full' },
 ];

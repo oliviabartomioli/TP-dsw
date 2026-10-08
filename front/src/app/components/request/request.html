@@ -1,0 +1,83 @@
+<h2>Gestión de Solicitudes</h2>
+
+<h3>{{ editingId !== null ? 'Editar solicitud' : 'Agregar solicitud' }}</h3>
+
+<form (ngSubmit)="saveRequest()" #requestForm="ngForm">
+
+  <div>
+    <label for="date">Fecha del servicio:</label>
+    <input
+      type="date"
+      id="date"
+      name="date"
+      [ngModel]="newRequest.date | date:'yyyy-MM-dd'"
+      (ngModelChange)="onDateChange($event)"
+      required
+    />
+  </div>
+
+  <div>
+    <label for="dniUs">DNI del usuario:</label>
+    <input
+      type="number"
+      id="dniUs"
+      name="dniUs"
+      [(ngModel)]="newRequest.dniUs"
+      required
+      min="1"
+    />
+  </div>
+
+  <div>
+    <button type="submit" [disabled]="requestForm.invalid">
+      {{ editingId !== null ? 'Actualizar' : 'Agregar' }}
+    </button>
+
+    @if (editingId !== null) {
+      <button type="button" (click)="resetForm()">
+        Cancelar
+      </button>
+    }
+  </div>
+
+</form>
+
+<hr />
+
+<h3>Listado de solicitudes</h3>
+
+<table border="1">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Fecha</th>
+      <th>Estado</th>
+      <th>Usuario</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    @for (request of requests; track request.idRequest) {
+      <tr>
+        <td>{{ request.idRequest }}</td>
+        <td>{{ request.date | date:'dd/MM/yyyy' }}</td>
+        <td>{{ request.state }}</td>
+        <td>{{ request.user?.dniUs ?? 'Sin usuario' }}</td>
+        <td>
+          <button type="button" (click)="editRequest(request)">
+            Editar
+          </button>
+
+          <button type="button" (click)="deleteRequest(request.idRequest)">
+            Eliminar
+          </button>
+        </td>
+      </tr>
+    } @empty {
+      <tr>
+        <td colspan="5">No hay solicitudes registradas.</td>
+      </tr>
+    }
+  </tbody>
+</table>
