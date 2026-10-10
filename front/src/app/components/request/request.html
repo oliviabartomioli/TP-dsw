@@ -1,83 +1,204 @@
+
 <h2>Gestión de Solicitudes</h2>
 
-<h3>{{ editingId !== null ? 'Editar solicitud' : 'Agregar solicitud' }}</h3>
+<h3>{{ editing ? 'Editar solicitud' : 'Nueva solicitud' }}</h3>
 
-<form (ngSubmit)="saveRequest()" #requestForm="ngForm">
+<form [formGroup]="requestForm" (ngSubmit)="onSubmit()">
 
   <div>
-    <label for="date">Fecha del servicio:</label>
+    <label for="date">Fecha:</label>
     <input
-      type="date"
       id="date"
-      name="date"
-      [ngModel]="newRequest.date | date:'yyyy-MM-dd'"
-      (ngModelChange)="onDateChange($event)"
-      required
+      type="date"
+      formControlName="date"
     />
   </div>
 
   <div>
     <label for="dniUs">DNI del usuario:</label>
     <input
-      type="number"
       id="dniUs"
-      name="dniUs"
-      [(ngModel)]="newRequest.dniUs"
-      required
-      min="1"
+      type="number"
+      formControlName="dniUs"
+      placeholder="Ingresá el DNI del usuario"
     />
   </div>
 
   <div>
-    <button type="submit" [disabled]="requestForm.invalid">
-      {{ editingId !== null ? 'Actualizar' : 'Agregar' }}
-    </button>
-
-    @if (editingId !== null) {
-      <button type="button" (click)="resetForm()">
-        Cancelar
-      </button>
-    }
+    <label for="idService">ID del servicio:</label>
+    <input
+      id="idService"
+      type="number"
+      formControlName="idService"
+      placeholder="Ingresá el ID del servicio"
+    />
   </div>
+
+  <button type="submit" [disabled]="requestForm.invalid">
+    {{ editing ? 'Guardar cambios' : 'Crear solicitud' }}
+  </button>
+
+  <button
+    *ngIf="editing"
+    type="button"
+    (click)="cancelEdit()"
+  >
+    Cancelar
+  </button>
 
 </form>
 
+<p *ngIf="errorMessage">{{ errorMessage }}</p>
+<p *ngIf="successMessage">{{ successMessage }}</p>
+
 <hr />
 
-<h3>Listado de solicitudes</h3>
+<h3>Solicitudes activas</h3>
 
-<table border="1">
+<p *ngIf="loading">Cargando solicitudes...</p>
+
+<table *ngIf="!loading">
   <thead>
     <tr>
       <th>ID</th>
       <th>Fecha</th>
       <th>Estado</th>
       <th>Usuario</th>
+      <th>Servicio</th>
+      <th>Profesional</th>
       <th>Acciones</th>
     </tr>
   </thead>
 
   <tbody>
-    @for (request of requests; track request.idRequest) {
-      <tr>
-        <td>{{ request.idRequest }}</td>
-        <td>{{ request.date | date:'dd/MM/yyyy' }}</td>
-        <td>{{ request.state }}</td>
-        <td>{{ request.user?.dniUs ?? 'Sin usuario' }}</td>
-        <td>
-          <button type="button" (click)="editRequest(request)">
-            Editar
-          </button>
+    <tr *ngFor="let request of requests">
+      <td>{{ request.idRequest }}</td>
 
-          <button type="button" (click)="deleteRequest(request.idRequest)">
-            Eliminar
+      <td>{{ request.date | date:'dd/MM/yyyy':'UTC' }}</td>
+
+      <td>{{ request.state }}</td>
+
+      <td>
+        {{ request.user?.nameU }}
+        {{ request.user?.surnameU }}
+      </td>
+
+      <td>{{ request.service?.idService }}</td>
+
+      <td>
+        {{ request.service?.professional?.nameP }}
+        {{ request.service?.professional?.surnameP }}
+      </td>
+
+      <td>
+        <!-- Editar solicitud -->
+        <button
+          type="button"
+          (click)="onEdit(request)"
+        >
+          Editar
+        </button>
+
+        <!-- Aceptar solicitud pendiente -->
+        <button
+          *ngIf="request.state === 'pendiente'"
+          type="button"
+          (click)="changeState(request.idRequest, 'aceptada')"
+        >
+          Aceptar
+        </button>
+
+        <!-- Rechazar solicitud pendiente -->
+        <button
+          *ngIf="request.state === 'pendiente'"
+          type="button"
+          (click)="changeState(request.idRequest, 'rechazada')"
+        >
+          Rechazar
+        </button>
+
+        <!-- Completar solicitud aceptada -->
+        <button
+          *ngIf="request.state === 'aceptada'"
+          type="button"
+          (click)="changeState(request.idRequest, 'completada')"
+        >
+          Completar
+        </button>
+
+        <!-- Eliminar solicitud -->
+        <button
+          type="button"
+          (click)="onDelete(request.idRequest)"
+        >
+          Eliminar
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p *ngIf="!loading && requests.length === 0">
+  No hay solicitudes registradas.
+</p>
+
+<hr />
+
+<button type="button" (click)="toggleDeleted()">
+  {{ showDeleted ? 'Ocultar eliminadas' : 'Ver eliminadas' }}
+</button>
+
+<div *ngIf="showDeleted">
+
+  <h3>Solicitudes eliminadas</h3>
+
+  <p *ngIf="deletedRequests.length === 0">
+    No hay solicitudes eliminadas.
+  </p>
+
+  <table *ngIf="deletedRequests.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Fecha</th>
+        <th>Estado</th>
+        <th>Usuario</th>
+        <th>Servicio</th>
+        <th>Profesional</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let request of deletedRequests">
+        <td>{{ request.idRequest }}</td>
+
+        <td>{{ request.date | date:'dd/MM/yyyy':'UTC' }}</td>
+
+        <td>{{ request.state }}</td>
+
+        <td>
+          {{ request.user?.nameU }}
+          {{ request.user?.surnameU }}
+        </td>
+
+        <td>{{ request.service?.idService }}</td>
+
+        <td>
+          {{ request.service?.professional?.nameP }}
+          {{ request.service?.professional?.surnameP }}
+        </td>
+
+        <td>
+          <button
+            type="button"
+            (click)="onRestore(request.idRequest)"
+          >
+            Restaurar
           </button>
         </td>
       </tr>
-    } @empty {
-      <tr>
-        <td colspan="5">No hay solicitudes registradas.</td>
-      </tr>
-    }
-  </tbody>
-</table>
+    </tbody>
+  </table>
+
+</div>

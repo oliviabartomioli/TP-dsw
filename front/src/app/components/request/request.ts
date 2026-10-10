@@ -1,108 +1,248 @@
-import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+} from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+
+import {
+  Request,
+  RequestDto,
+  UpdateRequestDto,
+} from '../../models/request.model';
+
 import { RequestService } from '../../services/request';
-import { Request as RequestModel, requestDto } from '../../models/request.model';
 
 @Component({
   selector: 'app-request',
-  imports: [CommonModule, FormsModule],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './request.html',
   styleUrl: './request.css',
 })
 export class RequestComponent implements OnInit {
-  private requestService = inject(RequestService);
+  requests: Request[] = [];
+  deletedRequests: Request[] = [];
 
-  requests: RequestModel[] = [];
+  requestForm!: FormGroup;
 
-  newRequest: requestDto = {
-    date: new Date(),
-    state: 'pendiente',
-    dniUs: 0,
-  };
-
+  editing = false;
   editingId: number | null = null;
+  showDeleted = false;
+  loading = false;
+
+  errorMessage = '';
+  successMessage = '';
+
+  constructor(
+    private fb: FormBuilder,
+    private requestService: RequestService,
+    private cdr: ChangeDetectorRef,
+  ) {}
 
   ngOnInit(): void {
+    this.initForm();
     this.loadRequests();
   }
 
+  initForm(): void {
+    this.requestForm = this.fb.group({
+      date: ['', Validators.required],
+      dniUs: [null, [Validators.required, Validators.min(1)]],
+      idService: [null, [Validators.required, Validators.min(1)]],
+    });
+  }
+
   loadRequests(): void {
+    this.loading = true;
+
     this.requestService.getRequests().subscribe({
       next: (data) => {
         this.requests = data;
+        this.loading = false;
+        this.cdr.detectChanges();
       },
-      error: (error) => {
-        console.error('Error al obtener solicitudes:', error);
+      error: () => {
+        this.errorMessage = 'Error al cargar las solicitudes';
+        this.loading = false;
+        this.cdr.detectChanges();
       },
     });
   }
 
-  saveRequest(): void {
-    if (this.editingId !== null) {
-      this.requestService
-        .updateRequest({
-          ...this.newRequest,
-          idRequest: this.editingId,
-        })
-        .subscribe({
-          next: () => {
-            this.loadRequests();
-            this.resetForm();
-          },
-          error: (error) => {
-            console.error('Error al actualizar solicitud:', error);
-            alert(error.error?.message || 'No se pudo actualizar la solicitud');
-          },
-        });
-    } else {
-      this.requestService.createRequest(this.newRequest).subscribe({
+  loadDeletedRequests(): void {
+    this.requestService.getDeletedRequests().subscribe({
+      next: (data) => {
+        this.deletedRequests = data;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.errorMessage =
+          'Error al cargar las solicitudes eliminadas';
+        this.cdr.detectChanges();
+      },
+    });
+  }
+
+  onSubmit(): void {
+    if (this.requestForm.invalid) {
+      this.requestForm.markAllAsTouched();
+      return;
+    }
+
+    const formValue = this.requestForm.value;
+
+    const dto: RequestDto = {
+      date: new Date(formValue.date).toISOString(),
+      dniUs: Number(formValue.dniUs),
+      idService: Number(formValue.idService),
+    };
+
+    this.errorMessage = '';
+    this.successMessage = '';
+
+    if (this.editing && this.editingId !== null) {
+      const updateDto: UpdateRequestDto = {
+        ...dto,
+        idRequest: this.editingId,
+      };
+
+      this.requestService.updateRequest(updateDto).subscribe({
         next: () => {
+          this.cancelEdit();
+          this.successMessage =
+            'Solicitud actualizada correctamente';
           this.loadRequests();
-          this.resetForm();
+          this.cdr.detectChanges();
         },
-        error: (error) => {
-          console.error('Error al crear solicitud:', error);
-          alert(error.error?.message || 'No se pudo crear la solicitud');
+        error: (err) => {
+          this.errorMessage =
+            err.error?.message || 'Error al actualizar la solicitud';
+          this.cdr.detectChanges();
+        },
+      });
+    } else {
+      this.requestService.createRequest(dto).subscribe({
+        next: () => {
+          this.cancelEdit();
+          this.successMessage = 'Solicitud creada correctamente';
+          this.loadRequests();
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          this.errorMessage =
+            err.error?.message || 'Error al crear la solicitud';
+          this.cdr.detectChanges();
         },
       });
     }
   }
 
-  editRequest(request: RequestModel): void {
+  onEdit(request: Request): void {
+    this.editing = true;
     this.editingId = request.idRequest;
 
-    this.newRequest = {
-      idRequest: request.idRequest,
-      date: new Date(request.date),
-      state: request.state,
-      dniUs: request.user?.dniUs ?? 0,
-    };
+    this.requestForm.patchValue({
+      date: request.date
+        ? request.date.substring(0, 10)
+        : '',
+      dniUs: request.user?.dniUs,
+      idService: request.service?.idService,
+    });
+
+    this.errorMessage = '';
+    this.successMessage = '';
   }
 
-  deleteRequest(idRequest: number): void {
-    if (confirm('¿Seguro que querés eliminar esta solicitud?')) {
-      this.requestService.deleteRequest(idRequest).subscribe({
-        next: () => {
-          this.loadRequests();
-        },
-        error: (error) => {
-          console.error('Error al eliminar solicitud:', error);
-        },
-      });
-    }
-  }
-
-  resetForm(): void {
-    this.newRequest = {
-      date: new Date(),
-      state: 'pendiente',
-      dniUs: 0,
-    };
-
+  cancelEdit(): void {
+    this.editing = false;
     this.editingId = null;
+
+    this.requestForm.reset({
+      date: '',
+      dniUs: null,
+      idService: null,
+    });
   }
-  onDateChange(value: string): void {
-    this.newRequest.date = new Date(`${value}T12:00:00`);
+
+  onDelete(idRequest: number): void {
+    if (!confirm('¿Eliminar esta solicitud?')) {
+      return;
+    }
+
+    this.requestService.deleteRequest(idRequest).subscribe({
+      next: () => {
+        this.successMessage =
+          'Solicitud eliminada correctamente';
+        this.errorMessage = '';
+        this.loadRequests();
+
+        if (this.showDeleted) {
+          this.loadDeletedRequests();
+        }
+
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.errorMessage =
+          err.error?.message || 'Error al eliminar la solicitud';
+        this.cdr.detectChanges();
+      },
+    });
+  }
+
+  onRestore(idRequest: number): void {
+    this.requestService.restoreRequest(idRequest).subscribe({
+      next: () => {
+        this.successMessage =
+          'Solicitud restaurada correctamente';
+        this.errorMessage = '';
+        this.loadRequests();
+        this.loadDeletedRequests();
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.errorMessage =
+          err.error?.message || 'Error al restaurar la solicitud';
+        this.cdr.detectChanges();
+      },
+    });
+  }
+  
+changeState(idRequest: number, state: string): void {
+  this.errorMessage = '';
+  this.successMessage = '';
+
+  this.requestService.changeRequestState(idRequest, state).subscribe({
+    next: () => {
+      this.successMessage =
+        'Estado de la solicitud actualizado a: ' + state;
+
+      this.loadRequests();
+      this.cdr.detectChanges();
+    },
+    error: (err) => {
+      this.errorMessage =
+        err.error?.message ||
+        'Error al cambiar el estado de la solicitud';
+
+      this.cdr.detectChanges();
+    },
+  });
+}
+
+
+  toggleDeleted(): void {
+    this.showDeleted = !this.showDeleted;
+
+    if (this.showDeleted) {
+      this.loadDeletedRequests();
+    }
   }
 }

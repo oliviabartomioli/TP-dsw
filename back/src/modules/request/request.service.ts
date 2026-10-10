@@ -202,4 +202,30 @@ export class RequestService {
 
     return await this.requestRepository.save(requestExists);
   }
+
+  async changeRequestState(idRequest: number, state: string) {
+    const validStates = ['pendiente', 'aceptada', 'rechazada', 'completada'];
+
+    if (!validStates.includes(state)) {
+      throw new BadRequestException('Estado de solicitud no válido');
+    }
+
+    const requestExists = await this.findRequest(idRequest);
+
+    if (!requestExists) {
+      throw new ConflictException(
+        'La solicitud con ID ' + idRequest + ' no existe',
+      );
+    }
+
+    if (requestExists.deleteRequest) {
+      throw new ConflictException(
+        'No se puede cambiar el estado de una solicitud eliminada',
+      );
+    }
+
+    requestExists.state = state;
+
+    return await this.requestRepository.save(requestExists);
+  }
 }

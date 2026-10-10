@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Put,
@@ -49,5 +50,13 @@ export class RequestController {
   @Patch('/restore/:idRequest')
   restoreRequests(@Param('idRequest') idRequest: number) {
     return this.requestService.restoreRequest(idRequest);
+  }
+
+  @Patch(':idRequest/state')
+  changeRequestState(
+    @Param('idRequest', ParseIntPipe) idRequest: number,
+    @Body('state') state: string,
+  ) {
+    return this.requestService.changeRequestState(idRequest, state);
   }
 }

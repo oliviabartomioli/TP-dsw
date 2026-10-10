@@ -1,17 +1,33 @@
-import { User } from './user.model';
 
 export interface Request {
   idRequest: number;
-  date: Date;
+  date: string;
   state: string;
   deleteRequest?: boolean;
-  user?: User;
+
+  user: {
+    dniUs: number;
+    nameU: string;
+    surnameU: string;
+  };
+
+  service: {
+    idService: number;
+
+    professional?: {
+      dniP: number;
+      nameP: string;
+      surnameP: string;
+    };
+  };
 }
 
-export interface requestDto {
-  idRequest?: number;
-  date: Date;
-  state: string;
+export interface RequestDto {
+  date: string;
   dniUs: number;
-  deleteRequest?: boolean;
+  idService: number;
+}
+
+export interface UpdateRequestDto extends RequestDto {
+  idRequest: number;
 }
