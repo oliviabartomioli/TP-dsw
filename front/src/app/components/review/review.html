@@ -1,1 +1,120 @@
-<p>review works!</p>
+
+<h2>Gestión de Valoraciones</h2>
+
+<h3>{{ editing ? 'Editar valoración' : 'Nueva valoración' }}</h3>
+
+<form [formGroup]="reviewForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="commentR">Comentario:</label>
+    <textarea
+      id="commentR"
+      formControlName="commentR"
+      maxlength="60"
+      rows="3"
+      placeholder="Escribí tu comentario..."
+    ></textarea>
+  </div>
+
+  <div>
+    <label for="rating">Calificación:</label>
+    <select id="rating" formControlName="rating">
+      <option [ngValue]="1">1 estrella</option>
+      <option [ngValue]="2">2 estrellas</option>
+      <option [ngValue]="3">3 estrellas</option>
+      <option [ngValue]="4">4 estrellas</option>
+      <option [ngValue]="5">5 estrellas</option>
+    </select>
+  </div>
+
+  <button type="submit" [disabled]="reviewForm.invalid">
+    {{ editing ? 'Guardar cambios' : 'Agregar valoración' }}
+  </button>
+
+  <button
+    *ngIf="editing"
+    type="button"
+    (click)="cancelEdit()"
+  >
+    Cancelar
+  </button>
+</form>
+
+<p *ngIf="errorMessage">{{ errorMessage }}</p>
+<p *ngIf="successMessage">{{ successMessage }}</p>
+
+<hr />
+
+<h3>Valoraciones activas</h3>
+
+<p *ngIf="loading">Cargando valoraciones...</p>
+
+<table *ngIf="!loading">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Comentario</th>
+      <th>Calificación</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let review of reviews">
+      <td>{{ review.idReview }}</td>
+      <td>{{ review.commentR }}</td>
+      <td>{{ review.rating }} / 5</td>
+      <td>
+        <button type="button" (click)="onEdit(review)">
+          Editar
+        </button>
+
+        <button type="button" (click)="onDelete(review.idReview)">
+          Eliminar
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p *ngIf="!loading && reviews.length === 0">
+  No hay valoraciones registradas.
+</p>
+
+<hr />
+
+<button type="button" (click)="toggleDeleted()">
+  {{ showDeleted ? 'Ocultar eliminadas' : 'Ver eliminadas' }}
+</button>
+
+<div *ngIf="showDeleted">
+  <h3>Valoraciones eliminadas</h3>
+
+  <p *ngIf="deletedReviews.length === 0">
+    No hay valoraciones eliminadas.
+  </p>
+
+  <table *ngIf="deletedReviews.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Comentario</th>
+        <th>Calificación</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let review of deletedReviews">
+        <td>{{ review.idReview }}</td>
+        <td>{{ review.commentR }}</td>
+        <td>{{ review.rating }} / 5</td>
+        <td>
+          <button type="button" (click)="onRestore(review.idReview)">
+            Restaurar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+

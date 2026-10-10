@@ -1,9 +1,14 @@
-export interface review{
 
-
+export interface Review {
+  idReview: number;
+  commentR: string;
+  rating: number;
+  deleteR?: boolean;
 }
 
-export interface reviewDto{
-
-    
+export interface ReviewDto {
+  commentR: string;
+  rating: number;
+  deleteR?: boolean;
 }
+

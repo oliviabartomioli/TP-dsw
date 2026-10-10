@@ -2,22 +2,17 @@ import {
   IsBoolean,
   IsInt,
   IsNotEmpty,
-  IsNumber,
   IsOptional,
-  IsPositive,
   IsString,
   Max,
+  MaxLength,
   Min,
 } from 'class-validator';
 
 export class reviewDto {
-  @IsNumber()
-  @IsPositive()
-  @IsNotEmpty()
-  idReview!: number;
-
   @IsString()
   @IsNotEmpty()
+  @MaxLength(60)
   commentR!: string;
 
   @IsInt()

@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Put,
@@ -36,9 +37,12 @@ export class ReviewController {
     return this.reviewService.findReview(idReview);
   }
 
-  @Put()
-  updateReview(@Body() review: reviewDto) {
-    return this.reviewService.updateReview(review);
+  @Put(':idReview')
+  updateReview(
+    @Param('idReview', ParseIntPipe) idReview: number,
+    @Body() review: reviewDto,
+  ) {
+    return this.reviewService.updateReview(idReview, review);
   }
 
   @Delete('/:idReview')

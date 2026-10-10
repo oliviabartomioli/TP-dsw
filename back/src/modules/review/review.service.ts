@@ -11,14 +11,16 @@ export class ReviewService {
     @InjectRepository(review)
     private reviewRepository: Repository<review>,
   ) {}
-  async createReview(review: reviewDto) {
-    const ReviewExists = await this.findReview(review.idReview);
-    if (ReviewExists) {
-      throw new ConflictException('reseña ya registrada.');
-    } else {
-      return await this.reviewRepository.save(review);
-    }
+
+  async createReview(reviewData: reviewDto) {
+    const newReview = this.reviewRepository.create({
+      commentR: reviewData.commentR,
+      rating: reviewData.rating,
+    });
+
+    return await this.reviewRepository.save(newReview);
   }
+
   async findReview(idReview: number) {
     return await this.reviewRepository.findOne({ where: { idReview } });
   }
@@ -28,18 +30,19 @@ export class ReviewService {
   async findAllDelete() {
     return await this.reviewRepository.find({ where: { deleteR: true } });
   }
-  async updateReview(reviewData: reviewDto) {
-    const reviewExists = await this.findReview(reviewData.idReview);
+
+  async updateReview(idReview: number, reviewData: reviewDto) {
+    const reviewExists = await this.findReview(idReview);
 
     if (!reviewExists) {
       throw new ConflictException(
-        'La reseña con id ' + reviewData.idReview + ' no existe',
+        'La reseña con id ' + idReview + ' no existe',
       );
     }
 
     if (reviewExists.deleteR) {
       throw new ConflictException(
-        'La reseña con id ' + reviewData.idReview + ' está eliminada',
+        'La reseña con id ' + idReview + ' está eliminada',
       );
     }
 
@@ -48,6 +51,7 @@ export class ReviewService {
 
     return await this.reviewRepository.save(reviewExists);
   }
+
   async deleteReview(idReview: number) {
     const ReviewExists = await this.findReview(idReview);
     if (!ReviewExists) {
