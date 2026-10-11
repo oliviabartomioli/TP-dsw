@@ -11,9 +11,9 @@ export interface Request {
     surnameU: string;
   };
 
-  service: {
+  service?: {
     idService: number;
-
+    nameS: string;
     professional?: {
       dniP: number;
       nameP: string;

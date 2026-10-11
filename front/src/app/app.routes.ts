@@ -9,6 +9,7 @@ import { AvailabilityComponent } from './components/availability/availability';
 import { RequestComponent } from './components/request/request';
 import { FavoriteComponent } from './components/favorite/favorite';
 import { ReviewComponent } from './components/review/review';
+import { BuscarServiciosComponent } from './components/buscar-servicios/buscar-servicios';
 
 export const routes: Routes = [
   { path: 'users', component: UsersComponent },
@@ -22,4 +23,5 @@ export const routes: Routes = [
   { path: '', redirectTo: 'users', pathMatch: 'full' },
   { path: 'favorite', component: FavoriteComponent },
   { path: 'review', component: ReviewComponent },
+  { path: 'buscar-servicios', component: BuscarServiciosComponent },
 ];

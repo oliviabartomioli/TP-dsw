@@ -50,6 +50,7 @@ export class ServicesService {
     const newService = this.ServicesRepository.create({
       nameS: servicesData.nameS,
       descriptionS: servicesData.descriptionS,
+      priceS: servicesData.priceS,
       category: categoryExists,
       professional: professionalExists,
     });
@@ -141,6 +142,7 @@ export class ServicesService {
 
     servicesExists.nameS = servicesData.nameS;
     servicesExists.descriptionS = servicesData.descriptionS;
+    servicesExists.priceS = servicesData.priceS;
     servicesExists.category = categoryExists;
     servicesExists.professional = professionalExists;
 

@@ -17,6 +17,10 @@ import { ServiceService } from '../../services/services';
 import { CategoryService } from '../../services/category';
 import { Professional } from '../../models/professional.model';
 import { ProfessionalService } from '../../services/professional';
+import localeEsAr from '@angular/common/locales/es-AR';
+import { registerLocaleData } from '@angular/common';
+
+registerLocaleData(localeEsAr);
 
 @Component({
   imports: [CommonModule, ReactiveFormsModule],
@@ -56,6 +60,7 @@ export class ServicesComponents implements OnInit {
   this.servicesForm = this.fb.group({
     nameS: ['', [Validators.required, Validators.maxLength(30)]],
     descriptionS: ['', [Validators.required, Validators.maxLength(150)]],
+    priceS: [null, [Validators.required, Validators.min(0.01)]],
     idCategory: ['', [Validators.required]],
     dniP: [null, [Validators.required, Validators.min(1)]],
   });
@@ -166,6 +171,7 @@ export class ServicesComponents implements OnInit {
   this.servicesForm.patchValue({
     nameS: service.nameS,
     descriptionS: service.descriptionS,
+    priceS: service.priceS,
     idCategory: service.category?.idCategory,
     dniP: service.professional?.dniP ?? null,
   });

@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Put,
@@ -33,17 +34,17 @@ export class ServicesController {
   }
 
   @Get('category/:idCategory')
-  getServicesByCategory(@Param('idCategory') idCategory: number) {
+  getServicesByCategory(@Param('idCategory', ParseIntPipe) idCategory: number) {
     return this.ServicesService.findByCategory(idCategory);
   }
 
   @Get('city/:idCity')
-  getServicesByCity(@Param('idCity') idCity: number) {
+  getServicesByCity(@Param('idCity', ParseIntPipe) idCity: number) {
     return this.ServicesService.findByCity(idCity);
   }
 
-  @Get('/:idServicio')
-  getServicesById(@Param('idServicio') idService: number) {
+  @Get(':idServicio')
+  getServicesById(@Param('idServicio', ParseIntPipe) idService: number) {
     return this.ServicesService.findServices(idService);
   }
 

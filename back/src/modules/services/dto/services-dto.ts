@@ -34,4 +34,9 @@ export class ServicesDto {
   @IsPositive()
   @IsNotEmpty()
   dniP!: number;
+
+  @IsNumber()
+  @IsPositive()
+  @IsNotEmpty()
+  priceS!: number;
 }

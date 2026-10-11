@@ -1,0 +1,170 @@
+<h2>Buscar servicios</h2>
+
+<p>Encontrá servicios disponibles según la categoría o ciudad.</p>
+
+<p *ngIf="errorMessage">
+  {{ errorMessage }}
+</p>
+
+<hr />
+
+
+<div>
+  <h3>Buscar por categoría</h3>
+
+  <label for="category">Categoría:</label>
+
+  <select
+    id="category"
+    [(ngModel)]="selectedCategory"
+  >
+    <option [ngValue]="null">Seleccione una categoría</option>
+
+    <option
+      *ngFor="let category of categories"
+      [ngValue]="category.idCategory"
+    >
+      {{ category.nameC }}
+    </option>
+  </select>
+
+  <button
+    type="button"
+    (click)="searchByCategory()"
+    [disabled]="selectedCategory === null || loading"
+  >
+    Buscar
+  </button>
+</div>
+
+<hr />
+
+<div>
+  <h3>Buscar por ciudad</h3>
+
+  <label for="city">Ciudad:</label>
+
+  <select
+    id="city"
+    [(ngModel)]="selectedCity"
+  >
+    <option [ngValue]="null">Seleccione una ciudad</option>
+
+    <option
+      *ngFor="let city of cities"
+      [ngValue]="city.idCity"
+    >
+      {{ city.nameCity }}
+    </option>
+  </select>
+
+  <button
+    type="button"
+    (click)="searchByCity()"
+    [disabled]="selectedCity === null || loading"
+  >
+    Buscar
+  </button>
+</div>
+
+<br />
+
+<button
+  type="button"
+  (click)="clearFilters()"
+  [disabled]="loading"
+>
+  Mostrar todos los servicios
+</button>
+
+<hr />
+
+<p *ngIf="loading">
+  Cargando servicios...
+</p>
+
+
+<h3>Resultados de búsqueda</h3>
+
+<table *ngIf="!loading && services.length > 0">
+  <thead>
+    <tr>
+      <th>Servicio</th>
+      <th>Categoría</th>
+      <th>Profesional</th>
+      <th>Precio</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let service of services">
+      <td>{{ service.nameS }}</td>
+
+      <td>
+        {{ service.category?.nameC }}
+      </td>
+
+      <td>
+        {{ service.professional?.nameP }}
+        {{ service.professional?.surnameP }}
+      </td>
+
+      <td>
+        {{ service.priceS | currency:'ARS':'symbol':'1.2-2':'es-AR' }}
+      </td>
+
+      <td>
+        <button
+          type="button"
+          (click)="viewDetail(service.idService)"
+        >
+          Ver detalle
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p *ngIf="!loading && services.length === 0 && !errorMessage">
+  No se encontraron servicios.
+</p>
+
+<hr />
+
+<div *ngIf="selectedService">
+  <h3>Detalle del servicio</h3>
+
+  <p>
+    <strong>Nombre:</strong>
+    {{ selectedService.nameS }}
+  </p>
+
+  <p>
+    <strong>Descripción:</strong>
+    {{ selectedService.descriptionS }}
+  </p>
+
+  <p>
+    <strong>Categoría:</strong>
+    {{ selectedService.category?.nameC }}
+  </p>
+
+  <p>
+    <strong>Profesional:</strong>
+    {{ selectedService.professional?.nameP }}
+    {{ selectedService.professional?.surnameP }}
+  </p>
+
+  <p>
+    <strong>Precio:</strong>
+    {{ selectedService.priceS | currency:'ARS':'symbol':'1.2-2':'es-AR' }}
+  </p>
+
+  <button
+    type="button"
+    (click)="closeDetail()"
+  >
+    Cerrar detalle
+  </button>
+</div>

@@ -22,6 +22,9 @@ export class Services {
   @Column({ type: Boolean, nullable: false, default: false })
   deleteS?: boolean;
 
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: false })
+  priceS!: number;
+
   @ManyToOne(() => category, (category) => category.services, {
     nullable: false,
   })

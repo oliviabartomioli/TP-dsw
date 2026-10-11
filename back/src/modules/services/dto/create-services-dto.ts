@@ -18,4 +18,9 @@ export class CreateServicesDto {
   @IsPositive()
   @IsNotEmpty()
   dniP!: number;
+
+  @IsNumber()
+  @IsPositive()
+  @IsNotEmpty()
+  priceS!: number;
 }

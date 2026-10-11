@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-
 import { Services, servicesDto } from '../models/services.model';
 
 @Injectable({
@@ -27,6 +26,18 @@ export class ServiceService {
 
   getServices(): Observable<Services[]> {
     return this.http.get<Services[]>(this.apiUrl);
+  }
+
+    getServicesByCategory(idCategory: number): Observable<Services[]> {
+    return this.http.get<Services[]>(
+      `${this.apiUrl}/category/${idCategory}`
+    );
+  }
+
+  getServicesByCity(idCity: number): Observable<Services[]> {
+    return this.http.get<Services[]>(
+      `${this.apiUrl}/city/${idCity}`
+    );
   }
 
   getServicesDelete(): Observable<Services[]> {
