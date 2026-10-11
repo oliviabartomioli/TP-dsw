@@ -18,23 +18,56 @@
     <label for="dniUs">DNI del usuario:</label>
     <input
       id="dniUs"
-      type="number"
+      type="text"
+      inputmode="numeric"
       formControlName="dniUs"
       placeholder="Ingresá el DNI del usuario"
     />
+
+    <small
+      *ngIf="
+        requestForm.get('dniUs')?.touched &&
+        requestForm.get('dniUs')?.hasError('pattern')
+      "
+    >
+      El DNI debe contener solamente números.
+    </small>
   </div>
 
   <div>
-    <label for="idService">ID del servicio:</label>
-    <input
+    <label for="idService">Servicio:</label>
+
+    <select
       id="idService"
-      type="number"
       formControlName="idService"
-      placeholder="Ingresá el ID del servicio"
-    />
+    >
+      <option [ngValue]="null">
+        Seleccionar servicio
+      </option>
+
+      <option
+        *ngFor="let service of services"
+        [ngValue]="service.idService"
+      >
+        {{ service.nameS }} -
+        {{ service.professional?.nameP }}
+        {{ service.professional?.surnameP }}
+      </option>
+    </select>
+
+    <p *ngIf="loadingServices">
+      Cargando servicios...
+    </p>
+
+    <p *ngIf="!loadingServices && services.length === 0">
+      No hay servicios disponibles.
+    </p>
   </div>
 
-  <button type="submit" [disabled]="requestForm.invalid">
+  <button
+    type="submit"
+    [disabled]="requestForm.invalid || loadingServices"
+  >
     {{ editing ? 'Guardar cambios' : 'Crear solicitud' }}
   </button>
 
@@ -48,9 +81,13 @@
 
 </form>
 
-<p *ngIf="errorMessage">{{ errorMessage }}</p>
-<p *ngIf="successMessage">{{ successMessage }}</p>
+<div *ngIf="errorMessage" class="request-error" role="alert">
+  {{ errorMessage }}
+</div>
 
+<div *ngIf="successMessage" class="request-success" role="status">
+  {{ successMessage }}
+</div>
 <hr />
 
 <h3>Solicitudes activas</h3>
@@ -83,7 +120,9 @@
         {{ request.user?.surnameU }}
       </td>
 
-      <td>{{ request.service?.idService }}</td>
+      <td>
+        {{ request.service?.nameS || request.service?.idService }}
+      </td>
 
       <td>
         {{ request.service?.professional?.nameP }}
@@ -91,7 +130,6 @@
       </td>
 
       <td>
-        <!-- Editar solicitud -->
         <button
           type="button"
           (click)="onEdit(request)"
@@ -99,7 +137,6 @@
           Editar
         </button>
 
-        <!-- Aceptar solicitud pendiente -->
         <button
           *ngIf="request.state === 'pendiente'"
           type="button"
@@ -108,7 +145,6 @@
           Aceptar
         </button>
 
-        <!-- Rechazar solicitud pendiente -->
         <button
           *ngIf="request.state === 'pendiente'"
           type="button"
@@ -117,7 +153,6 @@
           Rechazar
         </button>
 
-        <!-- Completar solicitud aceptada -->
         <button
           *ngIf="request.state === 'aceptada'"
           type="button"
@@ -126,7 +161,6 @@
           Completar
         </button>
 
-        <!-- Eliminar solicitud -->
         <button
           type="button"
           (click)="onDelete(request.idRequest)"
@@ -182,7 +216,9 @@
           {{ request.user?.surnameU }}
         </td>
 
-        <td>{{ request.service?.idService }}</td>
+        <td>
+          {{ request.service?.nameS || request.service?.idService }}
+        </td>
 
         <td>
           {{ request.service?.professional?.nameP }}

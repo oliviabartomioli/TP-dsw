@@ -1,0 +1,19 @@
+.request-error {
+  background-color: #fde8e8;
+  color: #991b1b;
+  border: 1px solid #f5b5b5;
+  border-radius: 6px;
+  padding: 12px;
+  margin: 12px 0;
+  font-size: 14px;
+}
+
+.request-success {
+  background-color: #e7f6ec;
+  color: #166534;
+  border: 1px solid #a7dfb7;
+  border-radius: 6px;
+  padding: 12px;
+  margin: 12px 0;
+  font-size: 14px;
+}

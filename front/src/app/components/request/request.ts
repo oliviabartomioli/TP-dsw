@@ -1,3 +1,4 @@
+
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectorRef,
@@ -17,7 +18,9 @@ import {
   UpdateRequestDto,
 } from '../../models/request.model';
 
+import { Services } from '../../models/services.model';
 import { RequestService } from '../../services/request';
+import { ServiceService } from '../../services/services';
 
 @Component({
   selector: 'app-request',
@@ -29,6 +32,7 @@ import { RequestService } from '../../services/request';
 export class RequestComponent implements OnInit {
   requests: Request[] = [];
   deletedRequests: Request[] = [];
+  services: Services[] = [];
 
   requestForm!: FormGroup;
 
@@ -36,6 +40,7 @@ export class RequestComponent implements OnInit {
   editingId: number | null = null;
   showDeleted = false;
   loading = false;
+  loadingServices = false;
 
   errorMessage = '';
   successMessage = '';
@@ -43,42 +48,79 @@ export class RequestComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private requestService: RequestService,
+    private serviceService: ServiceService,
     private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
     this.initForm();
     this.loadRequests();
+    this.loadServices();
   }
 
   initForm(): void {
     this.requestForm = this.fb.group({
       date: ['', Validators.required],
-      dniUs: [null, [Validators.required, Validators.min(1)]],
-      idService: [null, [Validators.required, Validators.min(1)]],
+      dniUs: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[0-9]+$/),
+        ],
+      ],
+      idService: [
+        null,
+        [Validators.required, Validators.min(1)],
+      ],
     });
   }
 
-  loadRequests(): void {
-    this.loading = true;
+  loadServices(): void {
+    this.loadingServices = true;
 
-    this.requestService.getRequests().subscribe({
-      next: (data) => {
-        this.requests = data;
-        this.loading = false;
+    this.serviceService.getServices().subscribe({
+      next: (data: Services[]) => {
+        console.log('SERVICIOS RECIBIDOS:', data);
+
+        this.services = data;
+        this.loadingServices = false;
         this.cdr.detectChanges();
       },
-      error: () => {
-        this.errorMessage = 'Error al cargar las solicitudes';
-        this.loading = false;
+      error: (err) => {
+        console.error('ERROR AL CARGAR SERVICIOS:', err);
+
+        this.errorMessage = 'Error al cargar los servicios';
+        this.loadingServices = false;
         this.cdr.detectChanges();
       },
     });
   }
+
+
+ loadRequests(): void {
+  this.loading = true;
+
+  this.requestService.getRequests().subscribe({
+    next: (data: Request[]) => {
+      this.requests = data;
+      this.loading = false;
+      this.cdr.detectChanges();
+    },
+    error: (err) => {
+      console.error('ERROR AL CARGAR SOLICITUDES:', err);
+
+      this.errorMessage =
+        'No se pudieron cargar las solicitudes';
+
+      this.loading = false;
+      this.cdr.detectChanges();
+    },
+  });
+}
 
   loadDeletedRequests(): void {
     this.requestService.getDeletedRequests().subscribe({
-      next: (data) => {
+      next: (data: Request[]) => {
         this.deletedRequests = data;
         this.cdr.detectChanges();
       },
@@ -90,6 +132,7 @@ export class RequestComponent implements OnInit {
     });
   }
 
+ 
   onSubmit(): void {
     if (this.requestForm.invalid) {
       this.requestForm.markAllAsTouched();
@@ -123,24 +166,35 @@ export class RequestComponent implements OnInit {
         },
         error: (err) => {
           this.errorMessage =
-            err.error?.message || 'Error al actualizar la solicitud';
+            err.error?.message ||
+            'Error al actualizar la solicitud';
           this.cdr.detectChanges();
         },
       });
     } else {
-      this.requestService.createRequest(dto).subscribe({
-        next: () => {
-          this.cancelEdit();
-          this.successMessage = 'Solicitud creada correctamente';
-          this.loadRequests();
-          this.cdr.detectChanges();
-        },
-        error: (err) => {
-          this.errorMessage =
-            err.error?.message || 'Error al crear la solicitud';
-          this.cdr.detectChanges();
-        },
-      });
+ this.requestService.createRequest(dto).subscribe({
+  next: () => {
+    this.cancelEdit();
+    this.errorMessage = '';
+    this.successMessage = 'Solicitud creada correctamente';
+    this.loadRequests();
+    this.cdr.detectChanges();
+  },
+  error: (err) => {
+    console.error('ERROR AL CREAR SOLICITUD:', err);
+
+    const message = err.error?.message;
+
+    this.errorMessage = Array.isArray(message)
+      ? message.join(', ')
+      : typeof message === 'string'
+        ? message
+        : 'No se pudo crear la solicitud. Verificá los datos ingresados.';
+
+    this.successMessage = '';
+    this.cdr.detectChanges();
+  },
+});
     }
   }
 
@@ -152,8 +206,10 @@ export class RequestComponent implements OnInit {
       date: request.date
         ? request.date.substring(0, 10)
         : '',
-      dniUs: request.user?.dniUs,
-      idService: request.service?.idService,
+      dniUs: request.user?.dniUs != null
+        ? String(request.user.dniUs)
+        : '',
+      idService: request.service?.idService ?? null,
     });
 
     this.errorMessage = '';
@@ -166,10 +222,11 @@ export class RequestComponent implements OnInit {
 
     this.requestForm.reset({
       date: '',
-      dniUs: null,
+      dniUs: '',
       idService: null,
     });
   }
+
 
   onDelete(idRequest: number): void {
     if (!confirm('¿Eliminar esta solicitud?')) {
@@ -191,11 +248,13 @@ export class RequestComponent implements OnInit {
       },
       error: (err) => {
         this.errorMessage =
-          err.error?.message || 'Error al eliminar la solicitud';
+          err.error?.message ||
+          'Error al eliminar la solicitud';
         this.cdr.detectChanges();
       },
     });
   }
+
 
   onRestore(idRequest: number): void {
     this.requestService.restoreRequest(idRequest).subscribe({
@@ -209,35 +268,39 @@ export class RequestComponent implements OnInit {
       },
       error: (err) => {
         this.errorMessage =
-          err.error?.message || 'Error al restaurar la solicitud';
+          err.error?.message ||
+          'Error al restaurar la solicitud';
         this.cdr.detectChanges();
       },
     });
   }
-  
-changeState(idRequest: number, state: string): void {
-  this.errorMessage = '';
-  this.successMessage = '';
 
-  this.requestService.changeRequestState(idRequest, state).subscribe({
-    next: () => {
-      this.successMessage =
-        'Estado de la solicitud actualizado a: ' + state;
+  changeState(idRequest: number, state: string): void {
+    this.errorMessage = '';
+    this.successMessage = '';
 
-      this.loadRequests();
-      this.cdr.detectChanges();
-    },
-    error: (err) => {
-      this.errorMessage =
-        err.error?.message ||
-        'Error al cambiar el estado de la solicitud';
+    this.requestService.changeRequestState(
+      idRequest,
+      state,
+    ).subscribe({
+      next: () => {
+        this.successMessage =
+          'Estado de la solicitud actualizado a: ' + state;
 
-      this.cdr.detectChanges();
-    },
-  });
-}
+        this.loadRequests();
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.errorMessage =
+          err.error?.message ||
+          'Error al cambiar el estado de la solicitud';
 
+        this.cdr.detectChanges();
+      },
+    });
+  }
 
+ 
   toggleDeleted(): void {
     this.showDeleted = !this.showDeleted;
 
