@@ -3,6 +3,7 @@ import {
   IsInt,
   IsNotEmpty,
   IsOptional,
+  IsPositive,
   IsString,
   Max,
   MaxLength,
@@ -19,6 +20,10 @@ export class reviewDto {
   @Min(1)
   @Max(5)
   rating!: number;
+
+  @IsInt()
+  @IsPositive()
+  idRequest!: number;
 
   @IsBoolean()
   @IsOptional()

@@ -1,9 +1,32 @@
-
 <h2>Gestión de Valoraciones</h2>
 
 <h3>{{ editing ? 'Editar valoración' : 'Nueva valoración' }}</h3>
 
 <form [formGroup]="reviewForm" (ngSubmit)="onSubmit()">
+
+  <div>
+    <label for="idRequest">Contratación completada:</label>
+
+    <select
+      id="idRequest"
+      formControlName="idRequest"
+    >
+      <option [ngValue]="null">
+        Seleccionar contratación
+      </option>
+
+      <option
+        *ngFor="let request of completedRequests"
+        [ngValue]="request.idRequest"
+      >
+        Solicitud #{{ request.idRequest }}
+        - {{ request.service?.nameS }}
+        - {{ request.service?.professional?.nameP }}
+        {{ request.service?.professional?.surnameP }}
+      </option>
+    </select>
+  </div>
+
   <div>
     <label for="commentR">Comentario:</label>
     <textarea
@@ -26,7 +49,10 @@
     </select>
   </div>
 
-  <button type="submit" [disabled]="reviewForm.invalid">
+  <button
+    type="submit"
+    [disabled]="reviewForm.invalid"
+  >
     {{ editing ? 'Guardar cambios' : 'Agregar valoración' }}
   </button>
 
@@ -37,6 +63,7 @@
   >
     Cancelar
   </button>
+
 </form>
 
 <p *ngIf="errorMessage">{{ errorMessage }}</p>
@@ -52,6 +79,8 @@
   <thead>
     <tr>
       <th>ID</th>
+      <th>Servicio</th>
+      <th>Profesional</th>
       <th>Comentario</th>
       <th>Calificación</th>
       <th>Acciones</th>
@@ -60,18 +89,38 @@
 
   <tbody>
     <tr *ngFor="let review of reviews">
+
       <td>{{ review.idReview }}</td>
-      <td>{{ review.commentR }}</td>
-      <td>{{ review.rating }} / 5</td>
+
       <td>
-        <button type="button" (click)="onEdit(review)">
+        {{ review.request?.service?.nameS || 'Sin servicio' }}
+      </td>
+
+      <td>
+        {{ review.request?.service?.professional?.nameP }}
+        {{ review.request?.service?.professional?.surnameP }}
+      </td>
+
+      <td>{{ review.commentR }}</td>
+
+      <td>{{ review.rating }} / 5</td>
+
+      <td>
+        <button
+          type="button"
+          (click)="onEdit(review)"
+        >
           Editar
         </button>
 
-        <button type="button" (click)="onDelete(review.idReview)">
+        <button
+          type="button"
+          (click)="onDelete(review.idReview)"
+        >
           Eliminar
         </button>
       </td>
+
     </tr>
   </tbody>
 </table>
@@ -82,11 +131,15 @@
 
 <hr />
 
-<button type="button" (click)="toggleDeleted()">
+<button
+  type="button"
+  (click)="toggleDeleted()"
+>
   {{ showDeleted ? 'Ocultar eliminadas' : 'Ver eliminadas' }}
 </button>
 
 <div *ngIf="showDeleted">
+
   <h3>Valoraciones eliminadas</h3>
 
   <p *ngIf="deletedReviews.length === 0">
@@ -97,6 +150,8 @@
     <thead>
       <tr>
         <th>ID</th>
+        <th>Servicio</th>
+        <th>Profesional</th>
         <th>Comentario</th>
         <th>Calificación</th>
         <th>Acciones</th>
@@ -105,16 +160,33 @@
 
     <tbody>
       <tr *ngFor="let review of deletedReviews">
+
         <td>{{ review.idReview }}</td>
-        <td>{{ review.commentR }}</td>
-        <td>{{ review.rating }} / 5</td>
+
         <td>
-          <button type="button" (click)="onRestore(review.idReview)">
+          {{ review.request?.service?.nameS || 'Sin servicio' }}
+        </td>
+
+        <td>
+          {{ review.request?.service?.professional?.nameP }}
+          {{ review.request?.service?.professional?.surnameP }}
+        </td>
+
+        <td>{{ review.commentR }}</td>
+
+        <td>{{ review.rating }} / 5</td>
+
+        <td>
+          <button
+            type="button"
+            (click)="onRestore(review.idReview)"
+          >
             Restaurar
           </button>
         </td>
+
       </tr>
     </tbody>
   </table>
-</div>
 
+</div>

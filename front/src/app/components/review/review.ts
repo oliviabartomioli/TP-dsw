@@ -1,4 +1,3 @@
-
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectorRef,
@@ -11,9 +10,10 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-
 import { Review, ReviewDto } from '../../models/review.model';
 import { ReviewService } from '../../services/review';
+import { RequestService } from '../../services/request';
+import { Request } from '../../models/request.model';
 
 @Component({
   selector: 'app-review',
@@ -25,9 +25,8 @@ import { ReviewService } from '../../services/review';
 export class ReviewComponent implements OnInit {
   reviews: Review[] = [];
   deletedReviews: Review[] = [];
-
+  completedRequests: Request[] = [];
   reviewForm!: FormGroup;
-
   editing = false;
   editingId: number | null = null;
   showDeleted = false;
@@ -39,20 +38,28 @@ export class ReviewComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private reviewService: ReviewService,
+    private requestService: RequestService,
     private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
     this.initForm();
     this.loadReviews();
+    this.loadCompletedRequests();
   }
 
   initForm(): void {
     this.reviewForm = this.fb.group({
+      idRequest: [null, Validators.required],
+
       commentR: [
         '',
-        [Validators.required, Validators.maxLength(60)],
+        [
+          Validators.required,
+          Validators.maxLength(60),
+        ],
       ],
+
       rating: [
         5,
         [
@@ -73,9 +80,27 @@ export class ReviewComponent implements OnInit {
         this.loading = false;
         this.cdr.detectChanges();
       },
+
       error: () => {
         this.errorMessage = 'Error al cargar las valoraciones';
         this.loading = false;
+        this.cdr.detectChanges();
+      },
+    });
+  }
+
+  loadCompletedRequests(): void {
+    this.requestService.getRequests().subscribe({
+      next: (data) => {
+        this.completedRequests = data.filter(
+          (request) => request.state === 'completada'
+        );
+
+        this.cdr.detectChanges();
+      },
+
+      error: () => {
+        this.errorMessage = 'Error al cargar las solicitudes';
         this.cdr.detectChanges();
       },
     });
@@ -87,52 +112,74 @@ export class ReviewComponent implements OnInit {
         this.deletedReviews = data;
         this.cdr.detectChanges();
       },
+
       error: () => {
-        this.errorMessage = 'Error al cargar las valoraciones eliminadas';
+        this.errorMessage =
+          'Error al cargar las valoraciones eliminadas';
         this.cdr.detectChanges();
       },
     });
   }
 
   onSubmit(): void {
+
     if (this.reviewForm.invalid) {
       this.reviewForm.markAllAsTouched();
       return;
     }
 
+
+    const formValue = this.reviewForm.getRawValue();
+
     const dto: ReviewDto = {
-      commentR: this.reviewForm.value.commentR,
-      rating: Number(this.reviewForm.value.rating),
+      idRequest: Number(formValue.idRequest),
+      commentR: formValue.commentR,
+      rating: Number(formValue.rating),
     };
 
     this.errorMessage = '';
     this.successMessage = '';
 
     if (this.editing && this.editingId !== null) {
-      this.reviewService.updateReview(this.editingId, dto).subscribe({
-        next: () => {
-          this.cancelEdit();
-          this.successMessage = 'Valoración actualizada correctamente';
-          this.loadReviews();
-          this.cdr.detectChanges();
-        },
-        error: (err) => {
-          this.errorMessage =
-            err.error?.message || 'Error al actualizar la valoración';
-          this.cdr.detectChanges();
-        },
-      });
+
+      this.reviewService
+        .updateReview(this.editingId, dto)
+        .subscribe({
+          next: () => {
+            this.cancelEdit();
+
+            this.successMessage =
+              'Valoración actualizada correctamente';
+
+            this.loadReviews();
+            this.cdr.detectChanges();
+          },
+
+          error: (err) => {
+            this.errorMessage =
+              err.error?.message ||
+              'Error al actualizar la valoración';
+
+            this.cdr.detectChanges();
+          },
+        });
+
     } else {
       this.reviewService.createReview(dto).subscribe({
         next: () => {
           this.cancelEdit();
-          this.successMessage = 'Valoración creada correctamente';
+
+          this.successMessage =
+            'Valoración creada correctamente';
+
           this.loadReviews();
           this.cdr.detectChanges();
         },
         error: (err) => {
           this.errorMessage =
-            err.error?.message || 'Error al crear la valoración';
+            err.error?.message ||
+            'Error al crear la valoración';
+
           this.cdr.detectChanges();
         },
       });
@@ -140,62 +187,84 @@ export class ReviewComponent implements OnInit {
   }
 
   onEdit(review: Review): void {
+
     this.editing = true;
     this.editingId = review.idReview;
-
     this.reviewForm.patchValue({
+      idRequest: review.request?.idRequest ?? null,
       commentR: review.commentR,
       rating: review.rating,
     });
-
+    this.reviewForm.get('idRequest')?.disable();
     this.errorMessage = '';
     this.successMessage = '';
   }
-
   cancelEdit(): void {
+
     this.editing = false;
     this.editingId = null;
-
+    this.reviewForm.get('idRequest')?.enable();
     this.reviewForm.reset({
+      idRequest: null,
       commentR: '',
       rating: 5,
     });
   }
-
   onDelete(idReview: number): void {
-    if (!confirm('¿Eliminar esta valoración?')) return;
+
+    if (!confirm('¿Eliminar esta valoración?')) {
+      return;
+    }
+
+    this.errorMessage = '';
+    this.successMessage = '';
 
     this.reviewService.deleteReview(idReview).subscribe({
       next: () => {
-        this.successMessage = 'Valoración eliminada correctamente';
+        this.successMessage =
+          'Valoración eliminada correctamente';
+
         this.loadReviews();
 
         if (this.showDeleted) {
           this.loadDeletedReviews();
         }
       },
+
       error: () => {
-        this.errorMessage = 'Error al eliminar la valoración';
+        this.errorMessage =
+          'Error al eliminar la valoración';
+
         this.cdr.detectChanges();
       },
     });
   }
 
   onRestore(idReview: number): void {
+
+    this.errorMessage = '';
+    this.successMessage = '';
+
     this.reviewService.restoreReview(idReview).subscribe({
       next: () => {
-        this.successMessage = 'Valoración restaurada correctamente';
+        this.successMessage =
+          'Valoración restaurada correctamente';
+
         this.loadReviews();
         this.loadDeletedReviews();
       },
+
       error: () => {
-        this.errorMessage = 'Error al restaurar la valoración';
+        this.errorMessage =
+          'Error al restaurar la valoración';
+
         this.cdr.detectChanges();
       },
     });
   }
-
+  
   toggleDeleted(): void {
+
     this.showDeleted = !this.showDeleted;
 
     if (this.showDeleted) {
@@ -203,5 +272,3 @@ export class ReviewComponent implements OnInit {
     }
   }
 }
-
-

@@ -92,6 +92,7 @@
       <th>Nombre</th>
       <th>Descripción</th>
       <th>Categoría</th>
+      <th>Profesional</th>
       <th>Acciones</th>
     </tr>
   </thead>
@@ -102,6 +103,11 @@
       <td>{{ service.nameS }}</td>
       <td>{{ service.descriptionS }}</td>
       <td>{{ service.category?.nameC }}</td>
+      
+      <td>
+        {{ service.professional?.nameP }}
+        {{ service.professional?.surnameP }}
+      </td>
 
       <td>
         <button
@@ -147,6 +153,7 @@
         <th>Nombre</th>
         <th>Descripción</th>
         <th>Categoría</th>
+        <th>Profesional</th>
         <th>Acciones</th>
       </tr>
     </thead>
@@ -157,6 +164,11 @@
         <td>{{ service.nameS }}</td>
         <td>{{ service.descriptionS }}</td>
         <td>{{ service.category?.nameC }}</td>
+
+        <td>
+          {{ service.professional?.nameP }}
+          {{ service.professional?.surnameP }}
+        </td>
 
         <td>
           <button

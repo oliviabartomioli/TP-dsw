@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AvailabilityService } from '../../services/availability';
 import { Availability as AvailabilityModel, availabilityDto } from '../../models/availability.model';
+import { ProfessionalService } from '../../services/professional';
+import { Professional } from '../../models/professional.model';
 
 @Component({
   selector: 'app-availability',
@@ -12,8 +14,10 @@ import { Availability as AvailabilityModel, availabilityDto } from '../../models
 })
 export class AvailabilityComponent implements OnInit {
   private availabilityService = inject(AvailabilityService);
+  private professionalService = inject(ProfessionalService);
 
   availabilities: AvailabilityModel[] = [];
+  professionals: Professional[] = [];
 
   newAvailability: availabilityDto = {
     dayOfWeek: '',
@@ -24,8 +28,9 @@ export class AvailabilityComponent implements OnInit {
 
   editingId: number | null = null;
 
-  ngOnInit(): void {
+ ngOnInit(): void {
     this.loadAvailabilities();
+    this.loadProfessionals();
   }
 
   loadAvailabilities(): void {
@@ -39,29 +44,66 @@ export class AvailabilityComponent implements OnInit {
     });
   }
 
-  saveAvailability(): void {
-    console.log('Datos enviados:', this.newAvailability);
-    console.log('ID en edición:', this.editingId);
-      if (this.editingId !== null) {
-    console.log('Actualizando disponibilidad:', this.newAvailability);
-
-    this.availabilityService
-      .updateAvailability(this.editingId, this.newAvailability)
-      .subscribe({
-        next: (response) => {
-          console.log('Disponibilidad actualizada:', response);
-          this.loadAvailabilities();
-          this.resetForm();
-        },
-        error: (error) => {
-          console.error('Error al actualizar:', error);
-          alert(
-            error.error?.message || 'No se pudo actualizar la disponibilidad'
-          );
-        },
-      });
+  loadProfessionals(): void {
+    this.professionalService.getProfessional().subscribe({
+      next: (data) => {
+        this.professionals = data;
+      },
+      error: (error) => {
+        console.error('Error al obtener profesionales:', error);
+        alert('No se pudieron cargar los profesionales.');
+      },
+    });
   }
-}
+
+  saveAvailability(): void {
+    if (
+      !this.newAvailability.dayOfWeek ||
+      !this.newAvailability.startTime ||
+      !this.newAvailability.endTime ||
+      !this.newAvailability.dniProfessional ||
+      this.newAvailability.dniProfessional <= 0
+    ) {
+      alert('Por favor, completá todos los campos correctamente.');
+      return;
+    }
+
+    if (this.newAvailability.startTime >= this.newAvailability.endTime) {
+      alert('La hora de inicio debe ser menor que la hora de finalización.');
+      return;
+    }
+
+    if (this.editingId !== null) {
+
+      this.availabilityService
+        .updateAvailability(this.editingId, this.newAvailability)
+        .subscribe({
+          next: () => {
+            this.loadAvailabilities();
+            this.resetForm();
+          },
+          error: (error) => {
+            console.error('Error al actualizar:', error);
+            alert('No se pudo actualizar la disponibilidad. Verificá los datos ingresados.');
+          },
+        });
+
+    } else {
+
+      this.availabilityService
+        .createAvailability(this.newAvailability)
+        .subscribe({
+          next: () => {
+            this.loadAvailabilities();
+            this.resetForm();
+          },
+          error: (error) => {
+            console.error('Error al crear:', error);
+            alert('No se pudo crear la disponibilidad. Verificá los datos ingresados.');
+          },
+        });
+    }
+  }
 
   editAvailability(availability: AvailabilityModel): void {
   this.editingId = availability.idAvailability;

@@ -50,22 +50,36 @@
 
     <div class="mb-3">
       <label for="dniProfessional" class="form-label">
-        DNI del profesional
+        Profesional
       </label>
-      <input
-        type="number"
+
+      <select
         id="dniProfessional"
         name="dniProfessional"
-        class="form-control"
+        class="form-select"
         [(ngModel)]="newAvailability.dniProfessional"
+        #professionalControl="ngModel"
         required
-      />
+      >
+        <option [ngValue]="0">
+          Seleccione un profesional
+        </option>
+
+        <option
+          *ngFor="let professional of professionals"
+          [ngValue]="professional.dniP"
+        >
+          {{ professional.nameP }}
+          {{ professional.surnameP }}
+          — DNI: {{ professional.dniP }}
+        </option>
+      </select>
     </div>
 
     <button
       type="submit"
       class="btn btn-primary"
-      [disabled]="availabilityForm.invalid"
+      [disabled]="availabilityForm.invalid || newAvailability.dniProfessional <= 0"
     >
       {{ editingId !== null ? 'Actualizar' : 'Agregar' }}
     </button>
