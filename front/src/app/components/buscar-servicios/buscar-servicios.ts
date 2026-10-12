@@ -1,3 +1,4 @@
+
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -7,11 +8,12 @@ import { City } from '../../models/city.model';
 import { ServiceService } from '../../services/services';
 import { CategoryService } from '../../services/category';
 import { CityService } from '../../services/city';
+import { DetalleServicioComponent } from '../detalle-servicio/detalle-servicio';
 
 @Component({
   selector: 'app-buscar-servicios',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, DetalleServicioComponent],
   templateUrl: './buscar-servicios.html',
   styleUrl: './buscar-servicios.css',
 })

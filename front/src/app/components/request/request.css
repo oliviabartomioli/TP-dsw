@@ -1,3 +1,78 @@
+
+
+:host {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+:host * {
+  box-sizing: border-box;
+}
+
+/* Formulario */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 550px;
+  margin-bottom: 20px;
+}
+
+form input,
+form select {
+  max-width: 100%;
+  padding: 9px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+form button {
+  padding: 10px 14px;
+  border: none;
+  border-radius: 5px;
+  background-color: #2563eb;
+  color: white;
+  cursor: pointer;
+  width: fit-content;
+}
+
+form button:disabled {
+  background-color: #cbd5e1;
+  cursor: not-allowed;
+}
+
+/* Tablas */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 650px;
+  margin: 15px 0;
+}
+
+th,
+td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+  vertical-align: middle;
+}
+
+th {
+  background-color: #f1f5f9;
+}
+
+td button {
+  margin: 3px;
+  padding: 6px 9px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Mensajes */
 .request-error {
   background-color: #fde8e8;
   color: #991b1b;
@@ -16,4 +91,57 @@
   padding: 12px;
   margin: 12px 0;
   font-size: 14px;
+}
+
+
+@media (max-width: 599px) {
+  :host {
+    padding: 10px;
+  }
+
+  form {
+    width: 100%;
+  }
+
+  form input,
+  form select {
+    width: 100%;
+  }
+
+  table {
+    font-size: 13px;
+  }
+
+  th,
+  td {
+    padding: 8px;
+  }
+}
+
+
+@media (min-width: 600px) and (max-width: 1023px) {
+  :host {
+    padding: 18px;
+  }
+
+  form {
+    max-width: 500px;
+  }
+}
+
+
+@media (min-width: 1024px) {
+  :host {
+    padding: 24px;
+  }
+
+  form {
+    max-width: 550px;
+  }
+  .table-responsive {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
 }

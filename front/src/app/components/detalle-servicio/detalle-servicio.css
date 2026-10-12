@@ -1,0 +1,31 @@
+
+.detalle-servicio {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background-color: #f8fafc;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.detalle-servicio h3 {
+  margin-top: 0;
+}
+
+.detalle-servicio p {
+  overflow-wrap: anywhere;
+}
+
+.detalle-servicio button {
+  padding: 10px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background-color: #dbeafe;
+  color: #1e40af;
+  cursor: pointer;
+}
+
+.detalle-servicio button:hover {
+  background-color: #bfdbfe;
+}

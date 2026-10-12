@@ -1,3 +1,4 @@
+
 <h2>Buscar servicios</h2>
 
 <p>Encontrá servicios disponibles según la categoría o ciudad.</p>
@@ -7,7 +8,6 @@
 </p>
 
 <hr />
-
 
 <div>
   <h3>Buscar por categoría</h3>
@@ -83,7 +83,6 @@
   Cargando servicios...
 </p>
 
-
 <h3>Resultados de búsqueda</h3>
 
 <table *ngIf="!loading && services.length > 0">
@@ -132,39 +131,8 @@
 
 <hr />
 
-<div *ngIf="selectedService">
-  <h3>Detalle del servicio</h3>
-
-  <p>
-    <strong>Nombre:</strong>
-    {{ selectedService.nameS }}
-  </p>
-
-  <p>
-    <strong>Descripción:</strong>
-    {{ selectedService.descriptionS }}
-  </p>
-
-  <p>
-    <strong>Categoría:</strong>
-    {{ selectedService.category?.nameC }}
-  </p>
-
-  <p>
-    <strong>Profesional:</strong>
-    {{ selectedService.professional?.nameP }}
-    {{ selectedService.professional?.surnameP }}
-  </p>
-
-  <p>
-    <strong>Precio:</strong>
-    {{ selectedService.priceS | currency:'ARS':'symbol':'1.2-2':'es-AR' }}
-  </p>
-
-  <button
-    type="button"
-    (click)="closeDetail()"
-  >
-    Cerrar detalle
-  </button>
-</div>
+<app-detalle-servicio
+  *ngIf="selectedService"
+  [service]="selectedService"
+  (cerrar)="closeDetail()"
+></app-detalle-servicio>

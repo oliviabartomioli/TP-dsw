@@ -1,0 +1,160 @@
+
+
+
+.services-container {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 16px;
+  font-family: Arial, sans-serif;
+}
+
+
+
+.services-container form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  max-width: 600px;
+}
+
+.services-container form > div {
+  width: 100%;
+  min-width: 0;
+}
+
+.services-container label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.services-container input,
+.services-container select {
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+.services-container small {
+  display: block;
+  margin-top: 5px;
+  color: #b91c1c;
+  font-size: 12px;
+}
+
+
+
+.services-container button {
+  padding: 9px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background-color: #f1f5f9;
+  color: #1e293b;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.services-container button:hover {
+  background-color: #e2e8f0;
+}
+
+.services-container button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+
+.services-table-wrapper {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  margin: 15px 0;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+}
+
+.services-table-wrapper table {
+  width: 100%;
+  min-width: 700px;
+  border-collapse: collapse;
+}
+
+.services-table-wrapper th,
+.services-table-wrapper td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+  white-space: nowrap;
+}
+
+.services-table-wrapper th {
+  background-color: #f1f5f9;
+  font-weight: 600;
+}
+
+.services-table-wrapper td button {
+  margin: 3px;
+}
+
+
+
+@media (max-width: 599px) {
+  .services-container {
+    padding: 10px;
+  }
+
+  .services-container h2 {
+    font-size: 22px;
+  }
+
+  .services-container input,
+  .services-container select {
+    max-width: 100%;
+  }
+
+  .services-container button {
+    font-size: 13px;
+  }
+}
+
+
+
+@media (min-width: 600px) and (max-width: 1023px) {
+  .services-container {
+    padding: 16px;
+  }
+
+  .services-container form {
+    max-width: 550px;
+  }
+}
+
+
+
+@media (min-width: 1024px) {
+  .services-container {
+    padding: 24px;
+  }
+
+  .services-container form {
+    max-width: 600px;
+  }
+
+  .services-table-wrapper table {
+    min-width: 700px;
+  }
+}

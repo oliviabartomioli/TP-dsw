@@ -1,1 +1,28 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Estilos globales */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  min-width: 0;
+}
+
+body {
+  margin: 0;
+  width: 100%;
+  min-width: 0;
+  font-family: Arial, sans-serif;
+}
+
+img,
+input,
+select,
+textarea {
+  max-width: 100%;
+}

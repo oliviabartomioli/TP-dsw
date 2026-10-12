@@ -1,27 +1,20 @@
-<nav>
+
+<nav class="main-nav" aria-label="Navegación principal">
   <a routerLink="/users">Usuarios</a>
-  |
   <a routerLink="/professional">Profesionales</a>
-  |
   <a routerLink="/category">Categorías</a>
-  |
   <a routerLink="/province">Provincias</a>
-  |
   <a routerLink="/city">Ciudades</a>
-  |
   <a routerLink="/services">Servicios</a>
-  |
   <a routerLink="/availability">Disponibilidades</a>
-  |
   <a routerLink="/request">Solicitudes</a>
-  |
   <a routerLink="/favorite">Favoritos</a>
-  |
   <a routerLink="/review">Valoraciones</a>
-  |
   <a routerLink="/buscar-servicios">Buscar servicios</a>
 </nav>
 
-<hr>
+<hr />
 
-<router-outlet></router-outlet>
+<main class="main-content">
+  <router-outlet></router-outlet>
+</main>

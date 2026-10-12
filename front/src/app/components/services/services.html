@@ -1,217 +1,240 @@
-<h2>Servicios</h2>
 
-<p *ngIf="errorMessage">
-  {{ errorMessage }}
-</p>
+<div class="services-container">
 
-<form [formGroup]="servicesForm" (ngSubmit)="onSubmit()">
+  <h2>Servicios</h2>
 
-  <div>
-    <label for="nameS">Nombre:</label>
-    <input
-      id="nameS"
-      type="text"
-      formControlName="nameS"
-    />
-  </div>
+  <p *ngIf="errorMessage">
+    {{ errorMessage }}
+  </p>
 
-  <div>
-    <label for="descriptionS">Descripción:</label>
-    <input
-      id="descriptionS"
-      type="text"
-      formControlName="descriptionS"
-    />
-  </div>
+  <form [formGroup]="servicesForm" (ngSubmit)="onSubmit()">
 
-  <div>
-    <label for="priceS">Precio ($):</label>
-    <input
-      id="priceS"
-      type="number"
-      formControlName="priceS"
-      min="0.01"
-      step="0.01"
-      placeholder="Ingrese el precio"
-    />
+    <div>
+      <label for="nameS">Nombre:</label>
+      <input
+        id="nameS"
+        type="text"
+        formControlName="nameS"
+      />
+    </div>
 
-    <small
-      *ngIf="
-        servicesForm.get('priceS')?.invalid &&
-        servicesForm.get('priceS')?.touched
-      "
-    >
-      Ingrese un precio válido mayor que cero.
-    </small>
-  </div>
+    <div>
+      <label for="descriptionS">Descripción:</label>
+      <input
+        id="descriptionS"
+        type="text"
+        formControlName="descriptionS"
+      />
+    </div>
 
-  <div>
-    <label for="idCategory">Categoría:</label>
+    <div>
+      <label for="priceS">Precio ($):</label>
+      <input
+        id="priceS"
+        type="number"
+        formControlName="priceS"
+        min="0.01"
+        step="0.01"
+        placeholder="Ingrese el precio"
+      />
 
-    <select
-      id="idCategory"
-      formControlName="idCategory"
-    >
-      <option value="">Seleccione una categoría</option>
-
-      <option
-        *ngFor="let category of categories"
-        [ngValue]="category.idCategory"
+      <small
+        *ngIf="
+          servicesForm.get('priceS')?.invalid &&
+          servicesForm.get('priceS')?.touched
+        "
       >
-        {{ category.nameC }}
-      </option>
-    </select>
-  </div>
+        Ingrese un precio válido mayor que cero.
+      </small>
+    </div>
 
-  <div>
-    <label for="dniP">Profesional:</label>
+    <div>
+      <label for="idCategory">Categoría:</label>
 
-    <select id="dniP" formControlName="dniP">
-      <option [ngValue]="null">Seleccione un profesional</option>
-
-      <option
-        *ngFor="let professional of professionals"
-        [ngValue]="professional.dniP"
+      <select
+        id="idCategory"
+        formControlName="idCategory"
       >
-        {{ professional.nameP }} {{ professional.surnameP }}
-        — DNI: {{ professional.dniP }}
-      </option>
-    </select>
+        <option value="">Seleccione una categoría</option>
+
+        <option
+          *ngFor="let category of categories"
+          [ngValue]="category.idCategory"
+        >
+          {{ category.nameC }}
+        </option>
+      </select>
+    </div>
+
+    <div>
+      <label for="dniP">Profesional:</label>
+
+      <select id="dniP" formControlName="dniP">
+        <option [ngValue]="null">
+          Seleccione un profesional
+        </option>
+
+        <option
+          *ngFor="let professional of professionals"
+          [ngValue]="professional.dniP"
+        >
+          {{ professional.nameP }}
+          {{ professional.surnameP }}
+          — DNI: {{ professional.dniP }}
+        </option>
+      </select>
+    </div>
+
+    <button type="submit">
+      {{ isEditMode ? 'Actualizar' : 'Crear' }}
+    </button>
+
+    <button
+      type="button"
+      *ngIf="isEditMode"
+      (click)="resetForm()"
+    >
+      Cancelar
+    </button>
+
+  </form>
+
+  <hr />
+
+  <p *ngIf="loading">
+    Cargando servicios...
+  </p>
+
+  <h3>Servicios activos</h3>
+
+  <div
+    class="services-table-wrapper"
+    *ngIf="!loading && services.length > 0"
+    tabindex="0"
+    role="region"
+    aria-label="Tabla de servicios activos"
+  >
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Precio</th>
+          <th>Categoría</th>
+          <th>Profesional</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let service of services">
+          <td>{{ service.idService }}</td>
+          <td>{{ service.nameS }}</td>
+          <td>{{ service.descriptionS }}</td>
+
+          <td>
+            {{ service.priceS | currency:'ARS':'symbol':'1.2-2':'es-AR' }}
+          </td>
+
+          <td>{{ service.category?.nameC }}</td>
+
+          <td>
+            {{ service.professional?.nameP }}
+            {{ service.professional?.surnameP }}
+          </td>
+
+          <td>
+            <button
+              type="button"
+              (click)="onEdit(service)"
+            >
+              Editar
+            </button>
+
+            <button
+              type="button"
+              (click)="onDelete(service.idService)"
+            >
+              Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
-  <button type="submit">
-    {{ isEditMode ? 'Actualizar' : 'Crear' }}
-  </button>
+  <p *ngIf="!loading && services.length === 0">
+    No hay servicios activos.
+  </p>
+
+  <hr />
 
   <button
     type="button"
-    *ngIf="isEditMode"
-    (click)="resetForm()"
+    (click)="toggleDeletedView()"
   >
-    Cancelar
+    {{ showDeleted ? 'Ocultar eliminados' : 'Ver eliminados' }}
   </button>
 
-</form>
+  <div *ngIf="showDeleted">
 
-<hr />
+    <h3>Servicios eliminados</h3>
 
-<p *ngIf="loading">
-  Cargando servicios...
-</p>
+    <div
+      class="services-table-wrapper"
+      *ngIf="deleteService.length > 0"
+      tabindex="0"
+      role="region"
+      aria-label="Tabla de servicios eliminados"
+    >
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Precio</th>
+            <th>Categoría</th>
+            <th>Profesional</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
 
-<h3>Servicios activos</h3>
+        <tbody>
+          <tr *ngFor="let service of deleteService">
+            <td>{{ service.idService }}</td>
+            <td>{{ service.nameS }}</td>
+            <td>{{ service.descriptionS }}</td>
 
-<table *ngIf="!loading && services.length > 0">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Nombre</th>
-      <th>Descripción</th>
-      <th>Precio</th>
-      <th>Categoría</th>
-      <th>Profesional</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
+            <td>
+              {{ service.priceS | currency:'ARS':'symbol':'1.2-2':'es-AR' }}
+            </td>
 
-  <tbody>
-    <tr *ngFor="let service of services">
-      <td>{{ service.idService }}</td>
-      <td>{{ service.nameS }}</td>
-      <td>{{ service.descriptionS }}</td>
+            <td>{{ service.category?.nameC }}</td>
 
-      <td>
-        {{ service.priceS | currency:'ARS':'symbol':'1.2-2':'es-AR' }}
-      </td>
+            <td>
+              {{ service.professional?.nameP }}
+              {{ service.professional?.surnameP }}
+            </td>
 
-      <td>{{ service.category?.nameC }}</td>
+            <td>
+              <button
+                type="button"
+                (click)="onRestore(service.idService)"
+              >
+                Restaurar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-      <td>
-        {{ service.professional?.nameP }}
-        {{ service.professional?.surnameP }}
-      </td>
+    <p *ngIf="deleteService.length === 0">
+      No hay servicios eliminados.
+    </p>
 
-      <td>
-        <button
-          type="button"
-          (click)="onEdit(service)"
-        >
-          Editar
-        </button>
-
-        <button
-          type="button"
-          (click)="onDelete(service.idService)"
-        >
-          Eliminar
-        </button>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<p *ngIf="!loading && services.length === 0">
-  No hay servicios activos.
-</p>
-
-<hr />
-
-<button
-  type="button"
-  (click)="toggleDeletedView()"
->
-  {{ showDeleted ? 'Ocultar eliminados' : 'Ver eliminados' }}
-</button>
-
-<div *ngIf="showDeleted">
-
-  <h3>Servicios eliminados</h3>
-
-  <table *ngIf="deleteService.length > 0">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Descripción</th>
-        <th>Precio</th>
-        <th>Categoría</th>
-        <th>Profesional</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr *ngFor="let service of deleteService">
-        <td>{{ service.idService }}</td>
-        <td>{{ service.nameS }}</td>
-        <td>{{ service.descriptionS }}</td>
-
-       
-        <td>
-          {{ service.priceS | currency:'ARS':'symbol':'1.2-2':'es-AR' }}
-        </td>
-
-        <td>{{ service.category?.nameC }}</td>
-
-        <td>
-          {{ service.professional?.nameP }}
-          {{ service.professional?.surnameP }}
-        </td>
-
-        <td>
-          <button
-            type="button"
-            (click)="onRestore(service.idService)"
-          >
-            Restaurar
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <p *ngIf="deleteService.length === 0">
-    No hay servicios eliminados.
-  </p>
+  </div>
 
 </div>

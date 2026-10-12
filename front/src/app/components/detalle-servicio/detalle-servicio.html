@@ -1,0 +1,39 @@
+
+<div class="detalle-servicio" *ngIf="service">
+
+  <h3>Detalle del servicio</h3>
+
+  <p>
+    <strong>Nombre:</strong>
+    {{ service.nameS }}
+  </p>
+
+  <p>
+    <strong>Descripción:</strong>
+    {{ service.descriptionS }}
+  </p>
+
+  <p>
+    <strong>Categoría:</strong>
+    {{ service.category?.nameC }}
+  </p>
+
+  <p>
+    <strong>Profesional:</strong>
+    {{ service.professional?.nameP }}
+    {{ service.professional?.surnameP }}
+  </p>
+
+  <p>
+    <strong>Precio:</strong>
+    {{ service.priceS | currency:'ARS':'symbol':'1.2-2':'es-AR' }}
+  </p>
+
+  <button
+    type="button"
+    (click)="cerrarDetalle()"
+  >
+    Cerrar detalle
+  </button>
+
+</div>
