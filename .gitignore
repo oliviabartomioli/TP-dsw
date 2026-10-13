@@ -1,3 +1,4 @@
 .archify/
 back.zip
 front.zip
+back/.env
