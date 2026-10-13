@@ -1,138 +1,165 @@
+<div class="buscar-servicios">
+  <div class="buscador-encabezado">
+    <h1>Buscar servicios</h1>
+    <p>Encontrá servicios disponibles según la categoría o ciudad.</p>
+  </div>
 
-<h2>Buscar servicios</h2>
+  <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+    {{ errorMessage }}
+  </div>
 
-<p>Encontrá servicios disponibles según la categoría o ciudad.</p>
+  <div class="row g-4 buscador-filtros">
+    <div class="col-12 col-md-6">
+      <div class="filtro-card">
+        <h2>Buscar por categoría</h2>
+        <p>Elegí el tipo de servicio que necesitás.</p>
 
-<p *ngIf="errorMessage">
-  {{ errorMessage }}
-</p>
+        <label for="category">Categoría</label>
 
-<hr />
+        <select
+          id="category"
+          class="form-select"
+          [(ngModel)]="selectedCategory"
+        >
+          <option [ngValue]="null">Seleccione una categoría</option>
 
-<div>
-  <h3>Buscar por categoría</h3>
+          <option
+            *ngFor="let category of categories"
+            [ngValue]="category.idCategory"
+          >
+            {{ category.nameC }}
+          </option>
+        </select>
 
-  <label for="category">Categoría:</label>
-
-  <select
-    id="category"
-    [(ngModel)]="selectedCategory"
-  >
-    <option [ngValue]="null">Seleccione una categoría</option>
-
-    <option
-      *ngFor="let category of categories"
-      [ngValue]="category.idCategory"
-    >
-      {{ category.nameC }}
-    </option>
-  </select>
-
-  <button
-    type="button"
-    (click)="searchByCategory()"
-    [disabled]="selectedCategory === null || loading"
-  >
-    Buscar
-  </button>
-</div>
-
-<hr />
-
-<div>
-  <h3>Buscar por ciudad</h3>
-
-  <label for="city">Ciudad:</label>
-
-  <select
-    id="city"
-    [(ngModel)]="selectedCity"
-  >
-    <option [ngValue]="null">Seleccione una ciudad</option>
-
-    <option
-      *ngFor="let city of cities"
-      [ngValue]="city.idCity"
-    >
-      {{ city.nameCity }}
-    </option>
-  </select>
-
-  <button
-    type="button"
-    (click)="searchByCity()"
-    [disabled]="selectedCity === null || loading"
-  >
-    Buscar
-  </button>
-</div>
-
-<br />
-
-<button
-  type="button"
-  (click)="clearFilters()"
-  [disabled]="loading"
->
-  Mostrar todos los servicios
-</button>
-
-<hr />
-
-<p *ngIf="loading">
-  Cargando servicios...
-</p>
-
-<h3>Resultados de búsqueda</h3>
-
-<table *ngIf="!loading && services.length > 0">
-  <thead>
-    <tr>
-      <th>Servicio</th>
-      <th>Categoría</th>
-      <th>Profesional</th>
-      <th>Precio</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr *ngFor="let service of services">
-      <td>{{ service.nameS }}</td>
-
-      <td>
-        {{ service.category?.nameC }}
-      </td>
-
-      <td>
-        {{ service.professional?.nameP }}
-        {{ service.professional?.surnameP }}
-      </td>
-
-      <td>
-        {{ service.priceS | currency:'ARS':'symbol':'1.2-2':'es-AR' }}
-      </td>
-
-      <td>
         <button
           type="button"
-          (click)="viewDetail(service.idService)"
+          class="btn btn-primary"
+          (click)="searchByCategory()"
+          [disabled]="selectedCategory === null || loading"
         >
-          Ver detalle
+          Buscar por categoría
         </button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+      </div>
+    </div>
 
-<p *ngIf="!loading && services.length === 0 && !errorMessage">
-  No se encontraron servicios.
-</p>
+    <div class="col-12 col-md-6">
+      <div class="filtro-card">
+        <h2>Buscar por ciudad</h2>
+        <p>Encontrá servicios disponibles en tu ciudad.</p>
 
-<hr />
+        <label for="city">Ciudad</label>
 
-<app-detalle-servicio
-  *ngIf="selectedService"
-  [service]="selectedService"
-  (cerrar)="closeDetail()"
-></app-detalle-servicio>
+        <select
+          id="city"
+          class="form-select"
+          [(ngModel)]="selectedCity"
+        >
+          <option [ngValue]="null">Seleccione una ciudad</option>
+
+          <option
+            *ngFor="let city of cities"
+            [ngValue]="city.idCity"
+          >
+            {{ city.nameCity }}
+          </option>
+        </select>
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="searchByCity()"
+          [disabled]="selectedCity === null || loading"
+        >
+          Buscar por ciudad
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="buscador-acciones">
+    <button
+      type="button"
+      class="btn btn-outline-primary"
+      (click)="clearFilters()"
+      [disabled]="loading"
+    >
+      Mostrar todos los servicios
+    </button>
+  </div>
+
+  <section class="resultados">
+    <div class="resultados-encabezado">
+      <h2>Resultados de búsqueda</h2>
+
+      <span *ngIf="!loading" class="resultados-contador">
+        {{ services.length }}
+        {{ services.length === 1 ? 'servicio' : 'servicios' }}
+      </span>
+    </div>
+
+    <p *ngIf="loading" class="alert alert-info" role="status">
+      Cargando servicios...
+    </p>
+
+    <div
+      *ngIf="!loading && services.length > 0"
+      class="table-responsive resultados-tabla"
+    >
+      <table class="table table-hover align-middle">
+        <thead>
+          <tr>
+            <th>Servicio</th>
+            <th>Categoría</th>
+            <th>Profesional</th>
+            <th>Precio</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let service of services">
+            <td class="servicio-nombre">
+              {{ service.nameS }}
+            </td>
+
+            <td>
+              {{ service.category?.nameC }}
+            </td>
+
+            <td>
+              {{ service.professional?.nameP }}
+              {{ service.professional?.surnameP }}
+            </td>
+
+            <td class="servicio-precio">
+              {{ service.priceS | currency:'ARS':'symbol':'1.2-2':'es-AR' }}
+            </td>
+
+            <td>
+              <button
+                type="button"
+                class="btn btn-outline-primary btn-sm"
+                (click)="viewDetail(service.idService)"
+              >
+                Ver detalle
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div
+      *ngIf="!loading && services.length === 0 && !errorMessage"
+      class="resultados-vacios"
+    >
+      <p>No se encontraron servicios.</p>
+    </div>
+  </section>
+
+  <app-detalle-servicio
+    *ngIf="selectedService"
+    [service]="selectedService"
+    (cerrar)="closeDetail()"
+  ></app-detalle-servicio>
+</div>

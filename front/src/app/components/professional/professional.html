@@ -1,23 +1,26 @@
 <div class="professional-container">
   <h1>Gestión de Profesionales</h1>
 
-  <!-- MENSAJE DE ERROR -->
-  <div *ngIf="errorMessage" class="error-message">
+  <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
     {{ errorMessage }}
   </div>
 
-  <!-- FORMULARIO -->
   <form [formGroup]="professionalForm" (ngSubmit)="onSubmit()">
     <h2>
       {{ isEditMode ? 'Editar Profesional' : 'Nuevo Profesional' }}
     </h2>
 
-    <!-- DNI -->
-    <div class="form-group">
+    <div class="form-group mb-3">
       <label for="dniP">DNI</label>
-      <input id="dniP" type="number" formControlName="dniP" />
+      <input
+        id="dniP"
+        type="number"
+        class="form-control"
+        formControlName="dniP"
+      />
 
       <small
+        class="text-danger"
         *ngIf="
           professionalForm.get('dniP')?.invalid &&
           professionalForm.get('dniP')?.touched
@@ -27,12 +30,17 @@
       </small>
     </div>
 
-    <!-- NOMBRE -->
-    <div class="form-group">
+    <div class="form-group mb-3">
       <label for="nameP">Nombre</label>
-      <input id="nameP" type="text" formControlName="nameP" />
+      <input
+        id="nameP"
+        type="text"
+        class="form-control"
+        formControlName="nameP"
+      />
 
       <small
+        class="text-danger"
         *ngIf="
           professionalForm.get('nameP')?.invalid &&
           professionalForm.get('nameP')?.touched
@@ -42,12 +50,17 @@
       </small>
     </div>
 
-    <!-- APELLIDO -->
-    <div class="form-group">
+    <div class="form-group mb-3">
       <label for="surnameP">Apellido</label>
-      <input id="surnameP" type="text" formControlName="surnameP" />
+      <input
+        id="surnameP"
+        type="text"
+        class="form-control"
+        formControlName="surnameP"
+      />
 
       <small
+        class="text-danger"
         *ngIf="
           professionalForm.get('surnameP')?.invalid &&
           professionalForm.get('surnameP')?.touched
@@ -57,12 +70,17 @@
       </small>
     </div>
 
-    <!-- TIPO DE PROFESIONAL -->
-    <div class="form-group">
+    <div class="form-group mb-3">
       <label for="typeP">Tipo de profesional</label>
-      <input id="typeP" type="text" formControlName="typeP" />
+      <input
+        id="typeP"
+        type="text"
+        class="form-control"
+        formControlName="typeP"
+      />
 
       <small
+        class="text-danger"
         *ngIf="
           professionalForm.get('typeP')?.invalid &&
           professionalForm.get('typeP')?.touched
@@ -72,11 +90,14 @@
       </small>
     </div>
 
-    <!-- CIUDAD -->
-    <div class="form-group">
-      <label for="idCity">Ciudad:</label>
+    <div class="form-group mb-3">
+      <label for="idCity">Ciudad</label>
 
-      <select id="idCity" formControlName="idCity">
+      <select
+        id="idCity"
+        class="form-select"
+        formControlName="idCity"
+      >
         <option [ngValue]="null">Seleccione una ciudad</option>
 
         <option
@@ -88,6 +109,7 @@
       </select>
 
       <small
+        class="text-danger"
         *ngIf="
           professionalForm.get('idCity')?.invalid &&
           professionalForm.get('idCity')?.touched
@@ -97,15 +119,15 @@
       </small>
     </div>
 
-    <!-- BOTONES -->
-    <div class="form-actions">
-      <button type="submit">
+    <div class="form-actions d-flex flex-wrap gap-2">
+      <button type="submit" class="btn btn-primary">
         {{ isEditMode ? 'Actualizar' : 'Crear Profesional' }}
       </button>
 
       <button
         *ngIf="isEditMode"
         type="button"
+        class="btn btn-outline-secondary"
         (click)="resetForm()"
       >
         Cancelar
@@ -113,9 +135,14 @@
     </div>
   </form>
 
-  <!-- BOTÓN ACTIVOS / ELIMINADOS -->
-  <div class="view-actions">
-    <button type="button" (click)="toggleDeletedView()">
+  <hr />
+
+  <div class="view-actions mb-3">
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      (click)="toggleDeletedView()"
+    >
       {{
         showDeleted
           ? 'Ver Profesionales Activos'
@@ -124,10 +151,8 @@
     </button>
   </div>
 
-  <!-- CARGANDO -->
   <p *ngIf="loading">Cargando profesionales...</p>
 
-  <!-- PROFESIONALES ACTIVOS -->
   <div *ngIf="!showDeleted">
     <h2>Profesionales Activos</h2>
 
@@ -135,42 +160,50 @@
       No hay profesionales registrados.
     </p>
 
-    <table *ngIf="professionals.length > 0">
-      <thead>
-        <tr>
-          <th>DNI</th>
-          <th>Nombre</th>
-          <th>Apellido</th>
-          <th>Tipo</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
+    <div *ngIf="professionals.length > 0" class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead>
+          <tr>
+            <th>DNI</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Tipo</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
 
-      <tbody>
-        <tr *ngFor="let professional of professionals">
-          <td>{{ professional.dniP }}</td>
-          <td>{{ professional.nameP }}</td>
-          <td>{{ professional.surnameP }}</td>
-          <td>{{ professional.typeP }}</td>
+        <tbody>
+          <tr *ngFor="let professional of professionals">
+            <td>{{ professional.dniP }}</td>
+            <td>{{ professional.nameP }}</td>
+            <td>{{ professional.surnameP }}</td>
+            <td>{{ professional.typeP }}</td>
 
-          <td>
-            <button type="button" (click)="onEdit(professional)">
-              Editar
-            </button>
+            <td>
+              <div class="d-flex gap-2">
+                <button
+                  type="button"
+                  class="btn btn-outline-primary btn-sm"
+                  (click)="onEdit(professional)"
+                >
+                  Editar
+                </button>
 
-            <button
-              type="button"
-              (click)="onDelete(professional.dniP)"
-            >
-              Eliminar
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+                <button
+                  type="button"
+                  class="btn btn-outline-danger btn-sm"
+                  (click)="onDelete(professional.dniP)"
+                >
+                  Eliminar
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
-  <!-- PROFESIONALES ELIMINADOS -->
   <div *ngIf="showDeleted">
     <h2>Profesionales Eliminados</h2>
 
@@ -178,34 +211,37 @@
       No hay profesionales eliminados.
     </p>
 
-    <table *ngIf="deletedProfessionals.length > 0">
-      <thead>
-        <tr>
-          <th>DNI</th>
-          <th>Nombre</th>
-          <th>Apellido</th>
-          <th>Tipo</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
+    <div *ngIf="deletedProfessionals.length > 0" class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead>
+          <tr>
+            <th>DNI</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Tipo</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
 
-      <tbody>
-        <tr *ngFor="let professional of deletedProfessionals">
-          <td>{{ professional.dniP }}</td>
-          <td>{{ professional.nameP }}</td>
-          <td>{{ professional.surnameP }}</td>
-          <td>{{ professional.typeP }}</td>
+        <tbody>
+          <tr *ngFor="let professional of deletedProfessionals">
+            <td>{{ professional.dniP }}</td>
+            <td>{{ professional.nameP }}</td>
+            <td>{{ professional.surnameP }}</td>
+            <td>{{ professional.typeP }}</td>
 
-          <td>
-            <button
-              type="button"
-              (click)="onRestore(professional.dniP)"
-            >
-              Restaurar
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            <td>
+              <button
+                type="button"
+                class="btn btn-outline-success btn-sm"
+                (click)="onRestore(professional.dniP)"
+              >
+                Restaurar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>

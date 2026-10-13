@@ -1,160 +1,180 @@
-<h2>Gestión de Categorías</h2>
+<div class="categories-container">
+  <h1>Gestión de Categorías</h1>
 
-<!-- Mensajes -->
-<p *ngIf="loading">Cargando categorías...</p>
+  <p *ngIf="loading">Cargando categorías...</p>
 
-<p *ngIf="errorMessage">
-  {{ errorMessage }}
-</p>
-
-<!-- Formulario -->
-<form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
-  <div>
-    <span
-      *ngIf="
-        categoryForm.get('idCategory')?.invalid &&
-        categoryForm.get('idCategory')?.touched
-      "
-    >
-      El ID es obligatorio.
-    </span>
+  <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+    {{ errorMessage }}
   </div>
 
-  <div>
-    <label for="nameC">Nombre:</label>
-    <input
-      id="nameC"
-      type="text"
-      formControlName="nameC"
-    />
+  <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+    <h2>
+      {{ isEditMode ? 'Editar Categoría' : 'Nueva Categoría' }}
+    </h2>
 
-    <span
-      *ngIf="
-        categoryForm.get('nameC')?.invalid &&
-        categoryForm.get('nameC')?.touched
-      "
-    >
-      El nombre es obligatorio.
-    </span>
+    <div>
+      <span
+        class="text-danger"
+        *ngIf="
+          categoryForm.get('idCategory')?.invalid &&
+          categoryForm.get('idCategory')?.touched
+        "
+      >
+        El ID es obligatorio.
+      </span>
+    </div>
+
+    <div class="mb-3">
+      <label for="nameC">Nombre</label>
+      <input
+        id="nameC"
+        type="text"
+        class="form-control"
+        formControlName="nameC"
+      />
+
+      <small
+        class="text-danger"
+        *ngIf="
+          categoryForm.get('nameC')?.invalid &&
+          categoryForm.get('nameC')?.touched
+        "
+      >
+        El nombre es obligatorio.
+      </small>
+    </div>
+
+    <div class="mb-3">
+      <label for="descriptionC">Descripción</label>
+      <input
+        id="descriptionC"
+        type="text"
+        class="form-control"
+        formControlName="descriptionC"
+      />
+
+      <small
+        class="text-danger"
+        *ngIf="
+          categoryForm.get('descriptionC')?.invalid &&
+          categoryForm.get('descriptionC')?.touched
+        "
+      >
+        La descripción es obligatoria.
+      </small>
+    </div>
+
+    <div class="d-flex flex-wrap gap-2">
+      <button type="submit" class="btn btn-primary">
+        {{ isEditMode ? 'Actualizar' : 'Crear' }}
+      </button>
+
+      <button
+        *ngIf="isEditMode"
+        type="button"
+        class="btn btn-outline-secondary"
+        (click)="resetForm()"
+      >
+        Cancelar
+      </button>
+    </div>
+  </form>
+
+  <hr />
+
+  <h2>Categorías</h2>
+
+  <div *ngIf="Categories.length > 0" class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let category of Categories">
+          <td>{{ category.idCategory }}</td>
+          <td>{{ category.nameC }}</td>
+          <td>{{ category.descriptionC }}</td>
+
+          <td>
+            <div class="d-flex gap-2">
+              <button
+                type="button"
+                class="btn btn-outline-primary btn-sm"
+                (click)="onEdit(category)"
+              >
+                Editar
+              </button>
+
+              <button
+                type="button"
+                class="btn btn-outline-danger btn-sm"
+                (click)="onDelete(category.idCategory)"
+              >
+                Eliminar
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
-  <div>
-    <label for="descriptionC">Descripción:</label>
-    <input
-      id="descriptionC"
-      type="text"
-      formControlName="descriptionC"
-    />
+  <p *ngIf="!loading && Categories.length === 0">
+    No hay categorías registradas.
+  </p>
 
-    <span
-      *ngIf="
-        categoryForm.get('descriptionC')?.invalid &&
-        categoryForm.get('descriptionC')?.touched
-      "
-    >
-      La descripción es obligatoria.
-    </span>
-  </div>
-
-  <button type="submit">
-    {{ isEditMode ? 'Actualizar' : 'Crear' }}
-  </button>
+  <hr />
 
   <button
-    *ngIf="isEditMode"
     type="button"
-    (click)="resetForm()"
+    class="btn btn-outline-secondary"
+    (click)="toggleDeletedView()"
   >
-    Cancelar
+    {{ showDeleted ? 'Ocultar eliminadas' : 'Ver eliminadas' }}
   </button>
-</form>
 
-<hr />
+  <div *ngIf="showDeleted">
+    <h2>Categorías eliminadas</h2>
 
-<!-- Categorías activas -->
-<h3>Categorías</h3>
+    <div *ngIf="deletedCategorys.length > 0" class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
 
-<table *ngIf="Categories.length > 0">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Nombre</th>
-      <th>Descripción</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
+        <tbody>
+          <tr *ngFor="let category of deletedCategorys">
+            <td>{{ category.idCategory }}</td>
+            <td>{{ category.nameC }}</td>
+            <td>{{ category.descriptionC }}</td>
 
-  <tbody>
-    <tr *ngFor="let category of Categories">
-      <td>{{ category.idCategory }}</td>
-      <td>{{ category.nameC }}</td>
-      <td>{{ category.descriptionC }}</td>
+            <td>
+              <button
+                type="button"
+                class="btn btn-outline-success btn-sm"
+                (click)="onRestore(category.idCategory)"
+              >
+                Restaurar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-      <td>
-        <button
-          type="button"
-          (click)="onEdit(category)"
-        >
-          Editar
-        </button>
-
-        <button
-          type="button"
-          (click)="onDelete(category.idCategory)"
-        >
-          Eliminar
-        </button>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<p *ngIf="!loading && Categories.length === 0">
-  No hay categorías registradas.
-</p>
-
-<hr />
-
-<!-- Categorías eliminadas -->
-<button
-  type="button"
-  (click)="toggleDeletedView()"
->
-  {{ showDeleted ? 'Ocultar eliminadas' : 'Ver eliminadas' }}
-</button>
-
-<div *ngIf="showDeleted">
-  <h3>Categorías eliminadas</h3>
-
-  <table *ngIf="deletedCategorys.length > 0">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Descripción</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr *ngFor="let category of deletedCategorys">
-        <td>{{ category.idCategory }}</td>
-        <td>{{ category.nameC }}</td>
-        <td>{{ category.descriptionC }}</td>
-
-        <td>
-          <button
-            type="button"
-            (click)="onRestore(category.idCategory)"
-          >
-            Restaurar
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <p *ngIf="deletedCategorys.length === 0">
-    No hay categorías eliminadas.
-  </p>
+    <p *ngIf="deletedCategorys.length === 0">
+      No hay categorías eliminadas.
+    </p>
+  </div>
 </div>

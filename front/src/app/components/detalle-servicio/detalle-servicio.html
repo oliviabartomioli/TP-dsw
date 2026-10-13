@@ -1,39 +1,44 @@
-
 <div class="detalle-servicio" *ngIf="service">
+  <div class="detalle-encabezado">
+    <div>
+      <span class="detalle-etiqueta">Información del servicio</span>
+      <h3>{{ service.nameS }}</h3>
+    </div>
 
-  <h3>Detalle del servicio</h3>
+    <div class="detalle-precio">
+      {{ service.priceS | currency:'ARS':'symbol':'1.2-2':'es-AR' }}
+    </div>
+  </div>
 
-  <p>
-    <strong>Nombre:</strong>
-    {{ service.nameS }}
-  </p>
+  <div class="detalle-contenido">
+    <div class="detalle-seccion">
+      <h4>Descripción</h4>
+      <p>{{ service.descriptionS }}</p>
+    </div>
 
-  <p>
-    <strong>Descripción:</strong>
-    {{ service.descriptionS }}
-  </p>
+    <div class="detalle-informacion">
+      <div>
+        <span class="detalle-label">Categoría</span>
+        <p>{{ service.category?.nameC }}</p>
+      </div>
 
-  <p>
-    <strong>Categoría:</strong>
-    {{ service.category?.nameC }}
-  </p>
+      <div>
+        <span class="detalle-label">Profesional</span>
+        <p>
+          {{ service.professional?.nameP }}
+          {{ service.professional?.surnameP }}
+        </p>
+      </div>
+    </div>
+  </div>
 
-  <p>
-    <strong>Profesional:</strong>
-    {{ service.professional?.nameP }}
-    {{ service.professional?.surnameP }}
-  </p>
-
-  <p>
-    <strong>Precio:</strong>
-    {{ service.priceS | currency:'ARS':'symbol':'1.2-2':'es-AR' }}
-  </p>
-
-  <button
-    type="button"
-    (click)="cerrarDetalle()"
-  >
-    Cerrar detalle
-  </button>
-
+  <div class="detalle-acciones">
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      (click)="cerrarDetalle()"
+    >
+      Cerrar detalle
+    </button>
+  </div>
 </div>

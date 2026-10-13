@@ -128,7 +128,10 @@ export class ServicesComponents implements OnInit {
       return;
     }
 
-    const dto: servicesDto = this.servicesForm.getRawValue();
+    const dto: servicesDto = {
+      ...this.servicesForm.getRawValue(),
+      priceS: Number(this.servicesForm.getRawValue().priceS),
+    };
 
     if (this.isEditMode) {
       if (this.selectedServiceId === null) {

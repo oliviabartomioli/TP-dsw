@@ -1,30 +1,26 @@
 <div class="users-container">
-
   <h1>Gestión de Usuarios</h1>
 
-  <!-- MENSAJE DE ERROR -->
-  <div *ngIf="errorMessage" class="error-message">
+  <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
     {{ errorMessage }}
   </div>
 
-  <!-- FORMULARIO -->
   <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
-
     <h2>
       {{ isEditMode ? 'Editar Usuario' : 'Nuevo Usuario' }}
     </h2>
 
-    <!-- DNI -->
-    <div class="form-group">
+    <div class="form-group mb-3">
       <label for="dniUs">DNI</label>
-
       <input
         id="dniUs"
         type="number"
+        class="form-control"
         formControlName="dniUs"
       />
 
       <small
+        class="text-danger"
         *ngIf="
           userForm.get('dniUs')?.invalid &&
           userForm.get('dniUs')?.touched
@@ -34,17 +30,17 @@
       </small>
     </div>
 
-    <!-- NOMBRE -->
-    <div class="form-group">
+    <div class="form-group mb-3">
       <label for="nameU">Nombre</label>
-
       <input
         id="nameU"
         type="text"
+        class="form-control"
         formControlName="nameU"
       />
 
       <small
+        class="text-danger"
         *ngIf="
           userForm.get('nameU')?.invalid &&
           userForm.get('nameU')?.touched
@@ -54,17 +50,17 @@
       </small>
     </div>
 
-    <!-- APELLIDO -->
-    <div class="form-group">
+    <div class="form-group mb-3">
       <label for="surnameU">Apellido</label>
-
       <input
         id="surnameU"
         type="text"
+        class="form-control"
         formControlName="surnameU"
       />
 
       <small
+        class="text-danger"
         *ngIf="
           userForm.get('surnameU')?.invalid &&
           userForm.get('surnameU')?.touched
@@ -74,17 +70,17 @@
       </small>
     </div>
 
-    <!-- TELÉFONO -->
-    <div class="form-group">
+    <div class="form-group mb-3">
       <label for="phoneU">Teléfono</label>
-
       <input
         id="phoneU"
         type="text"
+        class="form-control"
         formControlName="phoneU"
       />
 
       <small
+        class="text-danger"
         *ngIf="
           userForm.get('phoneU')?.invalid &&
           userForm.get('phoneU')?.touched
@@ -94,17 +90,17 @@
       </small>
     </div>
 
-    <!-- EMAIL -->
-    <div class="form-group">
+    <div class="form-group mb-3">
       <label for="emailU">Email</label>
-
       <input
         id="emailU"
         type="email"
+        class="form-control"
         formControlName="emailU"
       />
 
       <small
+        class="text-danger"
         *ngIf="
           userForm.get('emailU')?.invalid &&
           userForm.get('emailU')?.touched
@@ -114,17 +110,17 @@
       </small>
     </div>
 
-    <!-- CONTRASEÑA -->
-    <div class="form-group">
+    <div class="form-group mb-3">
       <label for="passwordU">Contraseña</label>
-
       <input
         id="passwordU"
         type="password"
+        class="form-control"
         formControlName="passwordU"
       />
 
       <small
+        class="text-danger"
         *ngIf="
           userForm.get('passwordU')?.invalid &&
           userForm.get('passwordU')?.touched
@@ -134,153 +130,129 @@
       </small>
     </div>
 
-    <!-- BOTONES DEL FORMULARIO -->
-    <div class="form-actions">
-
-      <button type="submit">
+    <div class="form-actions d-flex flex-wrap gap-2">
+      <button type="submit" class="btn btn-primary">
         {{ isEditMode ? 'Actualizar' : 'Crear Usuario' }}
       </button>
 
       <button
         *ngIf="isEditMode"
         type="button"
+        class="btn btn-outline-secondary"
         (click)="resetForm()"
       >
         Cancelar
       </button>
-
     </div>
-
   </form>
 
+  <hr />
 
-  <!-- CAMBIAR ENTRE ACTIVOS Y ELIMINADOS -->
-  <div class="view-actions">
-
+  <div class="view-actions mb-3">
     <button
       type="button"
+      class="btn btn-outline-secondary"
       (click)="toggleDeletedView()"
     >
       {{ showDeleted ? 'Ver Usuarios Activos' : 'Ver Usuarios Eliminados' }}
     </button>
-
   </div>
 
+  <p *ngIf="loading">Cargando usuarios...</p>
 
-  <!-- CARGANDO -->
-  <p *ngIf="loading">
-    Cargando usuarios...
-  </p>
-
-
-  <!-- USUARIOS ACTIVOS -->
   <div *ngIf="!showDeleted">
-
     <h2>Usuarios Activos</h2>
 
     <p *ngIf="users.length === 0 && !loading">
       No hay usuarios registrados.
     </p>
 
-    <table *ngIf="users.length > 0">
+    <div *ngIf="users.length > 0" class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead>
+          <tr>
+            <th>DNI</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Teléfono</th>
+            <th>Email</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
 
-      <thead>
-        <tr>
-          <th>DNI</th>
-          <th>Nombre</th>
-          <th>Apellido</th>
-          <th>Teléfono</th>
-          <th>Email</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
+        <tbody>
+          <tr *ngFor="let user of users">
+            <td>{{ user.dniUs }}</td>
+            <td>{{ user.nameU }}</td>
+            <td>{{ user.surnameU }}</td>
+            <td>{{ user.phoneU }}</td>
+            <td>{{ user.emailU }}</td>
 
-      <tbody>
+            <td>
+              <div class="d-flex gap-2">
+                <button
+                  type="button"
+                  class="btn btn-outline-primary btn-sm"
+                  (click)="onEdit(user)"
+                >
+                  Editar
+                </button>
 
-        <tr *ngFor="let user of users">
-
-          <td>{{ user.dniUs }}</td>
-          <td>{{ user.nameU }}</td>
-          <td>{{ user.surnameU }}</td>
-          <td>{{ user.phoneU }}</td>
-          <td>{{ user.emailU }}</td>
-
-          <td>
-
-            <button
-              type="button"
-              (click)="onEdit(user)"
-            >
-              Editar
-            </button>
-
-            <button
-              type="button"
-              (click)="onDelete(user.dniUs)"
-            >
-              Eliminar
-            </button>
-
-          </td>
-
-        </tr>
-
-      </tbody>
-
-    </table>
-
+                <button
+                  type="button"
+                  class="btn btn-outline-danger btn-sm"
+                  (click)="onDelete(user.dniUs)"
+                >
+                  Eliminar
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
-
-  <!-- USUARIOS ELIMINADOS -->
   <div *ngIf="showDeleted">
-
     <h2>Usuarios Eliminados</h2>
 
     <p *ngIf="deletedUsers.length === 0">
       No hay usuarios eliminados.
     </p>
 
-    <table *ngIf="deletedUsers.length > 0">
+    <div *ngIf="deletedUsers.length > 0" class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead>
+          <tr>
+            <th>DNI</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Teléfono</th>
+            <th>Email</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
 
-      <thead>
-        <tr>
-          <th>DNI</th>
-          <th>Nombre</th>
-          <th>Apellido</th>
-          <th>Teléfono</th>
-          <th>Email</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
+        <tbody>
+          <tr *ngFor="let user of deletedUsers">
+            <td>{{ user.dniUs }}</td>
+            <td>{{ user.nameU }}</td>
+            <td>{{ user.surnameU }}</td>
+            <td>{{ user.phoneU }}</td>
+            <td>{{ user.emailU }}</td>
 
-      <tbody>
-
-        <tr *ngFor="let user of deletedUsers">
-
-          <td>{{ user.dniUs }}</td>
-          <td>{{ user.nameU }}</td>
-          <td>{{ user.surnameU }}</td>
-          <td>{{ user.phoneU }}</td>
-          <td>{{ user.emailU }}</td>
-
-          <td>
-
-            <button
-              type="button"
-              (click)="onRestore(user.dniUs)"
-            >
-              Restaurar
-            </button>
-
-          </td>
-
-        </tr>
-
-      </tbody>
-
-    </table>
-
+            <td>
+              <button
+                type="button"
+                class="btn btn-outline-success btn-sm"
+                (click)="onRestore(user.dniUs)"
+              >
+                Restaurar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-
 </div>

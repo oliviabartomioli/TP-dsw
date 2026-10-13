@@ -1,192 +1,218 @@
-<h2>Gestión de Valoraciones</h2>
+<div>
+  <h1>Gestión de Valoraciones</h1>
 
-<h3>{{ editing ? 'Editar valoración' : 'Nueva valoración' }}</h3>
+  <form [formGroup]="reviewForm" (ngSubmit)="onSubmit()">
+    <h2>
+      {{ editing ? 'Editar Valoración' : 'Nueva Valoración' }}
+    </h2>
 
-<form [formGroup]="reviewForm" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label for="idRequest">Contratación completada</label>
 
-  <div>
-    <label for="idRequest">Contratación completada:</label>
-
-    <select
-      id="idRequest"
-      formControlName="idRequest"
-    >
-      <option [ngValue]="null">
-        Seleccionar contratación
-      </option>
-
-      <option
-        *ngFor="let request of completedRequests"
-        [ngValue]="request.idRequest"
+      <select
+        id="idRequest"
+        class="form-select"
+        formControlName="idRequest"
       >
-        Solicitud #{{ request.idRequest }}
-        - {{ request.service?.nameS }}
-        - {{ request.service?.professional?.nameP }}
-        {{ request.service?.professional?.surnameP }}
-      </option>
-    </select>
-  </div>
+        <option [ngValue]="null">
+          Seleccionar contratación
+        </option>
 
-  <div>
-    <label for="commentR">Comentario:</label>
-    <textarea
-      id="commentR"
-      formControlName="commentR"
-      maxlength="60"
-      rows="3"
-      placeholder="Escribí tu comentario..."
-    ></textarea>
-  </div>
-
-  <div>
-    <label for="rating">Calificación:</label>
-    <select id="rating" formControlName="rating">
-      <option [ngValue]="1">1 estrella</option>
-      <option [ngValue]="2">2 estrellas</option>
-      <option [ngValue]="3">3 estrellas</option>
-      <option [ngValue]="4">4 estrellas</option>
-      <option [ngValue]="5">5 estrellas</option>
-    </select>
-  </div>
-
-  <button
-    type="submit"
-    [disabled]="reviewForm.invalid"
-  >
-    {{ editing ? 'Guardar cambios' : 'Agregar valoración' }}
-  </button>
-
-  <button
-    *ngIf="editing"
-    type="button"
-    (click)="cancelEdit()"
-  >
-    Cancelar
-  </button>
-
-</form>
-
-<p *ngIf="errorMessage">{{ errorMessage }}</p>
-<p *ngIf="successMessage">{{ successMessage }}</p>
-
-<hr />
-
-<h3>Valoraciones activas</h3>
-
-<p *ngIf="loading">Cargando valoraciones...</p>
-
-<table *ngIf="!loading">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Servicio</th>
-      <th>Profesional</th>
-      <th>Comentario</th>
-      <th>Calificación</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <tr *ngFor="let review of reviews">
-
-      <td>{{ review.idReview }}</td>
-
-      <td>
-        {{ review.request?.service?.nameS || 'Sin servicio' }}
-      </td>
-
-      <td>
-        {{ review.request?.service?.professional?.nameP }}
-        {{ review.request?.service?.professional?.surnameP }}
-      </td>
-
-      <td>{{ review.commentR }}</td>
-
-      <td>{{ review.rating }} / 5</td>
-
-      <td>
-        <button
-          type="button"
-          (click)="onEdit(review)"
+        <option
+          *ngFor="let request of completedRequests"
+          [ngValue]="request.idRequest"
         >
-          Editar
-        </button>
+          Solicitud #{{ request.idRequest }}
+          - {{ request.service?.nameS }}
+          - {{ request.service?.professional?.nameP }}
+          {{ request.service?.professional?.surnameP }}
+        </option>
+      </select>
+    </div>
 
-        <button
-          type="button"
-          (click)="onDelete(review.idReview)"
-        >
-          Eliminar
-        </button>
-      </td>
+    <div class="mb-3">
+      <label for="commentR">Comentario</label>
 
-    </tr>
-  </tbody>
-</table>
+      <textarea
+        id="commentR"
+        class="form-control"
+        formControlName="commentR"
+        maxlength="60"
+        rows="3"
+        placeholder="Escribí tu comentario..."
+      ></textarea>
+    </div>
 
-<p *ngIf="!loading && reviews.length === 0">
-  No hay valoraciones registradas.
-</p>
+    <div class="mb-3">
+      <label for="rating">Calificación</label>
 
-<hr />
+      <select
+        id="rating"
+        class="form-select"
+        formControlName="rating"
+      >
+        <option [ngValue]="1">1 estrella</option>
+        <option [ngValue]="2">2 estrellas</option>
+        <option [ngValue]="3">3 estrellas</option>
+        <option [ngValue]="4">4 estrellas</option>
+        <option [ngValue]="5">5 estrellas</option>
+      </select>
+    </div>
 
-<button
-  type="button"
-  (click)="toggleDeleted()"
->
-  {{ showDeleted ? 'Ocultar eliminadas' : 'Ver eliminadas' }}
-</button>
+    <div class="d-flex flex-wrap gap-2">
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="reviewForm.invalid"
+      >
+        {{ editing ? 'Guardar cambios' : 'Agregar valoración' }}
+      </button>
 
-<div *ngIf="showDeleted">
+      <button
+        *ngIf="editing"
+        type="button"
+        class="btn btn-outline-secondary"
+        (click)="cancelEdit()"
+      >
+        Cancelar
+      </button>
+    </div>
+  </form>
 
-  <h3>Valoraciones eliminadas</h3>
+  <div *ngIf="errorMessage" class="alert alert-danger mt-3" role="alert">
+    {{ errorMessage }}
+  </div>
 
-  <p *ngIf="deletedReviews.length === 0">
-    No hay valoraciones eliminadas.
+  <div *ngIf="successMessage" class="alert alert-success mt-3" role="status">
+    {{ successMessage }}
+  </div>
+
+  <hr />
+
+  <h2>Valoraciones activas</h2>
+
+  <p *ngIf="loading">Cargando valoraciones...</p>
+
+  <div *ngIf="!loading && reviews.length > 0" class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Servicio</th>
+          <th>Profesional</th>
+          <th>Comentario</th>
+          <th>Calificación</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let review of reviews">
+          <td>{{ review.idReview }}</td>
+
+          <td>
+            {{ review.request?.service?.nameS || 'Sin servicio' }}
+          </td>
+
+          <td>
+            {{ review.request?.service?.professional?.nameP }}
+            {{ review.request?.service?.professional?.surnameP }}
+          </td>
+
+          <td>{{ review.commentR }}</td>
+
+          <td>{{ review.rating }} / 5</td>
+
+          <td>
+            <div class="d-flex gap-2">
+              <button
+                type="button"
+                class="btn btn-outline-primary btn-sm"
+                (click)="onEdit(review)"
+              >
+                Editar
+              </button>
+
+              <button
+                type="button"
+                class="btn btn-outline-danger btn-sm"
+                (click)="onDelete(review.idReview)"
+              >
+                Eliminar
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p *ngIf="!loading && reviews.length === 0">
+    No hay valoraciones registradas.
   </p>
 
-  <table *ngIf="deletedReviews.length > 0">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Servicio</th>
-        <th>Profesional</th>
-        <th>Comentario</th>
-        <th>Calificación</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
+  <hr />
 
-    <tbody>
-      <tr *ngFor="let review of deletedReviews">
+  <button
+    type="button"
+    class="btn btn-outline-secondary"
+    (click)="toggleDeleted()"
+  >
+    {{ showDeleted ? 'Ocultar eliminadas' : 'Ver eliminadas' }}
+  </button>
 
-        <td>{{ review.idReview }}</td>
+  <div *ngIf="showDeleted">
+    <h2>Valoraciones eliminadas</h2>
 
-        <td>
-          {{ review.request?.service?.nameS || 'Sin servicio' }}
-        </td>
+    <p *ngIf="deletedReviews.length === 0">
+      No hay valoraciones eliminadas.
+    </p>
 
-        <td>
-          {{ review.request?.service?.professional?.nameP }}
-          {{ review.request?.service?.professional?.surnameP }}
-        </td>
+    <div
+      *ngIf="deletedReviews.length > 0"
+      class="table-responsive"
+    >
+      <table class="table table-hover align-middle">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Servicio</th>
+            <th>Profesional</th>
+            <th>Comentario</th>
+            <th>Calificación</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
 
-        <td>{{ review.commentR }}</td>
+        <tbody>
+          <tr *ngFor="let review of deletedReviews">
+            <td>{{ review.idReview }}</td>
 
-        <td>{{ review.rating }} / 5</td>
+            <td>
+              {{ review.request?.service?.nameS || 'Sin servicio' }}
+            </td>
 
-        <td>
-          <button
-            type="button"
-            (click)="onRestore(review.idReview)"
-          >
-            Restaurar
-          </button>
-        </td>
+            <td>
+              {{ review.request?.service?.professional?.nameP }}
+              {{ review.request?.service?.professional?.surnameP }}
+            </td>
 
-      </tr>
-    </tbody>
-  </table>
+            <td>{{ review.commentR }}</td>
 
+            <td>{{ review.rating }} / 5</td>
+
+            <td>
+              <button
+                type="button"
+                class="btn btn-outline-success btn-sm"
+                (click)="onRestore(review.idReview)"
+              >
+                Restaurar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

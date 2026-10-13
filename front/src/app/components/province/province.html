@@ -1,134 +1,155 @@
-<h2>Gestión de Provincias</h2>
+<div class="provinces-container">
+  <h1>Gestión de Provincias</h1>
 
-<p *ngIf="loading">Cargando provincias...</p>
-<p *ngIf="errorMessage">{{ errorMessage }}</p>
+  <p *ngIf="loading">Cargando provincias...</p>
 
-<form [formGroup]="provinceForm" (ngSubmit)="onSubmit()">
-
-  <div>
-    <label for="nameProvince">Nombre:</label>
-
-    <input
-      id="nameProvince"
-      type="text"
-      formControlName="nameProvince"
-    />
-
-    <span
-      *ngIf="
-        provinceForm.get('nameProvince')?.hasError('required') &&
-        provinceForm.get('nameProvince')?.touched
-      "
-    >
-      El nombre es obligatorio.
-    </span>
-
-    <span
-      *ngIf="
-        provinceForm.get('nameProvince')?.hasError('maxlength') &&
-        provinceForm.get('nameProvince')?.touched
-      "
-    >
-      El nombre no puede superar los 15 caracteres.
-    </span>
+  <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+    {{ errorMessage }}
   </div>
 
-  <button type="submit">
-    {{ isEditMode ? 'Actualizar' : 'Crear' }}
-  </button>
+  <form [formGroup]="provinceForm" (ngSubmit)="onSubmit()">
+    <h2>
+      {{ isEditMode ? 'Editar Provincia' : 'Nueva Provincia' }}
+    </h2>
 
-  <button
-    *ngIf="isEditMode"
-    type="button"
-    (click)="resetForm()"
-  >
-    Cancelar
-  </button>
+    <div class="mb-3">
+      <label for="nameProvince">Nombre</label>
 
-</form>
+      <input
+        id="nameProvince"
+        type="text"
+        class="form-control"
+        formControlName="nameProvince"
+      />
 
-<hr>
+      <small
+        class="text-danger"
+        *ngIf="
+          provinceForm.get('nameProvince')?.hasError('required') &&
+          provinceForm.get('nameProvince')?.touched
+        "
+      >
+        El nombre es obligatorio.
+      </small>
 
-<h3>Provincias</h3>
+      <small
+        class="text-danger"
+        *ngIf="
+          provinceForm.get('nameProvince')?.hasError('maxlength') &&
+          provinceForm.get('nameProvince')?.touched
+        "
+      >
+        El nombre no puede superar los 15 caracteres.
+      </small>
+    </div>
 
-<table *ngIf="provinces.length > 0">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Nombre</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
+    <div class="d-flex flex-wrap gap-2">
+      <button type="submit" class="btn btn-primary">
+        {{ isEditMode ? 'Actualizar' : 'Crear' }}
+      </button>
 
-  <tbody>
-    <tr *ngFor="let province of provinces">
-      <td>{{ province.idProvince }}</td>
-      <td>{{ province.nameProvince }}</td>
+      <button
+        *ngIf="isEditMode"
+        type="button"
+        class="btn btn-outline-secondary"
+        (click)="resetForm()"
+      >
+        Cancelar
+      </button>
+    </div>
+  </form>
 
-      <td>
-        <button
-          type="button"
-          (click)="onEdit(province)"
-        >
-          Editar
-        </button>
+  <hr />
 
-        <button
-          type="button"
-          (click)="onDelete(province.nameProvince)"
-        >
-          Eliminar
-        </button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+  <h2>Provincias</h2>
 
-<p *ngIf="!loading && provinces.length === 0">
-  No hay provincias registradas.
-</p>
+  <div *ngIf="provinces.length > 0" class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
 
-<hr>
+      <tbody>
+        <tr *ngFor="let province of provinces">
+          <td>{{ province.idProvince }}</td>
+          <td>{{ province.nameProvince }}</td>
 
-<button
-  type="button"
-  (click)="toggleDeletedView()"
->
-  {{ showDeleted ? 'Ocultar eliminadas' : 'Ver eliminadas' }}
-</button>
+          <td>
+            <div class="d-flex gap-2">
+              <button
+                type="button"
+                class="btn btn-outline-primary btn-sm"
+                (click)="onEdit(province)"
+              >
+                Editar
+              </button>
 
-<div *ngIf="showDeleted">
+              <button
+                type="button"
+                class="btn btn-outline-danger btn-sm"
+                (click)="onDelete(province.nameProvince)"
+              >
+                Eliminar
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-  <h3>Provincias eliminadas</h3>
-
-  <table *ngIf="deletedProvinces.length > 0">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr *ngFor="let province of deletedProvinces">
-        <td>{{ province.idProvince }}</td>
-        <td>{{ province.nameProvince }}</td>
-
-        <td>
-          <button
-            type="button"
-            (click)="onRestore(province.nameProvince)"
-          >
-            Restaurar
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <p *ngIf="deletedProvinces.length === 0">
-    No hay provincias eliminadas.
+  <p *ngIf="!loading && provinces.length === 0">
+    No hay provincias registradas.
   </p>
 
+  <hr />
+
+  <button
+    type="button"
+    class="btn btn-outline-secondary"
+    (click)="toggleDeletedView()"
+  >
+    {{ showDeleted ? 'Ocultar eliminadas' : 'Ver eliminadas' }}
+  </button>
+
+  <div *ngIf="showDeleted">
+    <h2>Provincias eliminadas</h2>
+
+    <div *ngIf="deletedProvinces.length > 0" class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let province of deletedProvinces">
+            <td>{{ province.idProvince }}</td>
+            <td>{{ province.nameProvince }}</td>
+
+            <td>
+              <button
+                type="button"
+                class="btn btn-outline-success btn-sm"
+                (click)="onRestore(province.nameProvince)"
+              >
+                Restaurar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p *ngIf="deletedProvinces.length === 0">
+      No hay provincias eliminadas.
+    </p>
+  </div>
 </div>

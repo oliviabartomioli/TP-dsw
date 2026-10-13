@@ -1,20 +1,68 @@
+<div class="app-layout">
+  <header class="site-header">
+    <div class="container-xl">
+      <div class="header-content">
+        <a routerLink="/buscar-servicios" class="brand">
+          <span class="brand-icon">⌂</span>
 
-<nav class="main-nav" aria-label="Navegación principal">
-  <a routerLink="/users">Usuarios</a>
-  <a routerLink="/professional">Profesionales</a>
-  <a routerLink="/category">Categorías</a>
-  <a routerLink="/province">Provincias</a>
-  <a routerLink="/city">Ciudades</a>
-  <a routerLink="/services">Servicios</a>
-  <a routerLink="/availability">Disponibilidades</a>
-  <a routerLink="/request">Solicitudes</a>
-  <a routerLink="/favorite">Favoritos</a>
-  <a routerLink="/review">Valoraciones</a>
-  <a routerLink="/buscar-servicios">Buscar servicios</a>
-</nav>
+          <span class="brand-text">
+            <strong>HogarService</strong>
+            <small>Servicios para tu hogar</small>
+          </span>
+        </a>
 
-<hr />
+        <nav class="main-nav" aria-label="Navegación principal">
+          <a routerLink="/buscar-servicios" routerLinkActive="active">
+            Buscar servicios
+          </a>
 
-<main class="main-content">
-  <router-outlet></router-outlet>
-</main>
+          <a routerLink="/services" routerLinkActive="active">
+            Servicios
+          </a>
+
+          <a routerLink="/professional" routerLinkActive="active">
+            Profesionales
+          </a>
+
+          <a routerLink="/request" routerLinkActive="active">
+            Solicitudes
+          </a>
+
+          <a routerLink="/favorite" routerLinkActive="active">
+            Favoritos
+          </a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <div class="secondary-nav">
+    <nav class="container-xl secondary-content" aria-label="Administración">
+      <span class="admin-label">Administración:</span>
+
+      <a routerLink="/users" routerLinkActive="active">Usuarios</a>
+      <a routerLink="/category" routerLinkActive="active">Categorías</a>
+      <a routerLink="/province" routerLinkActive="active">Provincias</a>
+      <a routerLink="/city" routerLinkActive="active">Ciudades</a>
+      <a routerLink="/availability" routerLinkActive="active">Disponibilidades</a>
+      <a routerLink="/review" routerLinkActive="active">Valoraciones</a>
+    </nav>
+  </div>
+
+  <main class="main-content">
+    <div class="container-xl">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container-xl footer-content">
+      <div>
+        <strong>HogarService</strong>
+        <p>Conectamos personas con profesionales de confianza.</p>
+      </div>
+
+      <span>Trabajo Práctico - Desarrollo de Software</span>
+    </div>
+  </footer>
+</div>

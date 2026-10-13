@@ -13,8 +13,6 @@ export class favoriteServices{
 
     createFavorite(favorite: FavoriteDto): Observable <Favorite> {
         return this.http.post<Favorite>(`${this.apiUrl}/createFavorite`, favorite);
-
-
     }
 
     getFavorite(): Observable <Favorite[]> {

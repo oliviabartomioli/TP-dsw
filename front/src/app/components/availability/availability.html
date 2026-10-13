@@ -1,11 +1,14 @@
-<div class="container mt-4">
-  <h2>Gestión de Disponibilidades</h2>
+<div>
+  <h1>Gestión de Disponibilidades</h1>
 
-  <!-- Formulario -->
   <form (ngSubmit)="saveAvailability()" #availabilityForm="ngForm">
+    <h2>
+      {{ editingId !== null ? 'Editar Disponibilidad' : 'Nueva Disponibilidad' }}
+    </h2>
 
     <div class="mb-3">
       <label for="dayOfWeek" class="form-label">Día de la semana</label>
+
       <select
         id="dayOfWeek"
         name="dayOfWeek"
@@ -26,6 +29,7 @@
 
     <div class="mb-3">
       <label for="startTime" class="form-label">Hora de inicio</label>
+
       <input
         type="time"
         id="startTime"
@@ -38,6 +42,7 @@
 
     <div class="mb-3">
       <label for="endTime" class="form-label">Hora de finalización</label>
+
       <input
         type="time"
         id="endTime"
@@ -76,33 +81,29 @@
       </select>
     </div>
 
-    <button
-      type="submit"
-      class="btn btn-primary"
-      [disabled]="availabilityForm.invalid || newAvailability.dniProfessional <= 0"
-    >
-      {{ editingId !== null ? 'Actualizar' : 'Agregar' }}
-    </button>
-
-    @if (editingId !== null) {
-      <button
-        type="button"
-        class="btn btn-secondary ms-2"
-        (click)="resetForm()"
-      >
-        Cancelar
+    <div class="d-flex flex-wrap gap-2">
+      <button type="submit" class="btn btn-primary">
+        {{ editingId !== null ? 'Actualizar' : 'Agregar' }}
       </button>
-    }
 
+      @if (editingId !== null) {
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          (click)="resetForm()"
+        >
+          Cancelar
+        </button>
+      }
+    </div>
   </form>
 
-  <hr class="my-4" />
+  <hr />
 
-  <!-- Listado de disponibilidades -->
-  <h3>Disponibilidades registradas</h3>
+  <h2>Disponibilidades registradas</h2>
 
   <div class="table-responsive">
-    <table class="table table-striped table-hover">
+    <table class="table table-hover align-middle">
       <thead>
         <tr>
           <th>ID</th>
@@ -121,26 +122,30 @@
             <td>{{ availability.dayOfWeek }}</td>
             <td>{{ availability.startTime }}</td>
             <td>{{ availability.endTime }}</td>
+
             <td>
               {{ availability.professional?.nameP }}
               {{ availability.professional?.surnameP }}
             </td>
-            <td>
-              <button
-                type="button"
-                class="btn btn-warning btn-sm me-2"
-                (click)="editAvailability(availability)"
-              >
-                Editar
-              </button>
 
-              <button
-                type="button"
-                class="btn btn-danger btn-sm"
-                (click)="deleteAvailability(availability.idAvailability)"
-              >
-                Eliminar
-              </button>
+            <td>
+              <div class="d-flex gap-2">
+                <button
+                  type="button"
+                  class="btn btn-outline-primary btn-sm"
+                  (click)="editAvailability(availability)"
+                >
+                  Editar
+                </button>
+
+                <button
+                  type="button"
+                  class="btn btn-outline-danger btn-sm"
+                  (click)="deleteAvailability(availability.idAvailability)"
+                >
+                  Eliminar
+                </button>
+              </div>
             </td>
           </tr>
         } @empty {

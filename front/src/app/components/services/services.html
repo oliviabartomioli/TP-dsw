@@ -1,37 +1,41 @@
-
 <div class="services-container">
+  <h1>Gestión de Servicios</h1>
 
-  <h2>Servicios</h2>
-
-  <p *ngIf="errorMessage">
+  <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
     {{ errorMessage }}
-  </p>
+  </div>
 
   <form [formGroup]="servicesForm" (ngSubmit)="onSubmit()">
+    <h2>
+      {{ isEditMode ? 'Editar Servicio' : 'Nuevo Servicio' }}
+    </h2>
 
-    <div>
-      <label for="nameS">Nombre:</label>
+    <div class="mb-3">
+      <label for="nameS">Nombre</label>
       <input
         id="nameS"
         type="text"
+        class="form-control"
         formControlName="nameS"
       />
     </div>
 
-    <div>
-      <label for="descriptionS">Descripción:</label>
+    <div class="mb-3">
+      <label for="descriptionS">Descripción</label>
       <input
         id="descriptionS"
         type="text"
+        class="form-control"
         formControlName="descriptionS"
       />
     </div>
 
-    <div>
-      <label for="priceS">Precio ($):</label>
+    <div class="mb-3">
+      <label for="priceS">Precio ($)</label>
       <input
         id="priceS"
         type="number"
+        class="form-control"
         formControlName="priceS"
         min="0.01"
         step="0.01"
@@ -39,6 +43,7 @@
       />
 
       <small
+        class="text-danger"
         *ngIf="
           servicesForm.get('priceS')?.invalid &&
           servicesForm.get('priceS')?.touched
@@ -48,11 +53,12 @@
       </small>
     </div>
 
-    <div>
-      <label for="idCategory">Categoría:</label>
+    <div class="mb-3">
+      <label for="idCategory">Categoría</label>
 
       <select
         id="idCategory"
+        class="form-select"
         formControlName="idCategory"
       >
         <option value="">Seleccione una categoría</option>
@@ -66,10 +72,14 @@
       </select>
     </div>
 
-    <div>
-      <label for="dniP">Profesional:</label>
+    <div class="mb-3">
+      <label for="dniP">Profesional</label>
 
-      <select id="dniP" formControlName="dniP">
+      <select
+        id="dniP"
+        class="form-select"
+        formControlName="dniP"
+      >
         <option [ngValue]="null">
           Seleccione un profesional
         </option>
@@ -85,27 +95,27 @@
       </select>
     </div>
 
-    <button type="submit">
-      {{ isEditMode ? 'Actualizar' : 'Crear' }}
-    </button>
+    <div class="d-flex flex-wrap gap-2">
+      <button type="submit" class="btn btn-primary">
+        {{ isEditMode ? 'Actualizar' : 'Crear' }}
+      </button>
 
-    <button
-      type="button"
-      *ngIf="isEditMode"
-      (click)="resetForm()"
-    >
-      Cancelar
-    </button>
-
+      <button
+        type="button"
+        *ngIf="isEditMode"
+        class="btn btn-outline-secondary"
+        (click)="resetForm()"
+      >
+        Cancelar
+      </button>
+    </div>
   </form>
 
   <hr />
 
-  <p *ngIf="loading">
-    Cargando servicios...
-  </p>
+  <p *ngIf="loading">Cargando servicios...</p>
 
-  <h3>Servicios activos</h3>
+  <h2>Servicios activos</h2>
 
   <div
     class="services-table-wrapper"
@@ -114,7 +124,7 @@
     role="region"
     aria-label="Tabla de servicios activos"
   >
-    <table>
+    <table class="table table-hover align-middle">
       <thead>
         <tr>
           <th>ID</th>
@@ -145,19 +155,23 @@
           </td>
 
           <td>
-            <button
-              type="button"
-              (click)="onEdit(service)"
-            >
-              Editar
-            </button>
+            <div class="d-flex gap-2">
+              <button
+                type="button"
+                class="btn btn-outline-primary btn-sm"
+                (click)="onEdit(service)"
+              >
+                Editar
+              </button>
 
-            <button
-              type="button"
-              (click)="onDelete(service.idService)"
-            >
-              Eliminar
-            </button>
+              <button
+                type="button"
+                class="btn btn-outline-danger btn-sm"
+                (click)="onDelete(service.idService)"
+              >
+                Eliminar
+              </button>
+            </div>
           </td>
         </tr>
       </tbody>
@@ -172,14 +186,14 @@
 
   <button
     type="button"
+    class="btn btn-outline-secondary"
     (click)="toggleDeletedView()"
   >
     {{ showDeleted ? 'Ocultar eliminados' : 'Ver eliminados' }}
   </button>
 
   <div *ngIf="showDeleted">
-
-    <h3>Servicios eliminados</h3>
+    <h2>Servicios eliminados</h2>
 
     <div
       class="services-table-wrapper"
@@ -188,7 +202,7 @@
       role="region"
       aria-label="Tabla de servicios eliminados"
     >
-      <table>
+      <table class="table table-hover align-middle">
         <thead>
           <tr>
             <th>ID</th>
@@ -221,6 +235,7 @@
             <td>
               <button
                 type="button"
+                class="btn btn-outline-success btn-sm"
                 (click)="onRestore(service.idService)"
               >
                 Restaurar
@@ -234,7 +249,5 @@
     <p *ngIf="deleteService.length === 0">
       No hay servicios eliminados.
     </p>
-
   </div>
-
 </div>
