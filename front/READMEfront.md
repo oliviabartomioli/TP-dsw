@@ -1,79 +1,39 @@
 # HogarService — Frontend
 
-Frontend de la aplicación HogarService, desarrollado para el Trabajo Práctico de Desarrollo de Software de la Universidad Tecnológica Nacional, Facultad Regional Rosario.
+Interfaz web desarrollada con Angular para que los usuarios y profesionales puedan utilizar las funcionalidades de HogarService.
 
-[Repositorio completo](https://github.com/oliviabartomioli/TP-dsw)
+## Tecnologías utilizadas
 
-## 1. Descripción
+* Angular
+* TypeScript
+* HTML
+* CSS
+* Bootstrap
 
-HogarService es una aplicación web que permite buscar y contratar servicios domésticos, así como gestionar usuarios, profesionales, servicios y solicitudes de contratación.
+## Funcionalidades
 
-El frontend proporciona una interfaz gráfica para interactuar con las funcionalidades del sistema y se comunica con el backend mediante una API REST.
+El frontend permite gestionar usuarios, profesionales, categorías, provincias, ciudades, servicios, disponibilidades, solicitudes de contratación, valoraciones y favoritos.
 
-## 2. Tecnologías utilizadas
+También incluye la búsqueda de servicios por categoría y ciudad, la consulta de sus detalles y formularios para crear y modificar registros.
 
-- Angular
-- TypeScript
-- HTML5
-- CSS3
-- Bootstrap
-- Node.js y npm
+## Instalación
 
-## 3. Funcionalidades
+Para ejecutar el frontend es necesario tener instalados **Node.js y npm**.
 
-La aplicación incluye interfaces para:
-
-- Gestión de usuarios.
-- Gestión de profesionales.
-- Gestión de categorías.
-- Gestión de provincias y ciudades.
-- Gestión de servicios.
-- Gestión de disponibilidades.
-- Gestión de solicitudes de contratación.
-- Gestión de valoraciones.
-- Gestión de favoritos.
-- Búsqueda de servicios por categoría y ciudad.
-- Consulta del detalle de los servicios.
-
-Los formularios permiten crear y modificar registros, mientras que los listados facilitan su consulta y administración.
-
-## 4. Diseño de la interfaz
-
-La interfaz fue desarrollada utilizando Angular y Bootstrap.
-
-Se implementó un diseño responsive para facilitar la visualización de la aplicación en distintos tamaños de pantalla.
-
-Los componentes mantienen criterios visuales comunes para formularios, botones, tablas y mensajes.
-
-## 5. Requisitos previos
-
-Para ejecutar el frontend se necesita:
-
-- Node.js.
-- npm.
-- El backend de HogarService configurado y en ejecución.
-
-## 6. Instalación
-
-Clonar el repositorio:
+### 1. Clonar el repositorio
 
 ```bash
 git clone https://github.com/oliviabartomioli/TP-dsw.git
-```
-
-Ingresar a la carpeta del frontend:
-
-```bash
 cd TP-dsw/front
 ```
 
-Instalar las dependencias:
+### 2. Instalar dependencias
 
 ```bash
 npm install
 ```
 
-## 7. Ejecución
+## Ejecución
 
 Iniciar el servidor de desarrollo:
 
@@ -81,30 +41,22 @@ Iniciar el servidor de desarrollo:
 npm start
 ```
 
-Abrir la aplicación desde el navegador:
+Abrir la aplicación en el navegador:
 
-http://localhost:4200
+`http://localhost:4200`
 
-Para utilizar las funcionalidades que requieren información de la base de datos, el backend debe encontrarse en ejecución.
+## Conexión con el backend
 
-## 8. Comunicación con el backend
+El frontend se comunica con el backend mediante una API REST.
 
-El frontend utiliza servicios de Angular para realizar solicitudes HTTP a la API REST desarrollada con NestJS.
+El backend se ejecuta en:
 
-La dirección local habitual del backend es:
+`http://localhost:3000`
 
-http://localhost:3000
+Para utilizar correctamente la aplicación, deben estar ejecutándose **MySQL, el backend y el frontend**.
 
-Las operaciones realizadas desde los componentes permiten consultar, crear, modificar y eliminar información mediante los endpoints correspondientes.
+Las instrucciones para configurar el servidor se encuentran en el [README del backend](../back/READMEback.md).
 
-## 9. Integrantes
+---
 
-- 54223 - Bartomioli, Olivia
-- 54657 - Dulcich, Juan Ignacio
-- 54629 - Llagonne, Alma
-
-**Materia:** Desarrollo de Software
-
-**Institución:** Universidad Tecnológica Nacional — Facultad Regional Rosario
-
-**Proyecto:** HogarService
+[Volver al README principal](../README.md)
