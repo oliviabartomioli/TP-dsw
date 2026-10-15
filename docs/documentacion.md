@@ -1,5 +1,5 @@
-Documentación de HogarService
-1. Modelo del sistema
+# Documentación de HogarService
+## 1. Modelo del sistema
 
 HogarService está formado por usuarios, profesionales, servicios, categorías, provincias, ciudades, disponibilidades, solicitudes, valoraciones y favoritos.
 
@@ -12,7 +12,7 @@ El siguiente diagrama muestra las principales entidades del sistema y sus relaci
 
 
 
-2. Organización del trabajo
+## 2. Organización del trabajo
 
 Para desarrollar HogarService nos organizamos distribuyendo las funcionalidades entre los tres integrantes del grupo.
 
@@ -22,7 +22,7 @@ Cada integrante fue realizando sus aportes al frontend y al backend, integrando 
 
 Utilizamos Git y GitHub para gestionar el código y registrar los avances mediante commits.
 
-3. Seguimiento del desarrollo
+## 3. Seguimiento del desarrollo
 
 El seguimiento del proyecto se realizó principalmente a través de los cambios registrados en GitHub.
 
