@@ -9,8 +9,7 @@ Modelo de dominio
 
 El siguiente diagrama muestra las principales entidades del sistema y sus relaciones.
 
-
-
+Modelo de dominio <img width="1169" height="1654" alt="Diagrama de clases - TP DSW-Copia de TP desarrollo de software drawio" src="https://github.com/user-attachments/assets/de9ac6f4-d7ec-469a-b2ed-1ab2f493d5d9" /> 
 
 ## 2. Organización del trabajo
 
