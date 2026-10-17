@@ -16,7 +16,7 @@ export class ProfessionalController {
   constructor(private ProfessionalService: ProfessionalService) {}
 
   @Post('createProfessional')
-  createUser(@Body() professional: professionalDto) {
+  createProfessional(@Body() professional: professionalDto) {
     return this.ProfessionalService.createProfessional(professional);
   }
   @Get('/:dniP')
