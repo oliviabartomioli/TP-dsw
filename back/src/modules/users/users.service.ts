@@ -80,7 +80,7 @@ export class UsersService {
     const UserExists = await this.findUser(dniUs);
 
     if (!UserExists) {
-      throw new ConflictException(
+      throw new NotFoundException(
         'El usuario con dniUs ' + dniUs + ' no existe',
       );
     }

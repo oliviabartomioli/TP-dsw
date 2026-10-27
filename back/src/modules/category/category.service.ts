@@ -1,4 +1,9 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { categoryDto } from './dto/category-dto';
@@ -26,7 +31,7 @@ export class CategoryService {
   }
   async updateCategory(category: categoryDto) {
     if (category.idCategory === undefined) {
-      throw new ConflictException(
+      throw new BadRequestException(
         'El idCategory es obligatorio para actualizar una categoría',
       );
     }
@@ -34,7 +39,7 @@ export class CategoryService {
     const CategoryExists = await this.findCategory(category.idCategory);
 
     if (!CategoryExists) {
-      throw new ConflictException(
+      throw new NotFoundException(
         'La categoria con id ' + category.idCategory + ' no existe',
       );
     }
@@ -50,13 +55,13 @@ export class CategoryService {
   async deleteCategory(idCategory: number) {
     const CategoryExists = await this.findCategory(idCategory);
     if (!CategoryExists) {
-      throw new ConflictException(
-        'La categoria con id:' + idCategory + 'no existe',
+      throw new NotFoundException(
+        'La categoria con id: ' + idCategory + ' no existe',
       );
     }
     if (CategoryExists.deleteC) {
       throw new ConflictException(
-        'La categoria con id' + idCategory + 'esta eliminada',
+        'La categoria con id ' + idCategory + ' esta eliminada',
       );
     }
     const rows: UpdateResult = await this.categoryRepository.update(
@@ -69,7 +74,7 @@ export class CategoryService {
     const CategoryExists = await this.findCategory(idCategory);
 
     if (!CategoryExists) {
-      throw new ConflictException(
+      throw new NotFoundException(
         'La categoria con idCategory ' + idCategory + ' no existe',
       );
     }

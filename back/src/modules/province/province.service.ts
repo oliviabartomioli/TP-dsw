@@ -1,4 +1,9 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
 import { province } from './entity/province.entity';
@@ -47,7 +52,7 @@ export class ProvinceService {
 
   async updateProvince(province: provinceDto) {
     if (province.idProvince === undefined) {
-      throw new ConflictException(
+      throw new BadRequestException(
         'El idProvince es obligatorio para actualizar una provincia.',
       );
     }
@@ -55,7 +60,7 @@ export class ProvinceService {
     const provinceExists = await this.findProvinceById(province.idProvince);
 
     if (!provinceExists) {
-      throw new ConflictException(
+      throw new NotFoundException(
         'La provincia con ID ' + province.idProvince + ' no existe.',
       );
     }
@@ -73,7 +78,7 @@ export class ProvinceService {
     const provinceExists = await this.findProvince(nameProvince);
 
     if (!provinceExists) {
-      throw new ConflictException(
+      throw new NotFoundException(
         'La provincia: ' + nameProvince + ' no existe.',
       );
     }
@@ -96,7 +101,7 @@ export class ProvinceService {
     const provinceExists = await this.findProvince(nameProvince);
 
     if (!provinceExists) {
-      throw new ConflictException(
+      throw new NotFoundException(
         'La provincia: ' + nameProvince + ' no existe.',
       );
     }

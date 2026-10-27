@@ -27,6 +27,14 @@ El proyecto está dividido en dos partes:
 
 Ambas partes se comunican mediante una API REST.
 
+## Requisitos
+
+Versiones con las que se desarrolló y probó el proyecto:
+
+- Node.js v22.22.3 y npm 10.9.8
+- MySQL 8.0.45
+- Git 2.53.0
+
 ## Cómo correrlo
 
 Para ejecutar el proyecto es necesario tener instalados Node.js, npm y MySQL.
@@ -42,9 +50,17 @@ cd TP-dsw
 
 Iniciar MySQL y crear una base de datos llamada `servicios`.
 
-Configurar los datos de conexión en el backend, en el archivo:
+En la carpeta principal del proyecto, copiar el archivo de ejemplo del backend:
 
-`back/src/config/typeorm.config.ts`
+ ```bash
+cp back/.env.example back/.env
+```
+
+En Windows (PowerShell): `copy back\.env.example back\.env`
+
+Completar en `back/.env` los datos de tu MySQL (`DB_HOST`, `DB_PORT`, `DB_USERNAME`, `DB_PASSWORD`, `DB_DATABASE`) y un valor cualquiera para `JWT_SECRET`.
+
+Las tablas se crean automáticamente la primera vez que se inicia el backend.
 
 ### 3. Ejecutar el backend
 
@@ -73,6 +89,32 @@ Abrir la aplicación en el navegador:
 `http://localhost:4200`
 
 Para que todo funcione, deben estar ejecutándose MySQL, el backend y el frontend.
+
+## Probar la API (Swagger)
+
+Con el backend en ejecución, la documentación interactiva de la API está en:
+
+`http://localhost:3000/test`
+
+Desde ahí se pueden probar todos los endpoints sin usar el frontend.
+
+## Datos de prueba
+
+Al iniciar por primera vez, las tablas se crean vacías. Como algunas entidades dependen de otras, conviene cargarlas en este orden, desde las pantallas del frontend (`http://localhost:4200`) o desde Swagger:
+
+1. **Provincia** (ej. Santa Fe)
+2. **Ciudad** (depende de una provincia, ej. Rosario)
+3. **Categoría** (ej. Electricidad)
+4. **Usuario** (cliente que contrata)
+5. **Profesional** (depende de una ciudad)
+6. **Servicio** (depende de una categoría y un profesional)
+
+Con eso ya se puede probar el flujo principal:
+
+1. En **Buscar servicios**, filtrar por categoría o ciudad y ver el detalle.
+2. Crear una **Solicitud** para un servicio (queda en estado `pendiente`).
+3. Aceptar la solicitud y luego marcarla como `completada`.
+4. Crear una **Reseña** para esa solicitud (solo se pueden valorar solicitudes completadas).
 
 ## Documentación
 

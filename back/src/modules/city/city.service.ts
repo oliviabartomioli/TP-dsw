@@ -80,7 +80,7 @@ export class CityService {
     const cityExists = await this.findCityById(cityData.idCity);
 
     if (!cityExists) {
-      throw new ConflictException(
+      throw new NotFoundException(
         'La ciudad con ID ' + cityData.idCity + ' no existe.',
       );
     }
@@ -112,7 +112,7 @@ export class CityService {
     const cityExists = await this.findCity(nameCity);
 
     if (!cityExists) {
-      throw new ConflictException('La ciudad: ' + nameCity + ' no existe.');
+      throw new NotFoundException('La ciudad: ' + nameCity + ' no existe.');
     }
 
     if (cityExists.deleteCity) {
@@ -133,7 +133,7 @@ export class CityService {
     const cityExists = await this.findCity(nameCity);
 
     if (!cityExists) {
-      throw new ConflictException('La ciudad: ' + nameCity + ' no existe.');
+      throw new NotFoundException('La ciudad: ' + nameCity + ' no existe.');
     }
 
     if (!cityExists.deleteCity) {

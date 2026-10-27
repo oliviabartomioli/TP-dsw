@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
 import { Professional } from './entity/professional.entity';
@@ -32,7 +36,7 @@ export class ProfessionalService {
     });
 
     if (!cityExists) {
-      throw new ConflictException('ciudad no existe');
+      throw new NotFoundException('ciudad no existe');
     }
 
     const newProfessional = this.professionalRepository.create({
@@ -86,7 +90,7 @@ export class ProfessionalService {
     );
 
     if (!professionalExists) {
-      throw new ConflictException('profesional no existe');
+      throw new NotFoundException('profesional no existe');
     }
 
     if (professionalExists.deleteP) {
@@ -101,7 +105,7 @@ export class ProfessionalService {
     });
 
     if (!cityExists) {
-      throw new ConflictException('ciudad no existe');
+      throw new NotFoundException('ciudad no existe');
     }
 
     professionalExists.nameP = professionalData.nameP;
@@ -116,7 +120,7 @@ export class ProfessionalService {
     const professionalExists = await this.findProfessional(dniP);
 
     if (!professionalExists) {
-      throw new ConflictException('profesional no existe');
+      throw new NotFoundException('profesional no existe');
     }
 
     if (professionalExists.deleteP) {
@@ -135,7 +139,7 @@ export class ProfessionalService {
     const professionalExists = await this.findProfessional(dniP);
 
     if (!professionalExists) {
-      throw new ConflictException('profesional no existe');
+      throw new NotFoundException('profesional no existe');
     }
 
     if (!professionalExists.deleteP) {

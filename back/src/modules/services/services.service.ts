@@ -107,7 +107,7 @@ export class ServicesService {
     const servicesExists = await this.findServices(servicesData.idService);
 
     if (!servicesExists) {
-      throw new ConflictException(
+      throw new NotFoundException(
         'El servicio con ID ' + servicesData.idService + ' no existe',
       );
     }
@@ -153,7 +153,7 @@ export class ServicesService {
     const servicesExists = await this.findServices(idService);
 
     if (!servicesExists) {
-      throw new ConflictException(
+      throw new NotFoundException(
         'El servicio con ID ' + idService + ' no existe',
       );
     }
@@ -176,7 +176,7 @@ export class ServicesService {
     const servicesExists = await this.findServices(idService);
 
     if (!servicesExists) {
-      throw new ConflictException(
+      throw new NotFoundException(
         'El servicio con ID ' + idService + ' no existe',
       );
     }

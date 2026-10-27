@@ -118,11 +118,13 @@ export class ReviewService {
   async deleteReview(idReview: number) {
     const ReviewExists = await this.findReview(idReview);
     if (!ReviewExists) {
-      throw new ConflictException('La reseña con id:' + idReview + 'no existe');
+      throw new NotFoundException(
+        'La reseña con id: ' + idReview + ' no existe',
+      );
     }
     if (ReviewExists.deleteR) {
       throw new ConflictException(
-        'La reseña con id' + idReview + 'esta eliminada',
+        'La reseña con id ' + idReview + ' esta eliminada',
       );
     }
     const rows: UpdateResult = await this.reviewRepository.update(
@@ -135,7 +137,7 @@ export class ReviewService {
     const ReviewExists = await this.findReview(idReview);
 
     if (!ReviewExists) {
-      throw new ConflictException(
+      throw new NotFoundException(
         'La reseña con idReview ' + idReview + ' no existe',
       );
     }

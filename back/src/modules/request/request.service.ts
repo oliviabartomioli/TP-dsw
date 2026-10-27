@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
@@ -32,7 +33,7 @@ export class RequestService {
     });
 
     if (!user) {
-      throw new ConflictException(
+      throw new NotFoundException(
         'El usuario con DNI ' + requests.dniUs + ' no existe',
       );
     }
@@ -48,7 +49,7 @@ export class RequestService {
     });
 
     if (!service) {
-      throw new ConflictException(
+      throw new NotFoundException(
         'El servicio con ID ' + requests.idService + ' no existe',
       );
     }
@@ -101,7 +102,7 @@ export class RequestService {
     const requestsExists = await this.findRequest(idRequest);
 
     if (!requestsExists) {
-      throw new ConflictException(
+      throw new NotFoundException(
         'La solicitud con id: ' + idRequest + ' no existe',
       );
     }
@@ -124,7 +125,7 @@ export class RequestService {
     const requestExists = await this.findRequest(idRequest);
 
     if (!requestExists) {
-      throw new ConflictException(
+      throw new NotFoundException(
         'La solicitud con idRequest ' + idRequest + ' no existe',
       );
     }
@@ -150,7 +151,7 @@ export class RequestService {
     const requestExists = await this.findRequest(requests.idRequest);
 
     if (!requestExists) {
-      throw new ConflictException(
+      throw new NotFoundException(
         'La solicitud con id: ' + requests.idRequest + ' no existe',
       );
     }
@@ -169,7 +170,7 @@ export class RequestService {
     });
 
     if (!userExists) {
-      throw new ConflictException(
+      throw new NotFoundException(
         'El usuario con DNI ' + requests.dniUs + ' no existe',
       );
     }
@@ -185,7 +186,7 @@ export class RequestService {
     });
 
     if (!serviceExists) {
-      throw new ConflictException(
+      throw new NotFoundException(
         'El servicio con ID ' + requests.idService + ' no existe',
       );
     }
@@ -213,7 +214,7 @@ export class RequestService {
     const requestExists = await this.findRequest(idRequest);
 
     if (!requestExists) {
-      throw new ConflictException(
+      throw new NotFoundException(
         'La solicitud con ID ' + idRequest + ' no existe',
       );
     }

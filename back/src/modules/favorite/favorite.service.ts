@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
 
@@ -29,7 +33,7 @@ export class FavoriteService {
     });
 
     if (!userExists) {
-      throw new ConflictException('usuario no existe');
+      throw new NotFoundException('usuario no existe');
     }
 
     const professionalExists = await this.professionalRepository.findOne({
@@ -40,7 +44,7 @@ export class FavoriteService {
     });
 
     if (!professionalExists) {
-      throw new ConflictException('profesional no existe');
+      throw new NotFoundException('profesional no existe');
     }
 
     const newFavorite = this.favoriteRepository.create({
@@ -86,7 +90,7 @@ export class FavoriteService {
     const favoriteExists = await this.findFavorite(idfav);
 
     if (!favoriteExists) {
-      throw new ConflictException('favorito no existe');
+      throw new NotFoundException('favorito no existe');
     }
 
     if (favoriteExists.deleteFav) {
@@ -105,7 +109,7 @@ export class FavoriteService {
     const favoriteExists = await this.findFavorite(idfav);
 
     if (!favoriteExists) {
-      throw new ConflictException('favorito no existe');
+      throw new NotFoundException('favorito no existe');
     }
 
     if (!favoriteExists.deleteFav) {
