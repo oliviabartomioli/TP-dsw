@@ -89,13 +89,15 @@ export class RequestService {
   }
 
   async findAllDelete() {
-    return await this.requestRepository
-      .createQueryBuilder('request')
-      .leftJoinAndSelect('request.user', 'user')
-      .leftJoinAndSelect('request.service', 'service')
-      .leftJoinAndSelect('service.professional', 'professional')
-      .where('request.deleteRequest = :deleted', { deleted: true })
-      .getMany();
+    return await this.requestRepository.find({
+      where: { deleteRequest: true },
+      relations: {
+        user: true,
+        service: {
+          professional: true,
+        },
+      },
+    });
   }
 
   async deleteRequests(idRequest: number) {

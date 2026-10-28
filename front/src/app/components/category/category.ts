@@ -8,7 +8,6 @@ import {
 } from '@angular/forms';
 import { Category, categoryDto } from '../../models/category.model';
 import { CategoryService } from '../../services/category';
-import { Professional } from '../../models/professional.model';
 
 @Component({
   imports: [CommonModule, ReactiveFormsModule],

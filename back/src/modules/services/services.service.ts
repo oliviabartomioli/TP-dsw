@@ -59,48 +59,71 @@ export class ServicesService {
   }
 
   async findServices(idService: number) {
-    return await this.ServicesRepository.createQueryBuilder('service')
-      .leftJoinAndSelect('service.category', 'category')
-      .leftJoinAndSelect('service.professional', 'professional')
-      .leftJoinAndSelect('professional.city', 'city')
-      .where('service.idService = :idService', { idService })
-      .getOne();
+    return await this.ServicesRepository.findOne({
+      where: { idService },
+      relations: {
+        category: true,
+        professional: {
+          city: true,
+        },
+      },
+    });
   }
 
   async findAll() {
-    return await this.ServicesRepository.createQueryBuilder('service')
-      .leftJoinAndSelect('service.category', 'category')
-      .leftJoinAndSelect('service.professional', 'professional')
-      .where('service.deleteS = :deleted', { deleted: false })
-      .getMany();
+    return await this.ServicesRepository.find({
+      where: { deleteS: false },
+      relations: {
+        category: true,
+        professional: true,
+      },
+    });
   }
 
   async findByCategory(idCategory: number) {
-    return await this.ServicesRepository.createQueryBuilder('service')
-      .leftJoinAndSelect('service.category', 'category')
-      .leftJoinAndSelect('service.professional', 'professional')
-      .leftJoinAndSelect('professional.city', 'city')
-      .where('service.deleteS = :deleted', { deleted: false })
-      .andWhere('category.idCategory = :idCategory', { idCategory })
-      .getMany();
+    return await this.ServicesRepository.find({
+      where: {
+        deleteS: false,
+        category: {
+          idCategory,
+        },
+      },
+      relations: {
+        category: true,
+        professional: {
+          city: true,
+        },
+      },
+    });
   }
 
   async findByCity(idCity: number) {
-    return await this.ServicesRepository.createQueryBuilder('service')
-      .leftJoinAndSelect('service.category', 'category')
-      .leftJoinAndSelect('service.professional', 'professional')
-      .leftJoinAndSelect('professional.city', 'city')
-      .where('service.deleteS = :deleted', { deleted: false })
-      .andWhere('city.idCity = :idCity', { idCity })
-      .getMany();
+    return await this.ServicesRepository.find({
+      where: {
+        deleteS: false,
+        professional: {
+          city: {
+            idCity,
+          },
+        },
+      },
+      relations: {
+        category: true,
+        professional: {
+          city: true,
+        },
+      },
+    });
   }
 
   async findAllDelete() {
-    return await this.ServicesRepository.createQueryBuilder('service')
-      .leftJoinAndSelect('service.category', 'category')
-      .leftJoinAndSelect('service.professional', 'professional')
-      .where('service.deleteS = :deleted', { deleted: true })
-      .getMany();
+    return await this.ServicesRepository.find({
+      where: { deleteS: true },
+      relations: {
+        category: true,
+        professional: true,
+      },
+    });
   }
 
   async upDateServices(servicesData: ServicesDto) {
