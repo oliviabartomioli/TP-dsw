@@ -126,4 +126,4 @@ Para más información sobre la instalación y ejecución de cada parte, consult
 
 ## Propuesta del trabajo práctico
 
-La propuesta original, los requisitos funcionales y el alcance definido para regularidad y aprobación se encuentran en [proposal.md](https://github.com/oliviabartomioli/TP-dsw).
+La propuesta original, los requisitos funcionales y el alcance definido para regularidad y aprobación se encuentran en [proposal.md]([https://github.com/oliviabartomioli/TP-dsw](https://github.com/oliviabartomioli/TP-dsw/blob/main/Proposal.md)).
