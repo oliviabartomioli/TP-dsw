@@ -68,11 +68,12 @@ export class CityService {
   }
 
   async findAllDeleted() {
-    return await this.cityRepository
-      .createQueryBuilder('city')
-      .leftJoinAndSelect('city.province', 'province')
-      .where('city.deleteCity = :deleted', { deleted: true })
-      .getMany();
+    return await this.cityRepository.find({
+      where: { deleteCity: true },
+      relations: {
+        province: true,
+      },
+    });
   }
 
   async updateCity(cityData: cityDto) {
